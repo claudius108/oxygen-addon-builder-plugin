@@ -8,26 +8,26 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<files>
 		<file>
-			<source>${basedir}/src/main/resources/ro/kuberam/oxygen/addonBuilder/templates/xquery/framework.xq</source>
+			<source>${basedir}/templates/xquery/framework.xq</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<file>
-			<source>${basedir}/src/main/resources/ro/kuberam/oxygen/addonBuilder/templates/xquery/initializeFramework.xq</source>
+			<source>${basedir}/templates/xquery/initializeFramework.xq</source>
 			<outputDirectory>target</outputDirectory>
 		</file>
 		<file>
-			<source>${basedir}/src/main/resources/ro/kuberam/oxygen/addonBuilder/templates/addon/addon.xml</source>
+			<source>${basedir}/templates/addon/addon.xml</source>
 			<outputDirectory>target</outputDirectory>
 		</file>
 	</files>
 
 	<fileSets>
 		<fileSet>
-			<directory>${basedir}/src/main/resources/ro/kuberam/oxygen/addonBuilder/templates/css</directory>
+			<directory>${basedir}/templates/css</directory>
 			<outputDirectory>resources/css</outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${basedir}/src/main/resources/ro/kuberam/oxygen/addonBuilder/templates/java</directory>
+			<directory>${basedir}/templates/java</directory>
 			<outputDirectory>target/templates/java</outputDirectory>
 		</fileSet>
 	</fileSets>

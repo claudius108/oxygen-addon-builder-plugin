@@ -9,10 +9,6 @@
 
 	<files>
 		<file>
-			<source>${project.build.directory}/plugin.jar</source>
-			<outputDirectory>/lib</outputDirectory>
-		</file>
-		<file>
 			<source>${project.build.directory}/plugin.xml</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
@@ -21,5 +17,15 @@
 			<outputDirectory>/generate-framwork</outputDirectory>
 		</file>
 	</files>
+
+	<dependencySets>
+		<dependencySet>
+			<includes>
+				<include>ro.kuberam.oxygen:addon-builder:jar</include>
+			</includes>
+			<outputDirectory>/java</outputDirectory>
+			<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+		</dependencySet>
+	</dependencySets>
 
 </assembly>

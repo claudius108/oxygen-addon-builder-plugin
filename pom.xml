@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>ro.kuberam.oxygen</groupId>
-	<artifactId>addon-builde-pluginr</artifactId>
+	<artifactId>addon-builder-plugin</artifactId>
 	<version>0.1</version>
 
 	<prerequisites>
@@ -83,7 +83,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<descriptor>${basedir}/src/main/resources/ro/kuberam/oxygen/addonBuilder/generate-framework/initialize-framework-assembly.xml</descriptor>
+							<descriptor>${basedir}/generate-framework/initialize-framework-assembly.xml</descriptor>
 							<outputDirectory>${project.build.directory}</outputDirectory>
 							<finalName>initialize-framework</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
@@ -99,7 +99,7 @@
 							<finalName>${project.artifactId}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
-								<descriptor>addon-jar-assembly.xml</descriptor>
+								<descriptor>addon-assembly.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
