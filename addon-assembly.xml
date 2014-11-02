@@ -14,8 +14,12 @@
 		</file>
 		<file>
 			<source>${project.build.directory}/initialize-framework.zip</source>
-			<outputDirectory>/generate-framwork</outputDirectory>
+			<outputDirectory>/generate-framework</outputDirectory>
 		</file>
+		<file>
+			<source>${project.build.directory}/initialize-framework.zip</source>
+			<outputDirectory>/generate-framework</outputDirectory>
+		</file>		
 	</files>
 
 	<dependencySets>
@@ -23,8 +27,8 @@
 			<includes>
 				<include>ro.kuberam.oxygen:addon-builder:jar</include>
 			</includes>
-			<outputDirectory>/java</outputDirectory>
-			<outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+			<outputDirectory>/lib</outputDirectory>
+			<outputFileNameMapping>plugin.jar</outputFileNameMapping>
 		</dependencySet>
 	</dependencySets>
 

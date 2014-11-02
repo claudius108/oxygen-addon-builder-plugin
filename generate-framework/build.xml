@@ -1,0 +1,16 @@
+<project name="Image Size Reader" default="build">
+
+	<target name="build">
+		<mkdir dir="bin" />
+		<javac srcdir="/home/claudius/oxygen/16/frameworks/test/target/templates/java" destdir="/home/claudius/oxygen/16/frameworks/test/target/templates/java" includeantruntime="true" />
+	</target>
+
+	<target name="jar" depends="build">
+		<jar destfile="ImageInfo.jar" basedir="bin" />
+	</target>
+
+	<target name="clean">
+
+	</target>
+
+</project>
