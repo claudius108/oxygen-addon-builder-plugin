@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="${oxygenInstallDir}/plugins/AddonBuilder/addon-descriptor.css" type="text/css"?>
+<xt:extensions xmlns:xt="http://www.oxygenxml.com/ns/extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
+	<xt:extension id="">
+		<xt:location href="" />
+		<xt:version>1.0.0</xt:version>
+		<xt:oxy_version>15.1+</xt:oxy_version>
+		<xt:type>framework</xt:type>
+		<xt:author></xt:author>
+		<xt:name></xt:name>
+		<xt:description xmlns="http://www.w3.org/1999/xhtml"></xt:description>
+		<xt:license>END USER LICENSE AGREEMENT</xt:license>
+	</xt:extension>
+</xt:extensions>

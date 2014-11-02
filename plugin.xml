@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin SYSTEM "../plugin.dtd">
+<plugin
+    id="ro.kuberam.oxygen.addonBuilder"
+    name="Addon Builder"
+    description="Build an addon mainly based upon a XQuery script"
+    version="${project.version}.${timestamp}"
+    vendor="kuberam.ro"
+    class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPlugin"
+    classLoaderType="preferReferencedResources">
+    <runtime>
+        <library name="lib/plugin.jar" />
+    </runtime>
+    <extension type="WorkspaceAccess" class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension" />
+    <toolbar id="AddonBuilderToolbar" initialSide="NORTH" initialRow="1"/>
+</plugin>

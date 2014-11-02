@@ -1,0 +1,51 @@
+@namespace oxy "http://www.oxygenxml.com/extensions/author";
+@namespace xt 'http://www.oxygenxml.com/ns/extension';
+
+* {
+	visibility: "-oxy-collapse-text";
+}
+
+xt|extensions {
+    content: "Please enter below the data about the addon you want to create.";
+}
+
+xt|extensions * {
+    display: block !important;
+    margin: 5px;
+}
+
+xt|extension {
+	content: oxy_label(text, " Addon id ", styles, oxy_xpath("if (@id = '') then 'color: red; font-weight: bold;' else 'color: black;'")) oxy_textfield(edit, "@id", columns, 70);
+}
+
+xt|location {
+	content: "Addon location " oxy_textfield(edit, "@href", columns, 70);
+}
+
+xt|version {
+	content: "Addon version " oxy_textfield(edit, "#text", columns, 22);
+}
+
+xt|oxy_version {
+	content: "Oxygen version " oxy_combobox(edit, "#text", editable, true, values, "15.1+, 15.2+, 16.0+", labels, "14.0+, 15.1+, 15.2+, 16.0+");
+}
+
+xt|type {
+	content: "Addon type " oxy_combobox(edit, "#text", editable, false, values, "framework, plugin", labels, "framework, plugin");
+}
+
+xt|author {
+	content: "Addon author " oxy_textfield(edit, "#text", columns, 22);
+}
+
+xt|name {
+	content: "Addon name " oxy_textfield(edit, "#text", columns, 22);
+}
+
+xt|description {
+    content: "Addon description " oxy_textArea(edit, '#text', contentType, 'text/html', rows, 10, columns, 30);
+}
+
+xt|license {
+    content: "Addon description " oxy_textArea(edit, '#text', contentType, 'text/plain', rows, 10, columns, 30);
+}
