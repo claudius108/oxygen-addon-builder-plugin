@@ -78,18 +78,6 @@
 				<version>2.4.1</version>
 				<executions>
 					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptor>${basedir}/generate-framework/initialize-framework-assembly.xml</descriptor>
-							<outputDirectory>${project.build.directory}</outputDirectory>
-							<finalName>initialize-framework</finalName>
-							<appendAssemblyId>false</appendAssemblyId>
-						</configuration>
-					</execution>
-					<execution>
 						<id>make-addon-jar</id>
 						<phase>prepare-package</phase>
 						<goals>

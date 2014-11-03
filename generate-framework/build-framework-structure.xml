@@ -1,0 +1,26 @@
+<project name="Oxygen Framework Builder">
+
+	<property name="frameworkDir" value="${frameworksDir}${file.separator}${frameworkId}" />
+	<property name="pluginTemplatesDir" value="${pluginInstallDir}${file.separator}templates${file.separator}" />
+
+	<target name="initialize">
+		<copy file="${pluginInstallDir}${file.separator}lib${file.separator}plugin.jar" todir="${frameworkDir}${file.separator}java" />
+		<copy file="${pluginTemplatesDir}css${file.separator}addon.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
+		<copy file="${pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
+		<copy file="${pluginTemplatesDir}addon${file.separator}addon.xml" todir="${frameworkDir}" filtering="true">
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</copy>
+		<copy file="${pluginTemplatesDir}xquery${file.separator}framework.xq" todir="${frameworkDir}" />
+
+
+
+		<javac srcdir="/home/claudius/oxygen/16/frameworks/test/target/templates/java" destdir="/home/claudius/oxygen/16/frameworks/test/target/templates/java" includeantruntime="true" />
+	</target>
+
+	<target name="jar" depends="initialize">
+		<jar destfile="ImageInfo.jar" basedir="bin" />
+	</target>
+
+</project>

@@ -13,14 +13,17 @@
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<file>
-			<source>${project.build.directory}/initialize-framework.zip</source>
+			<source>${basedir}/generate-framework/build-framework-structure.xml</source>
 			<outputDirectory>/generate-framework</outputDirectory>
 		</file>
-		<file>
-			<source>${project.build.directory}/initialize-framework.zip</source>
-			<outputDirectory>/generate-framework</outputDirectory>
-		</file>		
 	</files>
+
+	<fileSets>
+		<fileSet>
+			<directory>${basedir}/templates</directory>
+			<outputDirectory>templates</outputDirectory>
+		</fileSet>
+	</fileSets>
 
 	<dependencySets>
 		<dependencySet>
