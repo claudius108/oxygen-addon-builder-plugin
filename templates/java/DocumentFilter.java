@@ -1,4 +1,4 @@
-package addon-javapackage-name;
+package ${frameworkId};
 
 import java.util.Map;
 

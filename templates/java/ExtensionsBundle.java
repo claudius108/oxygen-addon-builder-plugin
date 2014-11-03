@@ -1,15 +1,15 @@
-package addon-javapackage-name;
+package ${frameworkId};
 
 public class ExtensionsBundle extends ro.sync.ecss.extensions.api.ExtensionsBundle {
 
 	@Override
 	public String getDescription() {
-		return "addon-javapackage-name extensions bundle implementation";
+		return "${frameworkId} extensions bundle implementation";
 	}
 
 	@Override
 	public String getDocumentTypeID() {
-		return "addon-javapackage-name.document.type";
+		return "${frameworkId}.document.type";
 	}
 
 }
