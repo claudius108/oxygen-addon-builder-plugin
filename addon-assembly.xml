@@ -23,6 +23,10 @@
 			<directory>${basedir}/templates</directory>
 			<outputDirectory>templates</outputDirectory>
 		</fileSet>
+		<fileSet>
+			<directory>${basedir}/cryptographic-materials</directory>
+			<outputDirectory>cryptographic-materials</outputDirectory>
+		</fileSet>		
 	</fileSets>
 
 	<dependencySets>
