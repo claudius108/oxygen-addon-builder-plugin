@@ -2,8 +2,11 @@
 
 	<property name="frameworkDir" value="${frameworksDir}${file.separator}${frameworkId}" />
 	<property name="pluginTemplatesDir" value="${pluginInstallDir}${file.separator}templates${file.separator}" />
+	<property name="frameworkTargetDir" value="${frameworkDir}${file.separator}target${file.separator}" />
+	<property name="frameworkArchivePath" value="${frameworkTargetDir}${file.separator}${frameworkId}.jar" />
 
 	<target name="initialize">
+
 		<copy file="${pluginInstallDir}${file.separator}lib${file.separator}plugin.jar" todir="${frameworkDir}${file.separator}java" />
 		<copy file="${pluginTemplatesDir}css${file.separator}addon.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
 		<copy file="${pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
@@ -13,14 +16,16 @@
 			</filterchain>
 		</copy>
 		<copy file="${pluginTemplatesDir}xquery${file.separator}framework.xq" todir="${frameworkDir}" />
+		<copy todir="${frameworkTargetDir}${frameworkId}" filtering="true">
+			<fileset dir="${pluginTemplatesDir}java" />
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</copy>
+		<javac srcdir="${frameworkTargetDir}${frameworkId}" source="1.7" target="1.7" classpath="${frameworkDir}${file.separator}java${file.separator}plugin.jar;${frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" includeantruntime="false" debug="true" />
+		<jar destfile="${frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${frameworkTargetDir}" excludes="**/*.java" />
+		<jar destfile="${frameworkArchivePath}" basedir="${frameworkDir}" excludes="target/" />
 
-
-
-		<javac srcdir="/home/claudius/oxygen/16/frameworks/test/target/templates/java" destdir="/home/claudius/oxygen/16/frameworks/test/target/templates/java" includeantruntime="true" />
-	</target>
-
-	<target name="jar" depends="initialize">
-		<jar destfile="ImageInfo.jar" basedir="bin" />
 	</target>
 
 </project>
