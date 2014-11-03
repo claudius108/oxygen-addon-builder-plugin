@@ -35,7 +35,7 @@
 				<include>ro.kuberam.oxygen:addon-builder:jar</include>
 			</includes>
 			<outputDirectory>/lib</outputDirectory>
-			<outputFileNameMapping>plugin.jar</outputFileNameMapping>
+			<outputFileNameMapping>addon-builder.jar</outputFileNameMapping>
 		</dependencySet>
 	</dependencySets>
 
