@@ -24,6 +24,7 @@
 		</copy>
 		<javac srcdir="${frameworkTargetDir}${frameworkId}" source="1.7" target="1.7" classpath="${frameworkDir}${file.separator}java${file.separator}plugin.jar;${frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" includeantruntime="false" debug="true" />
 		<jar destfile="${frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${frameworkTargetDir}" excludes="**/*.java" />
+		<delete dir="${frameworkTargetDir}${frameworkId}" />
 		<jar destfile="${frameworkArchivePath}" basedir="${frameworkDir}" excludes="target/" />
 		<signjar jar="${frameworkArchivePath}" keystore="${pluginInstallDir}${file.separator}cryptographic-materials${file.separator}dlri.jks" alias="dlri" storepass="dlrisigner" keypass="dlrisigner" />
 
