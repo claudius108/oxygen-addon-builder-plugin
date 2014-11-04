@@ -15,7 +15,7 @@
 				<expandproperties />
 			</filterchain>
 		</copy>
-		<copy file="${pluginTemplatesDir}xquery${file.separator}framework.xq" todir="${frameworkDir}" />
+		<copy file="${pluginTemplatesDir}xquery${file.separator}addon.xq" todir="${frameworkDir}" />
 		<copy todir="${frameworkTargetDir}${frameworkId}" filtering="true">
 			<fileset dir="${pluginTemplatesDir}java" />
 			<filterchain>
