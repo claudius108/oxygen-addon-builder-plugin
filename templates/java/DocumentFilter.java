@@ -125,26 +125,6 @@ public class DocumentFilter extends AuthorDocumentFilter {
 		}
 
 		authorEditorAccess.setCaretPosition(caretPosition + 1);
-
-		AuthorNode currentNode2 = null;
-		String currentNodeXpathExpr2 = null;
-		try {
-			currentNode2 = getAuthorDocumentController().getNodeAtOffset(caretPosition);
-			currentNodeXpathExpr2 = authorDocumentController.getXPathExpression(currentNode2.getStartOffset());
-			// System.out.println("currentNode2: " + currentNode2);
-			// System.out.println("currentNode2 text: " +
-			// currentNode2.getTextContent());
-			// System.out.println("currentNodeXpathExpr2: " +
-			// currentNodeXpathExpr2);
-		} catch (BadLocationException e) {
-
-			e.printStackTrace();
-		}
-
-		// AuthorNode[] targetNodes =
-		// authorDocumentController.findNodesByXPath(targetExpr, currentNode2,
-		// true,
-		// true, true, false);
 	}
 
 	@Override
