@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.swing.text.BadLocationException;
 
 import ro.kuberam.oxygen.addonBuilder.mutations.ProcessMutationRecord;
-import ro.kuberam.oxygen.addonBuilder.operations.Utils;
 import ro.sync.ecss.extensions.api.AuthorAccess;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorDocumentFilter;
@@ -112,8 +111,9 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 		String currentNodeXpathExpr = null;
 		try {
-			currentNodeXpathExpr = Utils.getXpathExpresion(getAuthorDocumentController(),
-					(AuthorParentNode) currentNode);
+			currentNodeXpathExpr = authorDocumentController.getXPathExpression(currentElement
+					.getStartOffset());
+			// (AuthorParentNode) currentNode
 			// System.out.println("currentNode: " + currentNode);
 			// System.out.println("currentNode text: " +
 			// currentNode.getTextContent());
@@ -130,8 +130,7 @@ public class DocumentFilter extends AuthorDocumentFilter {
 		String currentNodeXpathExpr2 = null;
 		try {
 			currentNode2 = getAuthorDocumentController().getNodeAtOffset(caretPosition);
-			currentNodeXpathExpr2 = Utils.getXpathExpresion(getAuthorDocumentController(),
-					(AuthorParentNode) currentNode2);
+			currentNodeXpathExpr2 = authorDocumentController.getXPathExpression(currentNode2.getStartOffset());
 			// System.out.println("currentNode2: " + currentNode2);
 			// System.out.println("currentNode2 text: " +
 			// currentNode2.getTextContent());
