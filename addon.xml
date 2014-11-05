@@ -4,7 +4,7 @@
 	<xt:extension id="addon-builder-plugin">
 		<xt:location href="${addon-location}" />
 		<xt:version>${project.version}.${timestamp}</xt:version>
-		<xt:oxy_version>16.0+</xt:oxy_version>
+		<xt:oxy_version>16.1+</xt:oxy_version>
 		<xt:type>plugin</xt:type>
 		<xt:author>Claudius Teodorescu</xt:author>
 		<xt:name>Addon Builder plugin</xt:name>
