@@ -100,30 +100,6 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 		filterBypass.insertText(offset, textContent);
 
-		// System.out.println("currentNode for insert text: " + currentNode);
-		// try {
-		// System.out.println("text content after insert: " +
-		// currentNode.getTextContent() + "\n");
-		// } catch (BadLocationException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-		String currentNodeXpathExpr = null;
-		try {
-			currentNodeXpathExpr = authorDocumentController.getXPathExpression(currentElement
-					.getStartOffset());
-			// (AuthorParentNode) currentNode
-			// System.out.println("currentNode: " + currentNode);
-			// System.out.println("currentNode text: " +
-			// currentNode.getTextContent());
-			// System.out.println("currentNodeXpathExpr: " +
-			// currentNodeXpathExpr);
-		} catch (BadLocationException e) {
-
-			e.printStackTrace();
-		}
-
 		authorEditorAccess.setCaretPosition(caretPosition + 1);
 	}
 
