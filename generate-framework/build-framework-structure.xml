@@ -10,13 +10,18 @@
 		<copy file="${pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${frameworkDir}${file.separator}java" />
 		<copy file="${pluginTemplatesDir}css${file.separator}addon.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
 		<copy file="${pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
-		<copy file="${pluginTemplatesDir}addon${file.separator}addon.xml" todir="${frameworkDir}" filtering="true">
+		<copy todir="${frameworkDir}" filtering="true">
+			<fileset dir="${pluginTemplatesDir}addon" includes="addon.xml">
+				<present targetdir="${frameworkDir}" present="srconly" />
+			</fileset>
 			<filterchain>
 				<expandproperties />
 			</filterchain>
 		</copy>
-		<copy file="${pluginTemplatesDir}xquery${file.separator}addon.xq" todir="${frameworkDir}">
-			<present targetdir="target" present="srconly" />
+		<copy todir="${frameworkDir}">
+			<fileset dir="${pluginTemplatesDir}xquery" includes="addon.xq">
+				<present targetdir="${frameworkDir}" present="srconly" />
+			</fileset>
 		</copy>
 		<copy todir="${frameworkTargetDir}${frameworkId}" filtering="true">
 			<fileset dir="${pluginTemplatesDir}java" />
@@ -29,10 +34,18 @@
 		<jar destfile="${frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${frameworkTargetDir}" excludes="**/*.java" />
 		<jar destfile="${frameworkArchivePath}" basedir="${frameworkDir}" excludes="target/" />
 		<signjar jar="${frameworkArchivePath}" keystore="${pluginInstallDir}${file.separator}cryptographic-materials${file.separator}dlri.jks" alias="dlri" storepass="dlrisigner" keypass="dlrisigner" />
-		<delete>
-			<fileset dir="${frameworkTargetDir}" includes="*.ser" />
+		<delete includeemptydirs="true">
+			<fileset dir="${frameworkTargetDir}">
+				<include name="*/" />
+				<exclude name="${frameworkId}.jar" />
+			</fileset>
 		</delete>
-		
+		<copy todir="${frameworkTargetDir}" filtering="true">
+			<fileset dir="${frameworkDir}" includes="addon.xml" />
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</copy>		
 		
 	</target>
 
