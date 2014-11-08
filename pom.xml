@@ -11,7 +11,7 @@
 
 	<groupId>ro.kuberam.oxygen</groupId>
 	<artifactId>addon-builder-plugin</artifactId>
-	<version>0.7</version>
+	<version>0.9</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
