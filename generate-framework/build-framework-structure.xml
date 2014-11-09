@@ -45,8 +45,8 @@
 			<filterchain>
 				<expandproperties />
 			</filterchain>
-		</copy>		
-		
+		</copy>
+
 	</target>
 
 </project>
