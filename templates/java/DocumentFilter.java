@@ -23,9 +23,9 @@ public class DocumentFilter extends AuthorDocumentFilter {
 	 */
 	private final AuthorAccess authorAccess;
 	private final AuthorEditorAccess authorEditorAccess;
-	private static AuthorDocumentController authorDocumentController;
-	private static AuthorActionsProvider authorActionsProvider;
-	private static Map<String, Object> authorExtensionActions;
+	private AuthorDocumentController authorDocumentController;
+	private AuthorActionsProvider authorActionsProvider;
+	private Map<String, Object> authorExtensionActions;
 
 	/**
 	 * Constructor.
@@ -36,9 +36,9 @@ public class DocumentFilter extends AuthorDocumentFilter {
 	public DocumentFilter(AuthorAccess access) {
 		this.authorAccess = access;
 		this.authorEditorAccess = authorAccess.getEditorAccess();
-		DocumentFilter.setAuthorDocumentController(access.getDocumentController());
+		this.authorDocumentController = access.getDocumentController();
 		authorActionsProvider = authorEditorAccess.getActionsProvider();
-		DocumentFilter.setAuthorExtensionActions(authorActionsProvider.getAuthorExtensionActions());
+		this.authorExtensionActions = authorActionsProvider.getAuthorExtensionActions();
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 		AuthorNode currentNode = null;
 		try {
-			currentNode = getAuthorDocumentController().getNodeAtOffset(startOffset);
+			currentNode = authorDocumentController.getNodeAtOffset(startOffset);
 		} catch (BadLocationException e) {
 
 			e.printStackTrace();
@@ -57,7 +57,7 @@ public class DocumentFilter extends AuthorDocumentFilter {
 		int caretPosition = startOffset;
 
 		try {
-			OffsetInformation ci = getAuthorDocumentController().getContentInformationAtOffset(startOffset);
+			OffsetInformation ci = authorDocumentController.getContentInformationAtOffset(startOffset);
 			if (ci.getNodeForMarkerOffset() != null) {
 				if (withBackspace && ci.getNodeForMarkerOffset().getStartOffset() == startOffset) {
 					if (ci.getNodeForMarkerOffset().getStartOffset() + 1 == ci.getNodeForMarkerOffset()
@@ -90,7 +90,7 @@ public class DocumentFilter extends AuthorDocumentFilter {
 	public void insertText(AuthorDocumentFilterBypass filterBypass, int offset, String textContent) {
 		AuthorNode currentNode = null;
 		try {
-			currentNode = getAuthorDocumentController().getNodeAtOffset(offset);
+			currentNode = authorDocumentController.getNodeAtOffset(offset);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -109,24 +109,8 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 		filterBypass.removeAttribute(attributeName, element);
 		AttrValue attrValue = new AttrValue("");
-		getAuthorDocumentController().setAttribute(attributeName, attrValue, element);
+		authorDocumentController.setAttribute(attributeName, attrValue, element);
 
-	}
-
-	public static Map<String, Object> getAuthorExtensionActions() {
-		return authorExtensionActions;
-	}
-
-	public static void setAuthorExtensionActions(Map<String, Object> authorExtensionActions) {
-		DocumentFilter.authorExtensionActions = authorExtensionActions;
-	}
-
-	public static AuthorDocumentController getAuthorDocumentController() {
-		return authorDocumentController;
-	}
-
-	public static void setAuthorDocumentController(AuthorDocumentController authorDocumentController) {
-		DocumentFilter.authorDocumentController = authorDocumentController;
 	}
 
 }
