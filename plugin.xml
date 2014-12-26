@@ -12,6 +12,6 @@
         <library name="lib/addon-builder.jar" />
     </runtime>
     <extension type="WorkspaceAccess" class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension" />
-    <extension type="URLHandler" class="ro.kuberam.oxygen.addonBuilder.urlProtocols.CustomProtocolURLHandlerExtension"/>
+    <extension type="URLHandler" class="ro.kuberam.oxygen.addonBuilder.urlSchemes.CustomProtocolURLHandlerExtension"/>
     <toolbar id="AddonBuilderToolbar" initialSide="NORTH" initialRow="1"/>
 </plugin>
