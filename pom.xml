@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>ro.kuberam.oxygen</groupId>
 			<artifactId>addon-builder</artifactId>
-			<version>0.6</version>
+			<version>0.7</version>
 		</dependency>
 	</dependencies>
 
