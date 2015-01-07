@@ -26,7 +26,11 @@
 		<fileSet>
 			<directory>${basedir}/cryptographic-materials</directory>
 			<outputDirectory>cryptographic-materials</outputDirectory>
-		</fileSet>		
+		</fileSet>
+		<fileSet>
+			<directory>${basedir}/toolbar</directory>
+			<outputDirectory>toolbar</outputDirectory>
+		</fileSet>
 	</fileSets>
 
 	<dependencySets>
