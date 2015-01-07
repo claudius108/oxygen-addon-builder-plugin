@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<style type="text/css">
+#fileNamesContainer {
+	-webkit-column-count: 4;
+	column-count: 4;
+}
+
+.fileName {
+	color: blue;
+	word-wrap: break-word;
+	margin-bottom: 10px;
+}
+
+.fileName:hover {
+	color: black;
+	background-color: lightgray;
+	cursor: pointer;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+#footer button {
+	margin: 0 20px 10px 0;
+}
+</style>
+
+<script type="text/javascript">
+</script>
+</head>
+<body>
+	<h2>Frameworks</h2>
+	<div id="fileNamesContainer" />
+	<div id="footer">
+		<button style="float: right;" onclick="java.closeDialogWindow();">Close</button>
+	</div>
+</body>
+</html>
