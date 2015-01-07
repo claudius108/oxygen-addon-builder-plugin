@@ -31,11 +31,18 @@
 </style>
 
 <script type="text/javascript">
+	function getDirsList() {
+		var frameworksListPlaceholder = document.getElementById('fileNamesContainer');
+		frameworksListPlaceholder.textContent = "Loading frameworks list...";
+		var frameworksListString = java.listFileSystemItems2(window.location.search.substring(8));
+		var frameworksList = document.importNode((new DOMParser()).parseFromString(frameworksListString, "text/xml").documentElement, true);
+		document.body.replaceChild(frameworksList, frameworksListPlaceholder);
+	}
 </script>
 </head>
-<body>
+<body onload="window.setTimeout(getDirsList, 0);">
 	<h2>Frameworks</h2>
-	<div id="fileNamesContainer" />
+	<div id="fileNamesContainer"></div>
 	<div id="footer">
 		<button style="float: right;" onclick="java.closeDialogWindow();">Close</button>
 	</div>

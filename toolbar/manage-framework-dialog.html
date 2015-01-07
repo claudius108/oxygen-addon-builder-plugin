@@ -107,8 +107,7 @@ li input:checked+ol>li:last-child {
 	function getFileList() {
 		var fileTreePlaceholder = document.getElementById('file-list');
 		fileTreePlaceholder.textContent = "Loading file list...";
-		java.setFrameworkId(window.location.search.substring(13));
-		var fileTreeString = java.listFileSystemItems(java.getFrameworkId());
+		var fileTreeString = java.listFileSystemItems(window.location.search.substring(13));
 		var fileTree = document.importNode((new DOMParser()).parseFromString(fileTreeString, "text/xml").documentElement, true);
 		document.body.replaceChild(fileTree, fileTreePlaceholder);
 	}
