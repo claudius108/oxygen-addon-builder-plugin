@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="resources/css/manage-framework-dialog.css"/>
 <script type="text/javascript">
 	function getFileList() {
-		var fileTreePlaceholder = document.getElementById('file-list');
+		var fileTreePlaceholder = document.querySelector('ol.tree');
 		fileTreePlaceholder.textContent = "Loading file list...";
 		var fileTreeString = java.listFileSystemItems(window.location.search.substring(13));
 		var fileTree = document.importNode((new DOMParser()).parseFromString(fileTreeString, "text/xml").documentElement, true);
