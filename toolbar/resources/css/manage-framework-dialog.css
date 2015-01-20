@@ -29,7 +29,9 @@ li.file a {
 }
 
 li.file:hover {
-	background: url(../images/delete.png) 40px 0 no-repeat;
+	background-image: url(../images/page_white_edit.png), url(../images/page_white_delete.png);
+	background-position: 90%, 100%;
+	background-repeat: no-repeat, no-repeat;
 }
 
 li input {
