@@ -35,6 +35,7 @@
 
 	<dependencySets>
 		<dependencySet>
+			<useProjectArtifact>false</useProjectArtifact>
 			<includes>
 				<include>ro.kuberam.oxygen:addon-builder:jar</include>
 			</includes>
