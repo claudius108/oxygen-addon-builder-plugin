@@ -32,7 +32,7 @@
 		<javac srcdir="${frameworkTargetDir}${frameworkId}" source="1.7" target="1.7" classpath="${frameworkDir}${file.separator}java${file.separator}addon-builder.jar;${frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" includeantruntime="false" debug="true" />
 		<delete file="${frameworkArchivePath}" />
 		<jar destfile="${frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${frameworkTargetDir}" excludes="**/*.java" />
-		<jar destfile="${frameworkArchivePath}" basedir="${frameworkDir}" excludes="target/" />
+		<jar destfile="${frameworkArchivePath}" basedir="${frameworksDir}" includes="${frameworkId}/**/*.*" excludes="${frameworkId}/target/" />
 		<signjar jar="${frameworkArchivePath}" keystore="${pluginInstallDir}${file.separator}cryptographic-materials${file.separator}dlri.jks" alias="dlri" storepass="dlrisigner" keypass="dlrisigner" />
 		<delete includeemptydirs="true">
 			<fileset dir="${frameworkTargetDir}">
