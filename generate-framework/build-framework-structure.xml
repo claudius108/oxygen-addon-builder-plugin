@@ -3,7 +3,7 @@
 	<property name="frameworkDir" value="${frameworksDir}${file.separator}${frameworkId}" />
 	<property name="pluginTemplatesDir" value="${pluginInstallDir}${file.separator}templates${file.separator}" />
 	<property name="frameworkTargetDir" value="${frameworkDir}${file.separator}target${file.separator}" />
-	<property name="frameworkArchivePath" value="${frameworkTargetDir}${file.separator}${frameworkId}.jar" />
+	<property name="frameworkArchivePath" value="${frameworkTargetDir}${frameworkId}.jar" />
 
 	<target name="build-framework">
 
