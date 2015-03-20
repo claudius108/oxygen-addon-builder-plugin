@@ -10,7 +10,7 @@
     classLoaderType="preferReferencedResources">
     <runtime>
         <library name="lib/addon-builder.jar" />
-        <!--<library name="[OXYGEN_DIR]/jre/lib/jfxrt.jar" />-->
+        <library name="${oxygenInstallDir}/jre/lib/jfxrt.jar" />
     </runtime>
     <extension type="WorkspaceAccess" class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension" />
     <extension type="URLHandler" class="ro.kuberam.oxygen.addonBuilder.urlSchemes.CustomProtocolURLHandlerExtension"/>
