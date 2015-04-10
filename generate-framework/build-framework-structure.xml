@@ -8,7 +8,6 @@
 	<target name="build-framework">
 
 		<copy file="${pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${frameworkDir}${file.separator}java" />
-		<copy file="${pluginTemplatesDir}css${file.separator}addon.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
 		<copy file="${pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
 		<copy todir="${frameworkDir}" filtering="true">
 			<fileset dir="${pluginTemplatesDir}addon" includes="addon.xml">
