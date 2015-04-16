@@ -21,6 +21,7 @@ public class AuthorExtensionStateListener implements
 	private static ArrayList<String> actionsByName = new ArrayList<String>();
 	private static Map<String, ArrayList<String>> actionsByClass = new HashMap<String, ArrayList<String>>();
 
+	//loading the serialized objects
 	static {
 		try {
 			actionsByName = (ArrayList<String>) IOUtilities.deserializeObjectFromFile("/actionsByName.ser");
