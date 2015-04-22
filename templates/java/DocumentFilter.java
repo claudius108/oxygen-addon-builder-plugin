@@ -16,6 +16,7 @@ import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
 import ro.sync.ecss.extensions.api.node.AuthorParentNode;
 import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvider;
+import ro.kuberam.oxygen.addonBuilder.Constants;
 
 public class DocumentFilter extends AuthorDocumentFilter {
 	/**
@@ -80,10 +81,13 @@ public class DocumentFilter extends AuthorDocumentFilter {
 			AttrValue newAttrValueObj, AuthorElement currentElement) {
 
 		filterBypass.setAttribute(attributeName, newAttrValueObj, currentElement);
-
-		ProcessMutationRecord.attributes(authorActionsProvider, currentElement.getStartOffset() + 1,
-				currentElement, attributeName, null, null);
-
+		
+		if (currentElement.getAttribute(attributeName).getValue().equals(Constants.valueOfAttributeToBeDeleted)) {
+			filterBypass.removeAttribute(attributeName, currentElement);			
+		} else {
+			ProcessMutationRecord.attributes(authorActionsProvider, currentElement.getStartOffset() + 1,
+					currentElement, attributeName, null, null);		
+		}
 	}
 
 	@Override
@@ -102,15 +106,4 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 		authorEditorAccess.setCaretPosition(caretPosition + 1);
 	}
-
-	@Override
-	public void removeAttribute(AuthorDocumentFilterBypass filterBypass, String attributeName,
-			AuthorElement element) {
-
-		filterBypass.removeAttribute(attributeName, element);
-		AttrValue attrValue = new AttrValue("");
-		authorDocumentController.setAttribute(attributeName, attrValue, element);
-
-	}
-
 }
