@@ -12,10 +12,6 @@
 			<source>${project.build.directory}/plugin.xml</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
-		<file>
-			<source>${basedir}/generate-framework/build-framework-structure.xml</source>
-			<outputDirectory>/generate-framework</outputDirectory>
-		</file>
 	</files>
 
 	<fileSets>
@@ -31,6 +27,10 @@
 			<directory>${basedir}/toolbar</directory>
 			<outputDirectory>toolbar</outputDirectory>
 		</fileSet>
+		<fileSet>
+			<directory>${basedir}/generate-framework</directory>
+			<outputDirectory>generate-framework</outputDirectory>
+		</fileSet>		
 	</fileSets>
 
 	<dependencySets>
