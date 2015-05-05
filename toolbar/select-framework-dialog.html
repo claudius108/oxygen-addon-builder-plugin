@@ -34,7 +34,7 @@
 	function getDirsList() {
 		var frameworksListPlaceholder = document.getElementById('fileNamesContainer');
 		frameworksListPlaceholder.textContent = "Loading frameworks list...";
-		var frameworksListString = java.listFileSystemItems2(window.location.search.substring(8));
+		var frameworksListString = OxygenAddonBuilder.listFileSystemItems2(window.location.search.substring(8));
 		var frameworksList = document.importNode((new DOMParser()).parseFromString(frameworksListString, "text/xml").documentElement, true);
 		document.body.replaceChild(frameworksList, frameworksListPlaceholder);
 	}
@@ -44,7 +44,7 @@
 	<h2>Frameworks</h2>
 	<div id="fileNamesContainer"></div>
 	<div id="footer">
-		<button style="float: right;" onclick="java.closeDialogWindow();">Close</button>
+		<button style="float: right;" onclick="OxygenAddonBuilder.closeDialogWindow();">Close</button>
 	</div>
 </body>
 </html>
