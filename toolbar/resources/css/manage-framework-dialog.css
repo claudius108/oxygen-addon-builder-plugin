@@ -63,6 +63,15 @@ li label {
 	cursor: pointer;
 	display: block;
 	padding-left: 37px;
+	background-color: red;
+}
+
+li label img {
+	visibility: hidden;
+}
+
+li label:hover img {
+	visibility: visible;
 }
 
 li input:checked+ol {
