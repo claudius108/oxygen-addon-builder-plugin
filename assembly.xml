@@ -28,6 +28,10 @@
 			<outputDirectory>toolbar</outputDirectory>
 		</fileSet>
 		<fileSet>
+			<directory>${basedir}/resources</directory>
+			<outputDirectory>resources</outputDirectory>
+		</fileSet>		
+		<fileSet>
 			<directory>${basedir}/generate-framework</directory>
 			<outputDirectory>generate-framework</outputDirectory>
 		</fileSet>		
