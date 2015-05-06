@@ -24,8 +24,8 @@
 			<outputDirectory>cryptographic-materials</outputDirectory>
 		</fileSet>
 		<fileSet>
-			<directory>${basedir}/toolbar</directory>
-			<outputDirectory>toolbar</outputDirectory>
+			<directory>${basedir}/components</directory>
+			<outputDirectory>components</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${basedir}/resources</directory>
