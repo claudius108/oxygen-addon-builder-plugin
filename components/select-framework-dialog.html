@@ -1,6 +1,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
+<script type="text/javascript" src="../resources/javascript/jquery/jquery-2.1.4.min.js">/**/</script>
 <style type="text/css">
 #fileNamesContainer {
 	-webkit-column-count: 4;
@@ -29,18 +30,27 @@
 	margin: 0 20px 10px 0;
 }
 </style>
-
 <script type="text/javascript">
-	function getDirsList() {
-		var frameworksListPlaceholder = document.getElementById('fileNamesContainer');
-		frameworksListPlaceholder.textContent = "Loading frameworks list...";
-		var frameworksListString = OxygenAddonBuilder.listFileSystemItems2(window.location.search.substring(8));
-		var frameworksList = document.importNode((new DOMParser()).parseFromString(frameworksListString, "text/xml").documentElement, true);
-		document.body.replaceChild(frameworksList, frameworksListPlaceholder);
+	function initialize() {
+		$( document ).ready(function() {
+			var frameworksNames = JSON.parse(OxygenAddonBuilder.listFileSystemItems("", "**/frameworks/**/**, *.*"));
+			var action = window.location.search.substring(8);
+			var frameworksNamesArray = [];
+			$.each(frameworksNames[0].children, function(i, item) {
+				frameworksNamesArray[i] = item.title;
+			});
+			var frameworksList = " <div id=\"fileNamesContainer\">";
+			$.each(frameworksNamesArray.sort(), function(i, item) {
+				var frameworkName = frameworksNamesArray[i];
+				frameworksList += "<div class=\"fileName\" onclick=\"OxygenAddonBuilder." + action + "('" + frameworkName + "');\">" + frameworkName + "</div>";
+			});
+			frameworksList += "</div>";
+			$(frameworksList).insertAfter($("body > h2"));
+		});		
 	}
 </script>
 </head>
-<body onload="window.setTimeout(getDirsList, 0);">
+<body onload="window.setTimeout(initialize, 0);">
 	<h2>Frameworks</h2>
 	<div id="fileNamesContainer"></div>
 	<div id="footer">
