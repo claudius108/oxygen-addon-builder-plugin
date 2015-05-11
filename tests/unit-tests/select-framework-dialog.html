@@ -1,0 +1,51 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<script type="text/javascript" src="../../resources/javascript/jquery/jquery-2.1.4.min.js">/**/</script>
+<style type="text/css">
+#fileNamesContainer {
+	-webkit-column-count: 4;
+	column-count: 4;
+}
+
+.fileName {
+	color: blue;
+	word-wrap: break-word;
+	margin-bottom: 10px;
+}
+
+.fileName:hover {
+	color: black;
+	background-color: lightgray;
+	cursor: pointer;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+#footer button {
+	margin: 0 20px 10px 0;
+}
+</style>
+
+<script type="text/javascript">
+	function getDirsList() {
+		var frameworksListPlaceholder = document.getElementById('fileNamesContainer');
+		frameworksListPlaceholder.textContent = "Loading frameworks list...";
+		var frameworksListString = OxygenAddonBuilder.listFileSystemItems2(window.location.search.substring(8));
+		var frameworksList = document.importNode((new DOMParser()).parseFromString(frameworksListString, "text/xml").documentElement, true);
+		document.body.replaceChild(frameworksList, frameworksListPlaceholder);
+	}
+</script>
+</head>
+<body onload="window.setTimeout(getDirsList, 0);">
+	<h2>Frameworks</h2>
+	<div id="fileNamesContainer"></div>
+	<div id="footer">
+		<button style="float: right;" onclick="OxygenAddonBuilder.closeDialogWindow();">Close</button>
+	</div>
+</body>
+</html>
