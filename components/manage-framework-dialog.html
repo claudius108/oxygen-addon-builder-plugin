@@ -10,7 +10,7 @@
 		$( document ).ready(function() {
 			$("#tree").fancytree({
 				source: JSON.parse(OxygenAddonBuilder.listFileSystemItems(window.location.search.substring(13),
-					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar")),
+					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css")),
 				extensions: ["edit"],
 			    edit: {
 			      triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
