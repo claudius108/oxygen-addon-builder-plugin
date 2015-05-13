@@ -1,7 +1,8 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<link rel="stylesheet" type="text/css" href="../../resources/css/manage-framework-dialog.css"/>
+<link rel="stylesheet" type="text/css" href="../../resources/css/footer.css"/>
+<script type="text/javascript" src="../resources/framework-names.js">/**/</script>
 <script type="text/javascript" src="../../resources/javascript/jquery/jquery-2.1.4.min.js">/**/</script>
 <script type="text/javascript" src="../../resources/javascript/jquery-ui/jquery-ui.min.js">/**/</script>
 <link href="../../resources/javascript/fancytree/skin-win8/ui.fancytree.min.css" rel="stylesheet" type="text/css">
@@ -9,9 +10,11 @@
 <script type="text/javascript">
 	$( document ).ready(function() {
 		function initialize() {
-	
+			//
 		}	
 		$("#tree").fancytree({
+			source: frameworksNames,
+			minExpandLevel: 2,
 			extensions: ["edit"],
 		    edit: {
 		      triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
@@ -25,6 +28,7 @@
 		        // Return false to prevent cancel/save (data.input is available)
 		      },
 		      save: function(event, data){
+		      	alert(data.node.data['data-path']);
 		        // Save data.input.val() or return false to keep editor open
 		        console.log("save...", this, data);
 		        // Simulate to start a slow ajax request...
@@ -52,38 +56,7 @@
 </head>
 <body onload="window.setTimeout(initialize, 0);">
 	<h2>Manage framework</h2>
-	<div id="tree">
-	    <ul id="treeData" style="display: none;">
-	      <li id="id1" title="Look, a tool tip!">item1 with key and tooltip
-	      <li id="id2">item2
-	      <li id="id3" class="folder">Folder <em>with some</em> children
-	        <ul>
-	          <li id="id3.1">Sub-item 3.1
-	            <ul>
-	              <li id="id3.1.1">Sub-item 3.1.1
-	              <li id="id3.1.2">Sub-item 3.1.2
-	            </ul>
-	          <li id="id3.2">Sub-item 3.2
-	            <ul>
-	              <li id="id3.2.1">Sub-item 3.2.1
-	              <li id="id3.2.2">Sub-item 3.2.2
-	            </ul>
-	        </ul>
-	      <li id="id4" class="expanded">Document with some children (expanded on init)
-	        <ul>
-	          <li id="id4.1"  class="active focused">Sub-item 4.1 (active and focus on init)
-	            <ul>
-	              <li id="id4.1.1">Sub-item 4.1.1
-	              <li id="id4.1.2">Sub-item 4.1.2
-	            </ul>
-	          <li id="id4.2">Sub-item 4.2
-	            <ul>
-	              <li id="id4.2.1">Sub-item 4.2.1
-	              <li id="id4.2.2">Sub-item 4.2.2
-	            </ul>
-	        </ul>
-	    </ul>
-	  </div>	
+	<div id="tree"></div>	
 	<div id="footer">
 		<button style="float: right;" onclick="OxygenAddonBuilder.closeDialogWindow();">Close</button>
 	</div>
