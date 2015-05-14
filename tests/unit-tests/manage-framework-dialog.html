@@ -8,50 +8,32 @@
 <link href="../../resources/javascript/fancytree/skin-win8/ui.fancytree.min.css" rel="stylesheet" type="text/css">
 <script src="../../resources/javascript/fancytree/jquery.fancytree-all.min.js" type="text/javascript">/**/</script>
 <script type="text/javascript">
-	$( document ).ready(function() {
-		function initialize() {
-			//
-		}	
-		$("#tree").fancytree({
-			source: frameworksNames,
-			minExpandLevel: 2,
-			extensions: ["edit"],
-		    edit: {
-		      triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
-		      beforeEdit: function(event, data){
-		        // Return false to prevent edit mode
-		      },
-		      edit: function(event, data){
-		        // Editor was opened (available as data.input)
-		      },
-		      beforeClose: function(event, data){
-		        // Return false to prevent cancel/save (data.input is available)
-		      },
-		      save: function(event, data){
-		      	alert(data.node.data['data-path']);
-		        // Save data.input.val() or return false to keep editor open
-		        console.log("save...", this, data);
-		        // Simulate to start a slow ajax request...
-		        setTimeout(function(){
-		          $(data.node.span).removeClass("pending");
-		          // Let's pretend the server returned a slightly modified
-		          // title:
-		          data.node.setTitle(data.node.title + "!");
-		        }, 2000);
-		        // We return true, so ext-edit will set the current user input
-		        // as title
-		        return true;
-		      },
-		      close: function(event, data){
-		        // Editor was removed
-		        if( data.save ) {
-		          // Since we started an async request, mark the node as preliminary
-		          $(data.node.span).addClass("pending");
-		        }
-		      }
-		    }			
-		});	
-	});
+	function initialize() {
+		$( document ).ready(function() {
+			$("#tree").fancytree({
+				source: JSON.parse(OxygenAddonBuilder.listFileSystemItems(window.location.search.substring(13),
+					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
+				minExpandLevel: 2,					
+				extensions: ["edit"],
+			    edit: {
+			      triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
+			      beforeEdit: function(event, data){
+			        // Return false to prevent edit mode
+			      },
+			      edit: function(event, data){
+			      },
+			      beforeClose: function(event, data){
+			      },
+			      save: function(event, data){
+			        OxygenAddonBuilder.rename(data.node.data.path, data.input.val());
+			        return true;
+			      },
+			      close: function(event, data){
+			      }
+			    }			
+			});	
+		});		
+	}
 </script>
 </head>
 <body onload="window.setTimeout(initialize, 0);">
