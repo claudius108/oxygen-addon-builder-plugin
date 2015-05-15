@@ -13,11 +13,27 @@
 				source: JSON.parse(OxygenAddonBuilder.listFileSystemItems(window.location.search.substring(13),
 					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
 				minExpandLevel: 2,					
-				extensions: ["edit"],
+				extensions: ["dnd", "edit"],
+				dnd: {
+				  autoExpandMS: 400,
+				  focusOnClick: true,
+				  preventVoidMoves: true,
+				  preventRecursiveMoves: true,
+				  dragStart: function(node, data) {
+				    return true;
+				  },
+				  dragEnter: function(node, data) {
+				     return true;
+				  },
+				  dragDrop: function(node, data) {
+				  	var sourceNode = data.otherNode;
+				  	OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+				    sourceNode.moveTo(node, data.hitMode);
+				  }
+				},				
 			    edit: {
 			      triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
 			      beforeEdit: function(event, data){
-			        // Return false to prevent edit mode
 			      },
 			      edit: function(event, data){
 			      },
@@ -29,7 +45,7 @@
 			      },
 			      close: function(event, data){
 			      }
-			    }			
+			    }
 			});	
 		});		
 	}
