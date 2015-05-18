@@ -11,7 +11,7 @@
 	function initialize() {
 		$( document ).ready(function() {
 			$("#tree").fancytree({
-				source: JSON.parse(OxygenAddonBuilder.listFileSystemItems(window.location.search.substring(13),
+				source: JSON.parse(OxygenAddonBuilder.list(window.location.search.substring(13),
 					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
 				minExpandLevel: 2,					
 				extensions: ["edit"],
