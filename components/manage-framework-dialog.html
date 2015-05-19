@@ -70,7 +70,11 @@
 			      ],
 			  beforeOpen: function(event, ui) {
 			    var node = $.ui.fancytree.getNode(ui.target);
-			//                node.setFocus();
+			    if (node.isFolder()) {
+			    	$("#tree").contextmenu("showEntry", "edit", false);
+			    } else {
+			    	$("#tree").contextmenu("showEntry", "edit", true);
+			    }
 			    node.setActive();
 			  },
 			  select: function(event, ui) {
