@@ -18,6 +18,7 @@
 <script type="text/javascript">
 	function initialize() {
 		$( document ).ready(function() {
+			var CLIPBOARD = null;
 			$("#tree").fancytree({
 				source: JSON.parse(OxygenAddonBuilder.list(window.location.search.substring(13),
 					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
@@ -72,8 +73,10 @@
 			    var node = $.ui.fancytree.getNode(ui.target);
 			    if (node.isFolder()) {
 			    	$("#tree").contextmenu("showEntry", "edit", false);
+			    	$("#tree").contextmenu("showEntry", "paste", true);
 			    } else {
 			    	$("#tree").contextmenu("showEntry", "edit", true);
+			    	$("#tree").contextmenu("showEntry", "paste", false);
 			    }
 			    node.setActive();
 			  },
@@ -90,7 +93,29 @@
 			    	break;
 			    	case "edit":
 		    			OxygenAddonBuilder.edit(node.data.path);
-			    	break;			    	
+			    	break;
+					case "copy":
+					  CLIPBOARD = {
+					    mode: cmd,
+					    node: node.toDict(function(n) {
+					      delete node.key;
+					    })
+					  };
+					  alert(CLIPBOARD);
+					break;
+					case "paste":
+					  if (CLIPBOARD.mode === "cut") {
+					  	// refNode = node.getPrevSibling();
+					    CLIPBOARD.node.moveTo(node, "child");
+					    CLIPBOARD.node.setActive();
+					  } else if(CLIPBOARD.mode === "copy") {
+					  	var sourceNode = CLIPBOARD.node;
+					  	OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+					    var targetNode = node.addChildren(sourceNode);
+					    targetNode.setActive();
+					    targetNode.data.path = node.data.path + "/" + CLIPBOARD.node.title;
+					  }
+					break;					
 			    }
 			    
 			  }
