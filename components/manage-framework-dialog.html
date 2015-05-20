@@ -38,7 +38,10 @@
 					dragDrop: function(node, data) {
 						var sourceNode = data.otherNode;
 						OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+						alert(sourceNode.key);
 						sourceNode.moveTo(node, data.hitMode);
+						sourceNode.data.path =  node.data.path + "/" + sourceNode.title;
+						alert(sourceNode.key);
 					}
 				},				
 			    edit: {
@@ -60,7 +63,6 @@
 			
 			$("#tree").contextmenu({
 			  delegate: "span.fancytree-title",
-			//      menu: "#options",
 			  menu: [
 			      {title: "Edit", cmd: "edit", uiIcon: "ui-icon-pencil" },
 			      {title: "Delete", cmd: "delete", uiIcon: "ui-icon-trash" },
@@ -83,7 +85,11 @@
 			  select: function(event, ui) {
 			    var node = $.ui.fancytree.getNode(ui.target);
 			    var cmd = ui.cmd;
+			    alert("cmd = " + cmd);
 			    switch (cmd) {
+			    	case "edit":
+		    			OxygenAddonBuilder.edit(node.data.path);
+			    	break;			    
 			    	case "delete":
 			    		var response = confirm("Do you really want to delete this item?");
 			    		if(response) {
@@ -91,31 +97,37 @@
 			    			node.remove();
 			    		}	
 			    	break;
-			    	case "edit":
-		    			OxygenAddonBuilder.edit(node.data.path);
-			    	break;
+					case "cut":
+					  CLIPBOARD = {
+					  	cmd: cmd,
+					  	node: node
+					  };
+					break;			    	
 					case "copy":
 					  CLIPBOARD = {
-					    mode: cmd,
+					    cmd: cmd,
 					    node: node.toDict(function(n) {
 					      delete node.key;
 					    })
 					  };
-					  alert(CLIPBOARD);
+					  alert(JSON.stringify(CLIPBOARD));
 					break;
 					case "paste":
-					  if (CLIPBOARD.mode === "cut") {
-					  	// refNode = node.getPrevSibling();
-					    CLIPBOARD.node.moveTo(node, "child");
-					    CLIPBOARD.node.setActive();
-					  } else if(CLIPBOARD.mode === "copy") {
+					  if (CLIPBOARD.cmd === "cut") {
 					  	var sourceNode = CLIPBOARD.node;
 					  	OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+					    sourceNode.moveTo(node, "child");
+					    sourceNode.setActive();
+					    sourceNode.data.path = node.data.path + "/" + sourceNode.title;
+					    alert(sourceNode.data.path);
+					  } else if (CLIPBOARD.cmd === "copy") {
+					  	var sourceNode = CLIPBOARD.node;
+					  	OxygenAddonBuilder.copy(sourceNode.data.path, node.data.path);
 					    var targetNode = node.addChildren(sourceNode);
 					    targetNode.setActive();
 					    targetNode.data.path = node.data.path + "/" + CLIPBOARD.node.title;
 					  }
-					break;					
+					break;						
 			    }
 			    
 			  }
