@@ -38,10 +38,10 @@
 					dragDrop: function(node, data) {
 						var sourceNode = data.otherNode;
 						OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
-						alert(sourceNode.key);
+						console.log(sourceNode.key);
 						sourceNode.moveTo(node, data.hitMode);
 						sourceNode.data.path =  node.data.path + "/" + sourceNode.title;
-						alert(sourceNode.key);
+						console.log(sourceNode.key);
 					}
 				},				
 			    edit: {
@@ -85,16 +85,19 @@
 			  select: function(event, ui) {
 			    var node = $.ui.fancytree.getNode(ui.target);
 			    var cmd = ui.cmd;
-			    alert("cmd = " + cmd);
 			    switch (cmd) {
 			    	case "edit":
 		    			OxygenAddonBuilder.edit(node.data.path);
 			    	break;			    
 			    	case "delete":
 			    		var response = confirm("Do you really want to delete this item?");
-			    		if(response) {
+			    		if (response) {
 			    			OxygenAddonBuilder.delete(node.data.path);
 			    			node.remove();
+							CLIPBOARD = {
+							  cmd: "",
+							  node: ""
+							};			    			
 			    		}	
 			    	break;
 					case "cut":
@@ -102,6 +105,7 @@
 					  	cmd: cmd,
 					  	node: node
 					  };
+					  console.log("key = " + node.key);					  
 					break;			    	
 					case "copy":
 					  CLIPBOARD = {
@@ -110,7 +114,7 @@
 					      delete node.key;
 					    })
 					  };
-					  alert(JSON.stringify(CLIPBOARD));
+					  console.log("key = " + node.key);
 					break;
 					case "paste":
 					  if (CLIPBOARD.cmd === "cut") {
@@ -119,13 +123,16 @@
 					    sourceNode.moveTo(node, "child");
 					    sourceNode.setActive();
 					    sourceNode.data.path = node.data.path + "/" + sourceNode.title;
-					    alert(sourceNode.data.path);
+					    console.log("key = " + sourceNode.key);
 					  } else if (CLIPBOARD.cmd === "copy") {
 					  	var sourceNode = CLIPBOARD.node;
 					  	OxygenAddonBuilder.copy(sourceNode.data.path, node.data.path);
 					    var targetNode = node.addChildren(sourceNode);
 					    targetNode.setActive();
 					    targetNode.data.path = node.data.path + "/" + CLIPBOARD.node.title;
+					    console.log("key = " + targetNode.key);
+					    targetNode.key = OxygenAddonBuilder.uuid();
+					    console.log("key = " + targetNode.key);
 					  }
 					break;						
 			    }
