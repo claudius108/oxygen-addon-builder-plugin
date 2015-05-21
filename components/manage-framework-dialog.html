@@ -119,20 +119,23 @@
 					case "paste":
 					  if (CLIPBOARD.cmd === "cut") {
 					  	var sourceNode = CLIPBOARD.node;
-					  	OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
-					    sourceNode.moveTo(node, "child");
-					    sourceNode.setActive();
-					    sourceNode.data.path = node.data.path + "/" + sourceNode.title;
-					    console.log("key = " + sourceNode.key);
+					  	var operation = OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+					  	if (operation) {
+						    sourceNode.moveTo(node, "child");
+						    sourceNode.setActive();
+						    sourceNode.data.path = node.data.path + "/" + sourceNode.title;
+						} else {
+							console.log("operation is false");						
+						}					  	
 					  } else if (CLIPBOARD.cmd === "copy") {
 					  	var sourceNode = CLIPBOARD.node;
-					  	OxygenAddonBuilder.copy(sourceNode.data.path, node.data.path);
-					    var targetNode = node.addChildren(sourceNode);
-					    targetNode.setActive();
-					    targetNode.data.path = node.data.path + "/" + CLIPBOARD.node.title;
-					    console.log("key = " + targetNode.key);
-					    targetNode.key = OxygenAddonBuilder.uuid();
-					    console.log("key = " + targetNode.key);
+					  	var operation = OxygenAddonBuilder.copy(sourceNode.data.path, node.data.path);
+					  	if (operation) {
+						    var targetNode = node.addChildren(sourceNode);
+						    targetNode.setActive();
+						    targetNode.data.path = node.data.path + "/" + CLIPBOARD.node.title;
+						    targetNode.key = OxygenAddonBuilder.uuid();
+						}		  	
 					  }
 					break;						
 			    }
