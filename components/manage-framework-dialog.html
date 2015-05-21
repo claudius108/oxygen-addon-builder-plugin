@@ -63,16 +63,22 @@
 			    }	    
 			});
 			
+			var node = $("#tree").fancytree("getRootNode");
+      		//node.sortChildren(null, true);
+			
+			
 			$("#tree").contextmenu({
 			  delegate: "span.fancytree-title",
 			  menu: [
-			      {title: "Edit", cmd: "edit", uiIcon: "ui-icon-pencil" },
-			      {title: "Delete", cmd: "delete", uiIcon: "ui-icon-trash" },
-			      {title: "----"},
-			      {title: "Cut", cmd: "cut", uiIcon: "ui-icon-scissors"},
-			      {title: "Copy", cmd: "copy", uiIcon: "ui-icon-copy"},
-			      {title: "Paste", cmd: "paste", uiIcon: "ui-icon-clipboard" }
-			      ],
+			  	{title: "Create dir(s)", cmd: "create-directory" },
+			  	{title: "Create file", cmd: "create-file" },
+				{title: "Edit", cmd: "edit", uiIcon: "ui-icon-pencil" },
+				{title: "Delete", cmd: "delete", uiIcon: "ui-icon-trash" },
+				{title: "----"},
+				{title: "Cut", cmd: "cut", uiIcon: "ui-icon-scissors"},
+				{title: "Copy", cmd: "copy", uiIcon: "ui-icon-copy"},
+				{title: "Paste", cmd: "paste", uiIcon: "ui-icon-clipboard" }
+			  ],
 			  beforeOpen: function(event, ui) {
 			    var node = $.ui.fancytree.getNode(ui.target);
 			    if (node.isFolder()) {
@@ -88,6 +94,26 @@
 			    var node = $.ui.fancytree.getNode(ui.target);
 			    var cmd = ui.cmd;
 			    switch (cmd) {
+			    	case "create-directory":
+		    			var response = prompt("Enter the name of the directory");
+		    			var dirNames = response.split('/');
+		    			var dirPath = node.data.path;
+		    			
+				  		for (var i = 0, il = dirNames.length; i < il; i++) {
+				  			var dirName = dirNames[i];
+				  			dirPath += "/" + dirName;
+				  			
+						  	var operation = OxygenAddonBuilder.create(dirPath, true);
+						  	if (operation) {
+								var newNode = node.addNode({"title": dirName, "folder":true, "key": OxygenAddonBuilder.uuid(), "children":[], "data": {"path": dirPath}});
+								console.log(newNode.data.path);
+								node = newNode;
+							}				  			
+				  		}    			
+			    	break;
+			    	case "create-file":
+		    			prompt("Enter the name of the file");
+			    	break;
 			    	case "edit":
 		    			OxygenAddonBuilder.edit(node.data.path);
 			    	break;			    
