@@ -37,11 +37,13 @@
 					},
 					dragDrop: function(node, data) {
 						var sourceNode = data.otherNode;
-						OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
-						console.log(sourceNode.key);
-						sourceNode.moveTo(node, data.hitMode);
-						sourceNode.data.path =  node.data.path + "/" + sourceNode.title;
-						console.log(sourceNode.key);
+					  	var operation = OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+					  	if (operation) {
+							console.log(sourceNode.key);
+							sourceNode.moveTo(node, data.hitMode);
+							sourceNode.data.path =  node.data.path + "/" + sourceNode.title;
+							console.log(sourceNode.key);
+						}						
 					}
 				},				
 			    edit: {
@@ -124,8 +126,6 @@
 						    sourceNode.moveTo(node, "child");
 						    sourceNode.setActive();
 						    sourceNode.data.path = node.data.path + "/" + sourceNode.title;
-						} else {
-							console.log("operation is false");						
 						}					  	
 					  } else if (CLIPBOARD.cmd === "copy") {
 					  	var sourceNode = CLIPBOARD.node;
