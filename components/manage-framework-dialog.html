@@ -117,6 +117,7 @@
 		    			var dirPath = node.data.path;
 		    			var nodeTitle = node.title;
 		    			var parentNode = node;
+		    			var newNode = node;
 		    			
 				  		for (var i = 0, il = dirNames.length; i < il; i++) {
 				  			var dirName = dirNames[i];
@@ -129,7 +130,7 @@
 				  			if (!newNodeExists) {
 							  	var operation = OxygenAddonBuilder.create(dirPath, true);
 							  	if (operation) {
-									var newNode = parentNode.addNode({"title": dirName, "folder":true, "key": OxygenAddonBuilder.uuid(), "children":[], "data": {"path": dirPath}});
+									newNode = parentNode.addNode({"title": dirName, "folder":true, "key": OxygenAddonBuilder.uuid(), "children":[], "data": {"path": dirPath}});
 									parentNode = newNode;
 								}
 							} else {
@@ -139,7 +140,23 @@
 				  		newNode.setActive();
 			    	break;
 			    	case "create-file":
-		    			prompt("Enter the name of the file");
+		    			var fileName = prompt("Enter the name of the file");
+		    			var parentNode = node;
+		    			
+			  			var duplicateNode = findChildNodeByTitle(parentNode, fileName);
+			  			var newNodeExists = (duplicateNode != null) ? duplicateNode.isChildOf(parentNode) : false;
+			  			
+			  			if (!newNodeExists) {
+			  				var filePath = parentNode.data.path + "/" + fileName;
+						  	var operation = OxygenAddonBuilder.create(filePath, false);
+						  	if (operation) {
+							    var newNode = parentNode.addNode({"title": fileName, "key": OxygenAddonBuilder.uuid(), "data": {"path": filePath}});
+							    newNode.setActive();
+							}
+						} else {
+							alert('The file already exists!');
+							return;
+						}			  			
 			    	break;
 			    	case "edit":
 		    			OxygenAddonBuilder.edit(node.data.path);
