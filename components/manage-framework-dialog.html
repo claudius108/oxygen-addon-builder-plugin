@@ -18,6 +18,23 @@
 <script type="text/javascript">
 	function initialize() {
 		$( document ).ready(function() {
+			var findChildNodeByTitle = function(parentNode, childNodeTitle) {
+				var childNodes = parentNode.getChildren();
+				var result = null;
+				
+				if (childNodes != null) {
+					for (var i = 0, il = childNodes.length; i < il; i++) {
+						var childNode = childNodes[i];
+						if (childNode.title == childNodeTitle) {
+							result = childNode;
+						} else {
+							continue;
+						}
+					}				
+				}
+				
+				return result;
+			}
 			var CLIPBOARD = null;
 			$("#tree").fancytree({
 				source: JSON.parse(OxygenAddonBuilder.list(window.location.search.substring(13),
@@ -98,18 +115,28 @@
 		    			var response = prompt("Enter the name of the directory");
 		    			var dirNames = response.split('/');
 		    			var dirPath = node.data.path;
+		    			var nodeTitle = node.title;
+		    			var parentNode = node;
 		    			
 				  		for (var i = 0, il = dirNames.length; i < il; i++) {
 				  			var dirName = dirNames[i];
 				  			dirPath += "/" + dirName;
+				  			console.log("parentNode = " + parentNode);
 				  			
-						  	var operation = OxygenAddonBuilder.create(dirPath, true);
-						  	if (operation) {
-								var newNode = node.addNode({"title": dirName, "folder":true, "key": OxygenAddonBuilder.uuid(), "children":[], "data": {"path": dirPath}});
-								console.log(newNode.data.path);
-								node = newNode;
+				  			var duplicateNode = findChildNodeByTitle(parentNode, dirName);
+				  			var newNodeExists = (duplicateNode != null) ? duplicateNode.isChildOf(parentNode) : false;
+				  			
+				  			if (!newNodeExists) {
+							  	var operation = OxygenAddonBuilder.create(dirPath, true);
+							  	if (operation) {
+									var newNode = parentNode.addNode({"title": dirName, "folder":true, "key": OxygenAddonBuilder.uuid(), "children":[], "data": {"path": dirPath}});
+									parentNode = newNode;
+								}
+							} else {
+								parentNode = duplicateNode;
 							}				  			
-				  		}    			
+				  		}
+				  		newNode.setActive();
 			    	break;
 			    	case "create-file":
 		    			prompt("Enter the name of the file");
