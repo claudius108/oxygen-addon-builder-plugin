@@ -34,7 +34,7 @@
 <script type="text/javascript">
 	function initialize() {
 		$( document ).ready(function() {
-			var frameworksNames = JSON.parse(OxygenAddonBuilder.getframeworksNames("", "**/frameworks/**/**, *.*"));
+			var frameworksNames = JSON.parse(OxygenAddonBuilder.getframeworksNames("**/frameworks/**/**, *.*"));
 			var action = window.location.search.substring(8);
 			var frameworksNamesArray = [];
 			$.each(frameworksNames[0].children, function(i, item) {
