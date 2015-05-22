@@ -18,6 +18,9 @@
 <script type="text/javascript">
 	function initialize() {
 		$( document ).ready(function() {
+			var CLIPBOARD = null;
+			var frameworkPath = window.location.search.substring(15);
+					
 			var findChildNodeByTitle = function(parentNode, childNodeTitle) {
 				var childNodes = parentNode.getChildren();
 				var result = null;
@@ -35,10 +38,9 @@
 				
 				return result;
 			}
-			var CLIPBOARD = null;
+
 			$("#tree").fancytree({
-				source: JSON.parse(OxygenAddonBuilder.list(window.location.search.substring(13),
-					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
+				source: JSON.parse(OxygenAddonBuilder.list(frameworkPath, "*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
 				minExpandLevel: 2,					
 				extensions: ["dnd", "edit"],
 				dnd: {
@@ -54,12 +56,9 @@
 					},
 					dragDrop: function(node, data) {
 						var sourceNode = data.otherNode;
-					  	var operation = OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+					  	var operation = OxygenAddonBuilder.move(sourceNode.getKeyPath(), node.getKeyPath());
 					  	if (operation) {
-							console.log(sourceNode.key);
 							sourceNode.moveTo(node, data.hitMode);
-							sourceNode.data.path =  node.data.path + "/" + sourceNode.title;
-							console.log(sourceNode.key);
 						}						
 					}
 				},				
@@ -72,7 +71,7 @@
 					beforeClose: function(event, data) {
 					},
 					save: function(event, data){
-						OxygenAddonBuilder.rename(data.node.data.path, data.input.val());
+						OxygenAddonBuilder.rename(data.node.getKeyPath(), data.input.val());
 						return true;
 					},
 					close: function(event, data){
@@ -80,7 +79,8 @@
 			    }	    
 			});
 			
-			var node = $("#tree").fancytree("getRootNode");
+			var rootNode = $("#tree").fancytree("getRootNode").getFirstChild();
+			rootNode.key = frameworkPath.substring(1);
       		//node.sortChildren(null, true);
 			
 			
@@ -99,9 +99,13 @@
 			  beforeOpen: function(event, ui) {
 			    var node = $.ui.fancytree.getNode(ui.target);
 			    if (node.isFolder()) {
+			    	$("#tree").contextmenu("showEntry", "create-directory", true);
+			    	$("#tree").contextmenu("showEntry", "create-file", true);			    
 			    	$("#tree").contextmenu("showEntry", "edit", false);
 			    	$("#tree").contextmenu("showEntry", "paste", true);
 			    } else {
+			    	$("#tree").contextmenu("showEntry", "create-directory", false);
+			    	$("#tree").contextmenu("showEntry", "create-file", false);
 			    	$("#tree").contextmenu("showEntry", "edit", true);
 			    	$("#tree").contextmenu("showEntry", "paste", false);
 			    }
@@ -114,7 +118,7 @@
 			    	case "create-directory":
 		    			var response = prompt("Enter the name of the directory");
 		    			var dirNames = response.split('/');
-		    			var dirPath = node.data.path;
+		    			var dirPath = node.getKeyPath();
 		    			var nodeTitle = node.title;
 		    			var parentNode = node;
 		    			var newNode = node;
@@ -122,15 +126,14 @@
 				  		for (var i = 0, il = dirNames.length; i < il; i++) {
 				  			var dirName = dirNames[i];
 				  			dirPath += "/" + dirName;
-				  			console.log("parentNode = " + parentNode);
-				  			
+
 				  			var duplicateNode = findChildNodeByTitle(parentNode, dirName);
 				  			var newNodeExists = (duplicateNode != null) ? duplicateNode.isChildOf(parentNode) : false;
 				  			
 				  			if (!newNodeExists) {
 							  	var operation = OxygenAddonBuilder.create(dirPath, true);
 							  	if (operation) {
-									newNode = parentNode.addNode({"title": dirName, "folder":true, "key": OxygenAddonBuilder.uuid(), "children":[], "data": {"path": dirPath}});
+									newNode = parentNode.addNode({"title": dirName, "folder":true, "key": dirName, "children":[], "data": {"path": dirPath}});
 									parentNode = newNode;
 								}
 							} else {
@@ -147,10 +150,10 @@
 			  			var newNodeExists = (duplicateNode != null) ? duplicateNode.isChildOf(parentNode) : false;
 			  			
 			  			if (!newNodeExists) {
-			  				var filePath = parentNode.data.path + "/" + fileName;
+			  				var filePath = parentNode.getKeyPath() + "/" + fileName;
 						  	var operation = OxygenAddonBuilder.create(filePath, false);
 						  	if (operation) {
-							    var newNode = parentNode.addNode({"title": fileName, "key": OxygenAddonBuilder.uuid(), "data": {"path": filePath}});
+							    var newNode = parentNode.addNode({"title": fileName, "key": fileName, "data": {"path": filePath}});
 							    newNode.setActive();
 							}
 						} else {
@@ -159,12 +162,12 @@
 						}			  			
 			    	break;
 			    	case "edit":
-		    			OxygenAddonBuilder.edit(node.data.path);
+		    			OxygenAddonBuilder.edit(node.getKeyPath());
 			    	break;			    
 			    	case "delete":
 			    		var response = confirm("Do you really want to delete this item?");
 			    		if (response) {
-			    			OxygenAddonBuilder.delete(node.data.path);
+			    			OxygenAddonBuilder.delete(node.getKeyPath());
 			    			node.remove();
 							CLIPBOARD = {
 							  cmd: "",
@@ -177,34 +180,30 @@
 					  	cmd: cmd,
 					  	node: node
 					  };
-					  console.log("key = " + node.key);					  
 					break;			    	
 					case "copy":
 					  CLIPBOARD = {
 					    cmd: cmd,
 					    node: node.toDict(function(n) {
 					      delete node.key;
-					    })
+					    }),
+					  	nodePath: node.getKeyPath()					    
 					  };
-					  console.log("key = " + node.key);
 					break;
 					case "paste":
 					  if (CLIPBOARD.cmd === "cut") {
 					  	var sourceNode = CLIPBOARD.node;
-					  	var operation = OxygenAddonBuilder.move(sourceNode.data.path, node.data.path);
+					  	var operation = OxygenAddonBuilder.move(sourceNode.getKeyPath(), node.getKeyPath());
 					  	if (operation) {
 						    sourceNode.moveTo(node, "child");
 						    sourceNode.setActive();
-						    sourceNode.data.path = node.data.path + "/" + sourceNode.title;
 						}					  	
 					  } else if (CLIPBOARD.cmd === "copy") {
 					  	var sourceNode = CLIPBOARD.node;
-					  	var operation = OxygenAddonBuilder.copy(sourceNode.data.path, node.data.path);
+					  	var operation = OxygenAddonBuilder.copy(CLIPBOARD.nodePath, node.getKeyPath());
 					  	if (operation) {
 						    var targetNode = node.addChildren(sourceNode);
 						    targetNode.setActive();
-						    targetNode.data.path = node.data.path + "/" + CLIPBOARD.node.title;
-						    targetNode.key = OxygenAddonBuilder.uuid();
 						}		  	
 					  }
 					break;						
