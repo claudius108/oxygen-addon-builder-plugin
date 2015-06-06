@@ -1,46 +1,55 @@
 <project name="Oxygen Framework Builder">
 
-	<property name="frameworkDir" value="${frameworksDir}${file.separator}${frameworkId}" />
-	<property name="pluginTemplatesDir" value="${pluginInstallDir}${file.separator}templates${file.separator}" />
-	<property name="frameworkTargetDir" value="${frameworkDir}${file.separator}target${file.separator}" />
-	<property name="frameworkArchivePath" value="${frameworkTargetDir}${frameworkId}.jar" />
+	<property name="oxygenAddonBuilder.frameworkDir" value="${oxygenAddonBuilder.frameworksDir}${file.separator}${oxygenAddonBuilder.frameworkId}" />
+	<property name="oxygenAddonBuilder.pluginTemplatesDir" value="${oxygenAddonBuilder.pluginInstallDir}${file.separator}templates${file.separator}" />
+	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}${file.separator}target${file.separator}" />
+	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
+
+	<echoproperties />
 
 	<target name="build-framework">
 
-		<copy file="${pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${frameworkDir}${file.separator}java" />
-		<copy file="${pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${frameworkDir}${file.separator}resources${file.separator}css" />
-		<copy todir="${frameworkDir}" filtering="true">
-			<fileset dir="${pluginTemplatesDir}addon" includes="addon.xml">
-				<present targetdir="${frameworkDir}" present="srconly" />
+		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
+		<copy file="${oxygenAddonBuilder.pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css" />
+		<copy todir="${oxygenAddonBuilder.frameworkDir}" filtering="true">
+			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}addon" includes="addon.xml">
+				<present targetdir="${oxygenAddonBuilder.frameworkDir}" present="srconly" />
 			</fileset>
 			<filterchain>
 				<expandproperties />
 			</filterchain>
 		</copy>
-		<copy todir="${frameworkDir}">
-			<fileset dir="${pluginTemplatesDir}xquery" includes="addon.xq">
-				<present targetdir="${frameworkDir}" present="srconly" />
+		<copy todir="${oxygenAddonBuilder.frameworkDir}">
+			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}xquery" includes="addon.xq">
+				<present targetdir="${oxygenAddonBuilder.frameworkDir}" present="srconly" />
 			</fileset>
 		</copy>
-		<copy todir="${frameworkTargetDir}${frameworkId}" filtering="true">
-			<fileset dir="${pluginTemplatesDir}java" />
+		<mkdir dir="${oxygenAddonBuilder.frameworkDir}.templates/xquery"/>
+		<copy todir="${oxygenAddonBuilder.frameworkDir}.templates/xquery" filtering="true" verbose="true">
+			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}xquery" excludes="addon.xq" />
 			<filterchain>
 				<expandproperties />
 			</filterchain>
 		</copy>
-		<javac srcdir="${frameworkTargetDir}${frameworkId}" source="1.7" target="1.7" classpath="${frameworkDir}${file.separator}java${file.separator}addon-builder.jar;${frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" includeantruntime="false" debug="true" />
-		<delete file="${frameworkArchivePath}" />
-		<jar destfile="${frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${frameworkTargetDir}" excludes="**/*.java" />
-		<jar destfile="${frameworkArchivePath}" basedir="${frameworksDir}" includes="${frameworkId}/**/*.*" excludes="${frameworkId}/target/" />
-		<signjar jar="${frameworkArchivePath}" keystore="${pluginInstallDir}${file.separator}cryptographic-materials${file.separator}dlri.jks" alias="dlri" storepass="dlrisigner" keypass="dlrisigner" />
+		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" filtering="true">
+			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}java" />
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</copy>
+		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="1.7" target="1.7" classpath="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}addon-builder.jar;${oxygenAddonBuilder.frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" includeantruntime="false" debug="true" />
+		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
+		<jar destfile="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
+		<jar destfile="${oxygenAddonBuilder.frameworkArchivePath}" basedir="${oxygenAddonBuilder.frameworksDir}" includes="${oxygenAddonBuilder.frameworkId}/**/*.*" excludes="${oxygenAddonBuilder.frameworkId}/target/" />
+		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}dlri.jks" alias="dlri" storepass="dlrisigner" keypass="dlrisigner" />
 		<delete includeemptydirs="true">
-			<fileset dir="${frameworkTargetDir}">
+			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
 				<include name="*/" />
-				<exclude name="${frameworkId}.jar" />
+				<exclude name="${oxygenAddonBuilder.frameworkId}.jar" />
 			</fileset>
 		</delete>
-		<copy todir="${frameworkTargetDir}" filtering="true">
-			<fileset dir="${frameworkDir}" includes="addon.xml" />
+		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}" filtering="true">
+			<fileset dir="${oxygenAddonBuilder.frameworkDir}" includes="addon.xml" />
 			<filterchain>
 				<expandproperties />
 			</filterchain>
