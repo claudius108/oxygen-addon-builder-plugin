@@ -5,7 +5,7 @@
 	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}${file.separator}target${file.separator}" />
 	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
 
-	<echoproperties />
+	<echoproperties prefix="oxygenAddonBuilder." />
 
 	<target name="build-framework">
 
