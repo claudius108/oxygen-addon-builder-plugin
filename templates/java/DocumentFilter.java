@@ -1,4 +1,4 @@
-package ${frameworkId};
+package ${oxygenAddonBuilder.frameworkId};
 
 import java.util.Map;
 

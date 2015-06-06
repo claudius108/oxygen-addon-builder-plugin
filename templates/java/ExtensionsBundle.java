@@ -1,15 +1,15 @@
-package ${frameworkId};
+package ${oxygenAddonBuilder.frameworkId};
 
 public class ExtensionsBundle extends ro.sync.ecss.extensions.api.ExtensionsBundle {
 
 	@Override
 	public String getDescription() {
-		return "${frameworkId} extensions bundle implementation";
+		return "${oxygenAddonBuilder.frameworkId} extensions bundle implementation";
 	}
 
 	@Override
 	public String getDocumentTypeID() {
-		return "${frameworkId}.document.type";
+		return "${oxygenAddonBuilder.frameworkId}.document.type";
 	}
 
 }
