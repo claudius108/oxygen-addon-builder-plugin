@@ -27,7 +27,7 @@
 		</copy>
 		<delete includeemptydirs="true">
 			<fileset dir="${oxygenAddonBuilder.frameworkTemplatesPath}" />
-		</delete>		
+		</delete>
 		<copy todir="${oxygenAddonBuilder.frameworkTemplatesPath}xquery" filtering="true" verbose="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}xquery" excludes="addon.xq" />
 			<filterchain>

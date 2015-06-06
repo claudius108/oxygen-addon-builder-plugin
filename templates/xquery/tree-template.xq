@@ -46,13 +46,13 @@ return
             <title />
             <meta charset="UTF-8" />
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-            <link rel="stylesheet" type="text/css" href="../resources/css/footer.css"/>
-            <script type="text/javascript" src="../resources/javascript/jquery/jquery-2.1.4.min.js">/**/</script>
-            <link type="text/css" rel="stylesheet" href="../resources/javascript/jquery-ui/jquery-ui.css" />
-            <script type="text/javascript" src="../resources/javascript/jquery-ui/jquery-ui.min.js">/**/</script>
-            <link href="../resources/javascript/fancytree/skin-win8/ui.fancytree.min.css" rel="stylesheet" type="text/css">
-            <script src="../resources/javascript/fancytree/jquery.fancytree-all.min.js" type="text/javascript">/**/</script>
-            <script type="text/javascript" src="../resources/javascript/jquery.ui-contextmenu/jquery.ui-contextmenu.min.js">/**/</script>
+            <link rel="stylesheet" type="text/css" href="${oxygenAddonBuilder.pluginInstallDir}/resources/css/footer.css"/>
+            <script type="text/javascript" src="${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery/jquery-2.1.4.min.js">/**/</script>
+            <link type="text/css" rel="stylesheet" href="${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery-ui/jquery-ui.css" />
+            <script type="text/javascript" src="${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery-ui/jquery-ui.min.js">/**/</script>
+            <link href="${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/fancytree/skin-win8/ui.fancytree.min.css" rel="stylesheet" type="text/css">
+            <script src="${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/fancytree/jquery.fancytree-all.min.js" type="text/javascript">/**/</script>
+            <script type="text/javascript" src="${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery.ui-contextmenu/jquery.ui-contextmenu.min.js">/**/</script>
             <style type="text/css">
               .ui-menu {
                 width: 100px;
