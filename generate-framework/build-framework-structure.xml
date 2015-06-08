@@ -6,6 +6,7 @@
 	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
 	<property name="oxygenAddonBuilder.path-to-oxygenAuthor.jar" value="${oxygenAddonBuilder.frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" />
 	<property name="oxygenAddonBuilder.path-to-addon-builder.jar" value="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}addon-builder.jar" />
+	<property name="oxygenAddonBuilder.path-to-log4j.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/log4j.jar" />
 
 	<echoproperties prefix="oxygenAddonBuilder." />
 
@@ -41,9 +42,9 @@
 		<echo>Execute 'ro.kuberam.oxygen.addonBuilder.parser.Parser' class...</echo>
 		<java fork="true" classname="ro.kuberam.oxygen.addonBuilder.parser.Parser" failonerror="true" output="/home/claudius/a.txt">
 			<classpath>
-				<pathelement path="${oxygenAddonBuilder.path-to-addon-builder.jar}"/>
-				<pathelement path="${oxygenAddonBuilder.path-to-oxygenAuthor.jar}"/>
-				<pathelement path="${oxygenAddonBuilder.frameworksDir}/../lib/log4j.jar"/>
+				<pathelement path="${oxygenAddonBuilder.path-to-addon-builder.jar}" />
+				<pathelement path="${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" />
+				<pathelement path="${oxygenAddonBuilder.path-to-log4j.jar}" />
 			</classpath>
 			<arg value="${oxygenAddonBuilder.frameworkDir}" />
 			<arg value="${oxygenAddonBuilder.frameworkId}" />
@@ -52,7 +53,7 @@
 		</java>
 
 
-		<echo>Compile 'ro.kuberam.oxygen.addonBuilder.parser.Parser' class...</echo>
+		<echo>Compile '${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}' directory...</echo>
 		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="1.7" target="1.7" classpath="${oxygenAddonBuilder.path-to-addon-builder.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
 		<jar destfile="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
