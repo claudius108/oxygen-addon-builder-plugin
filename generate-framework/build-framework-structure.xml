@@ -53,8 +53,11 @@
 			<arg value="${oxygenAddonBuilder.frameworkTargetDir}" />
 			<sysproperty key="DEBUG" value="true" />
 		</java>
-
-
+		<delete>
+			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
+				<include name="tree-template.xq" />
+			</fileset>
+		</delete>		
 		<echo>Compile '${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}' directory...</echo>
 		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="1.7" target="1.7" classpath="${oxygenAddonBuilder.path-to-addon-builder.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
