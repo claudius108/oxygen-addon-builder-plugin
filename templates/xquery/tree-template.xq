@@ -1,6 +1,6 @@
 declare variable $root-nodes := ${root-nodes};
 declare variable $item-template := ${item-template};
-declare variable $tree-height := ${tree-height};
+declare variable $tree-height := "${tree-height}";
 
 declare function local:process-node($node) {
     let $treeitem := ${treeitem}
