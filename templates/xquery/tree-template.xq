@@ -1,5 +1,6 @@
 declare variable $root-nodes := ${root-nodes};
 declare variable $item-template := ${item-template};
+declare variable $tree-height := ${tree-height};
 
 declare function local:process-node($node) {
     let $treeitem := ${treeitem}
@@ -59,6 +60,10 @@ return
                 font-size: 63%;
                 z-index: 3;
               }}
+              #tree .fancytree-container {{
+                height: {$tree-height};
+                overflow: auto;
+              }}              
             </style>
             <script type="text/javascript">
                 datasource = {$datasource};
