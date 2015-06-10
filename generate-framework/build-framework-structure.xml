@@ -2,7 +2,7 @@
 
 	<property name="oxygenAddonBuilder.frameworkDir" value="${oxygenAddonBuilder.frameworksDir}${file.separator}${oxygenAddonBuilder.frameworkId}${file.separator}" />
 	<property name="oxygenAddonBuilder.pluginTemplatesDir" value="${oxygenAddonBuilder.pluginInstallDir}${file.separator}templates${file.separator}" />
-	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}${file.separator}target${file.separator}" />
+	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}target${file.separator}" />
 	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
 	<property name="oxygenAddonBuilder.path-to-oxygenAuthor.jar" value="${oxygenAddonBuilder.frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" />
 	<property name="oxygenAddonBuilder.path-to-addon-builder.jar" value="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}addon-builder.jar" />
