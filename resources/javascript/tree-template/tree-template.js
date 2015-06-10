@@ -23,6 +23,8 @@ function initialize() {
             source: datasource,
             minExpandLevel: 2,                  
             extensions: ["dnd", "wide"],
+            autoScroll: true,
+            toggleEffect: { effect: "blind", options: {direction: "vertical", scale: "box"}, duration: 200 },
             dnd: {
                 autoExpandMS: 400,
                 focusOnClick: true,
