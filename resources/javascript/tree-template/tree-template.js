@@ -24,7 +24,7 @@ function initialize() {
         $("#tree").fancytree({
             source: datasource,
             minExpandLevel: 2,                  
-            extensions: ["dnd", "edit"],
+            extensions: ["dnd", "wide"],
             dnd: {
                 autoExpandMS: 400,
                 focusOnClick: true,
@@ -44,21 +44,11 @@ function initialize() {
                     }                       
                 }
             },              
-            edit: {
-                triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
-                beforeEdit: function(event, data) {
-                },
-                edit: function(event, data){
-                },
-                beforeClose: function(event, data) {
-                },
-                save: function(event, data){
-                    OxygenAddonBuilder.rename(data.node.getKeyPath(), data.input.val());
-                    return true;
-                },
-                close: function(event, data){
-                }
-            }       
+            wide: {
+                // iconWidth: "1em",     // Adjust this if @fancy-icon-width != "16px"
+                // iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
+                // levelOfs: "1.5em"     // Adjust this if ul padding != "16px"
+              }       
         });
         
         var rootNode = $("#tree").fancytree("getRootNode").getFirstChild();
