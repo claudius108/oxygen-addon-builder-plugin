@@ -89,7 +89,7 @@ return
                             }
                 
                             $("#tree").fancytree({
-                                source: JSON.parse(datasource),
+                                source: datasource,
                                 minExpandLevel: 2,                  
                                 extensions: ["dnd", "edit"],
                                 dnd: {
