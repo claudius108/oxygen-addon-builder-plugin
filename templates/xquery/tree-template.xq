@@ -57,7 +57,7 @@ return
               .ui-menu {{
                 width: 100px;
                 font-size: 63%;
-                z-index: 3; /* over ext-wide titles */
+                z-index: 3;
               }}
             </style>
             <script type="text/javascript">

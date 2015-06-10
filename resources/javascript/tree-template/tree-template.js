@@ -1,8 +1,6 @@
 function initialize() {
     $(document).ready(function() {
         var CLIPBOARD = null;
-        var frameworkPath = window.location.search.substring(15);
-                
         var findChildNodeByTitle = function(parentNode, childNodeTitle) {
             var childNodes = parentNode.getChildren();
             var result = null;
