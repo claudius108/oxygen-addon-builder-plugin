@@ -45,16 +45,11 @@ function initialize() {
                 }
             },              
             wide: {
-                // iconWidth: "1em",     // Adjust this if @fancy-icon-width != "16px"
-                // iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
-                // levelOfs: "1.5em"     // Adjust this if ul padding != "16px"
+                iconWidth: "1em",     // Adjust this if @fancy-icon-width != "16px"
+                iconSpacing: "0.5em", // Adjust this if @fancy-icon-spacing != "3px"
+                levelOfs: "1.5em"     // Adjust this if ul padding != "16px"
               }       
         });
-        
-        var rootNode = $("#tree").fancytree("getRootNode").getFirstChild();
-        rootNode.key = frameworkPath.substring(1);
-        //node.sortChildren(null, true);
-        
         
         $("#tree").contextmenu({
           delegate: "span.fancytree-title",
