@@ -22,7 +22,7 @@ function initialize() {
         $("#tree").fancytree({
             source: datasource,
             minExpandLevel: 2,                  
-            extensions: ["dnd", "wide"],
+            extensions: ["dnd"],
             autoScroll: true,
             dnd: {
                 autoExpandMS: 400,
@@ -176,6 +176,6 @@ function initialize() {
             }
             
           }
-        }); 
+        });        
     });     
 }

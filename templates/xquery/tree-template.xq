@@ -63,8 +63,7 @@ return
               }}
               #tree .fancytree-container {{
                 height: {$tree-height};
-                overflow: auto;
-              }}              
+              }}
             </style>
             <script type="text/javascript">
                 datasource = {$datasource};
