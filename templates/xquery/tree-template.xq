@@ -4,7 +4,8 @@ declare variable $tree-height := "${tree-height}";
 
 declare function local:process-node($node) {
     let $treeitem := ${treeitem}
-    let $children := $node/element()
+    let $node-name := $node/local-name()
+    let $children := $node/element()[local-name() = $node-name]
     
     return
         string-join(
