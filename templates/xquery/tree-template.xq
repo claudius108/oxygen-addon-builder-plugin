@@ -1,9 +1,10 @@
 declare variable $root-nodes := ${root-nodes};
+declare variable $root-nodes-path := ${root-nodes-path};
 declare variable $item-template := ${item-template};
 declare variable $tree-height := "${tree-height}";
 
-declare function local:process-node($node) {
-    let $treeitem := ${treeitem}
+declare function local:process-node($node as node()?, $node-path as xs:string?) {
+    let $treeitem := substring(translate(normalize-space(string-join(($node/@level, if ($node/tmx:form) then concat($node/tmx:form, ' =') else (), $node/tmx:def), ' ')), "&quot;", "\&quot;"), 0, 100)
     let $node-name := $node/name()
     let $children := $node/element()[name() = $node-name]
     
@@ -12,13 +13,13 @@ declare function local:process-node($node) {
             (
                 concat("{", "&quot;title&quot;: &quot;", $treeitem, "&quot;")
                 ,
-                concat("&quot;key&quot;: &quot;", $treeitem, "&quot;", if (empty($children)) then "}" else ())
+                concat("&quot;key&quot;: &quot;", $node-path, "&quot;", if (empty($children)) then "}" else ())
                 ,
                 if (not(empty($children)))
                 then
                     let $children :=
-                        for $child in $children
-                        return local:process-node($child)
+                        for $child at $pos in $children
+                        return local:process-node($child, concat($node-path, "/", $child/name(), "[position() = ", $pos , " and namespace-uri() = '", namespace-uri($child),"']"))
                         
                     return concat("&quot;folder&quot;: true, ", "&quot;children&quot;: [", string-join($children, ", "), "]}")
                 else ()
@@ -33,8 +34,8 @@ let $datasource :=
         "["
         ,
         string-join(
-            for $root-node in $root-nodes
-            return local:process-node($root-node)
+            for $root-node at $pos in $root-nodes
+            return local:process-node($root-node, concat($root-nodes-path, "[", $pos , "]"))
             ,
             ","
         )
