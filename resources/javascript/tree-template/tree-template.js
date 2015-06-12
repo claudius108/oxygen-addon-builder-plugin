@@ -37,7 +37,7 @@ function initialize() {
                 },
                 dragDrop: function(node, data) {
                     var sourceNode = data.otherNode;
-                    var operation = OxygenAddonBuilder.move(sourceNode.getKeyPath(), node.getKeyPath());
+                    var operation = UserInterfaceBridge.move(sourceNode.getKeyPath(), node.getKeyPath());
                     if (operation) {
                         sourceNode.moveTo(node, data.hitMode);
                     }                       
@@ -97,7 +97,7 @@ function initialize() {
                         var newNodeExists = (duplicateNode != null) ? duplicateNode.isChildOf(parentNode) : false;
                         
                         if (!newNodeExists) {
-                            var operation = OxygenAddonBuilder.create(dirPath, true);
+                            var operation = UserInterfaceBridge.create(dirPath, true);
                             if (operation) {
                                 newNode = parentNode.addNode({"title": dirName, "folder":true, "key": dirName, "children":[], "data": {"path": dirPath}});
                                 parentNode = newNode;
@@ -117,7 +117,7 @@ function initialize() {
                     
                     if (!newNodeExists) {
                         var filePath = parentNode.getKeyPath() + "/" + fileName;
-                        var operation = OxygenAddonBuilder.create(filePath, false);
+                        var operation = UserInterfaceBridge.create(filePath, false);
                         if (operation) {
                             var newNode = parentNode.addNode({"title": fileName, "key": fileName, "data": {"path": filePath}});
                             newNode.setActive();
@@ -128,12 +128,12 @@ function initialize() {
                     }                       
                 break;
                 case "edit":
-                    OxygenAddonBuilder.edit(node.getKeyPath());
+                    UserInterfaceBridge.edit(node.getKeyPath());
                 break;              
                 case "delete":
                     var response = confirm("Do you really want to delete this item?");
                     if (response) {
-                        OxygenAddonBuilder.delete(node.getKeyPath());
+                        UserInterfaceBridge.delete(node.getKeyPath());
                         node.remove();
                         CLIPBOARD = {
                           cmd: "",
@@ -159,14 +159,14 @@ function initialize() {
                 case "paste":
                   if (CLIPBOARD.cmd === "cut") {
                     var sourceNode = CLIPBOARD.node;
-                    var operation = OxygenAddonBuilder.move(sourceNode.getKeyPath(), node.getKeyPath());
+                    var operation = UserInterfaceBridge.move(sourceNode.getKeyPath(), node.getKeyPath());
                     if (operation) {
                         sourceNode.moveTo(node, "child");
                         sourceNode.setActive();
                     }                       
                   } else if (CLIPBOARD.cmd === "copy") {
                     var sourceNode = CLIPBOARD.node;
-                    var operation = OxygenAddonBuilder.copy(CLIPBOARD.nodePath, node.getKeyPath());
+                    var operation = UserInterfaceBridge.copy(CLIPBOARD.nodePath, node.getKeyPath());
                     if (operation) {
                         var targetNode = node.addChildren(sourceNode);
                         targetNode.setActive();
