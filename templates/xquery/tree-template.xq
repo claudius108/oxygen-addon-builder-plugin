@@ -49,7 +49,6 @@ return
             <title>Tree template</title>
             <meta charset="UTF-8" />
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-            <link rel="stylesheet" type="text/css" href="file://${oxygenAddonBuilder.pluginInstallDir}/resources/css/footer.css"/>
             <script type="text/javascript" src="file://${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery/jquery-2.1.4.min.js">/**/</script>
             <link type="text/css" rel="stylesheet" href="file://${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery-ui/jquery-ui.css" />
             <script type="text/javascript" src="file://${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/jquery-ui/jquery-ui.min.js">/**/</script>
