@@ -72,9 +72,6 @@ return
             <script type="text/javascript" src="file://${oxygenAddonBuilder.pluginInstallDir}/resources/javascript/tree-template/tree-template.js">/**/</script>            
         </head>
         <body onload="window.setTimeout(initialize, 0);">
-            <ol id="tree"></ol>
-            <div id="footer">
-                <button style="float: right;" onclick="OxygenAddonBuilder.closeDialogWindow();">Close</button>
-            </div>      
+            <ol id="tree"></ol>     
         </body>
     </html>
