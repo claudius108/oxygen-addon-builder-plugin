@@ -45,6 +45,15 @@
 						<target>${java-version}</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>wagon-maven-plugin</artifactId>
+					<version>1.0</version>
+					<configuration>
+						<serverId>sourceforge</serverId>
+						<url>${sourceforge-repo-url}</url>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
