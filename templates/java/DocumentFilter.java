@@ -89,6 +89,16 @@ public class DocumentFilter extends AuthorDocumentFilter {
 					currentElement, attributeName, null, null);		
 		}
 	}
+	
+	@Override
+	public void removeAttribute(AuthorDocumentFilterBypass filterBypass, String attributeName,
+			AuthorElement element) {
+
+		filterBypass.removeAttribute(attributeName, element);
+		AttrValue attrValue = new AttrValue("");
+		authorDocumentController.setAttribute(attributeName, attrValue, element);
+
+	}	
 
 	@Override
 	public void insertText(AuthorDocumentFilterBypass filterBypass, int offset, String textContent) {
