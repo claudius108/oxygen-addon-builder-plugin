@@ -19,6 +19,7 @@
 		<addon-location>http://claudius108.users.sourceforge.net/repos/${project.artifactId}/${project.artifactId}.jar</addon-location>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
+		<dlri.jarsigner.keystore>/home/claudius/workspaces/_backup/archive/cryptographic-materials/dlri/dlri.jks</dlri.jarsigner.keystore>
 	</properties>
 
 	<dependencies>
@@ -125,7 +126,7 @@
 							<goal>sign</goal>
 						</goals>
 						<configuration>
-							<keystore>/home/claudius/workspaces/_backup/archive/cryptographic-materials/dlri/dlri.jks</keystore>
+							<keystore>${dlri.jarsigner.keystore}</keystore>
 							<alias>dlri</alias>
 							<storepass>dlrisigner</storepass>
 							<keypass>dlrisigner</keypass>
