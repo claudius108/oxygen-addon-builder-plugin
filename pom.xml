@@ -125,7 +125,7 @@
 							<goal>sign</goal>
 						</goals>
 						<configuration>
-							<keystore>/home/claudius/workspaces/archive/cryptographic-materials/dlri/dlri.jks</keystore>
+							<keystore>/home/claudius/workspaces/_backup/archive/cryptographic-materials/dlri/dlri.jks</keystore>
 							<alias>dlri</alias>
 							<storepass>dlrisigner</storepass>
 							<keypass>dlrisigner</keypass>
