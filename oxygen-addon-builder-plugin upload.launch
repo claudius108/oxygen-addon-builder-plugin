@@ -13,6 +13,5 @@
 	<intAttribute key="M2_THREADS" value="1" />
 	<booleanAttribute key="M2_UPDATE_SNAPSHOTS" value="false" />
 	<booleanAttribute key="M2_WORKSPACE_RESOLUTION" value="false" />
-	<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY"
-		value="/home/claudius/workspaces/repositories/git/oxygen-addon-builder-plugin" />
+	<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_path}" />
 </launchConfiguration>
