@@ -7,10 +7,9 @@
     version="${project.version}.${timestamp}"
     vendor="kuberam.ro"
     class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPlugin"
-    classLoaderType="preferOxygenResources">
+    classLoaderType="preferReferencedResources">
     <runtime>
         <library name="lib/addon-builder.jar" />
-        <library name="${oxygenInstallDir}/jre/lib/ext/jfxrt.jar" />
     </runtime>
     <extension type="WorkspaceAccess" class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension" />
     <extension type="URLHandler" class="ro.kuberam.oxygen.addonBuilder.urlSchemes.CustomProtocolURLHandlerExtension"/>
