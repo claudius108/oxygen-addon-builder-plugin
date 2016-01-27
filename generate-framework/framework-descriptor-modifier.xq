@@ -12,7 +12,7 @@ declare updating function local:process-css-descriptors() {
     let $cssFile-descriptor :=
         <cssFile>
             <field name="href">
-                <String>${{framework}}/resources/css/kuberam-addon-templates.css</String>
+                <String>${{framework}}/resources/css/kuberam-addon-templates.less</String>
             </field>
             <field name="title">
                 <String/>
@@ -46,7 +46,7 @@ declare updating function local:process-authorExtensionStateListener-field() {
 };
 
 (
-    if (contains($cssDescriptors-field/string(), '${framework}/resources/css/kuberam-addon-templates.css'))
+    if (contains($cssDescriptors-field/string(), '${framework}/resources/css/kuberam-addon-templates.less'))
     then ()
     else local:process-css-descriptors()
     ,

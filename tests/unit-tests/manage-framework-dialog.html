@@ -12,7 +12,7 @@
 		$( document ).ready(function() {
 			$("#tree").fancytree({
 				source: JSON.parse(OxygenAddonBuilder.list(window.location.search.substring(13),
-					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.css, **/.svn")),
+					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar, kuberam-addon-templates.less, **/.svn")),
 				minExpandLevel: 2,					
 				extensions: ["edit"],
 			    edit: {

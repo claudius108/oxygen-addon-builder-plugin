@@ -14,7 +14,7 @@
 	<target name="build-framework">
 
 		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
-		<copy file="${oxygenAddonBuilder.pluginTemplatesDir}css${file.separator}kuberam-addon-templates.css" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css" />
+		<copy file="${oxygenAddonBuilder.pluginTemplatesDir}css${file.separator}kuberam-addon-templates.less" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css" />
 		<copy todir="${oxygenAddonBuilder.frameworkDir}" filtering="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}addon" includes="addon.xml">
 				<present targetdir="${oxygenAddonBuilder.frameworkDir}" present="srconly" />
