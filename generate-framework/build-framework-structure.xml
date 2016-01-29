@@ -9,13 +9,18 @@
 	<property name="oxygenAddonBuilder.path-to-log4j.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/log4j.jar" />
 	<property name="oxygenAddonBuilder.path-to-commons-io.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/commons-io-1.3.1.jar" />
 
-	<echoproperties prefix="oxygenAddonBuilder."/>
+	<echoproperties prefix="oxygenAddonBuilder." />
 
 	<target name="build-framework">
 
 		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
-		<copy file="${oxygenAddonBuilder.pluginTemplatesDir}css${file.separator}kuberam-addon-templates.less" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css" />
-		<copy file="${oxygenAddonBuilder.pluginTemplatesDir}css${file.separator}datalists.less" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css" />
+		<copy todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css">
+			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
+				<filename name="kuberam-addon-templates.less" />
+				<filename name="datalists.less" />
+				<filename name="actions.less" />
+			</fileset>
+		</copy>
 		<copy todir="${oxygenAddonBuilder.frameworkDir}" filtering="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}addon" includes="addon.xml">
 				<present targetdir="${oxygenAddonBuilder.frameworkDir}" present="srconly" />
@@ -58,7 +63,7 @@
 			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
 				<include name="tree-template.xq" />
 			</fileset>
-		</delete>		
+		</delete>
 		<echo>Compile '${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}' directory...</echo>
 		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="${ant.java.version}" target="${ant.java.version}" classpath="${oxygenAddonBuilder.path-to-addon-builder.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
