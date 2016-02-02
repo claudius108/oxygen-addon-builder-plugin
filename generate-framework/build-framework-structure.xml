@@ -16,7 +16,7 @@
 		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
 		<copy todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
-				<filename name="kuberam-addon-templates.less" />
+				<filename name="framework.less" />
 				<filename name="datalists.less" />
 				<filename name="actions.less" />
 			</fileset>
