@@ -125,10 +125,10 @@
 							<goal>sign</goal>
 						</goals>
 						<configuration>
-							<keystore>${dlri.jarsigner.keystore}</keystore>
-							<alias>${dlri.jarsigner.alias}</alias>
-							<storepass>${dlri.jarsigner.storepass}</storepass>
-							<keypass>${dlri.jarsigner.keypass}</keypass>
+							<keystore>${basedir}/cryptographic-materials/oxygen-addon-builder.jks</keystore>
+							<alias>oxygen-addon-builder</alias>
+							<storepass>oxygen</storepass>
+							<keypass>oxygen</keypass>
 						</configuration>
 					</execution>
 				</executions>
