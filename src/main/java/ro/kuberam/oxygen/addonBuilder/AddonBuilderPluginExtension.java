@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 
 import ro.kuberam.oxygen.addonBuilder.javafx.JavaFXPanel;
 import ro.kuberam.oxygen.addonBuilder.javafx.bridges.framework.FrameworkGeneratingBridge;
-import ro.kuberam.oxygen.addonBuilder.urlSchemes.CustomProtocolURLHandlerExtension;
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 import ro.sync.exml.workspace.api.standalone.ToolbarComponentsCustomizer;
@@ -37,8 +36,6 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 
 	@Override
 	public void applicationStarted(final StandalonePluginWorkspace pluginWorkspaceAccess) {
-
-		CustomProtocolURLHandlerExtension.setPluginWorkspaceAccess(pluginWorkspaceAccess);
 
 		setPluginWorkspaceAccess(pluginWorkspaceAccess);
 
