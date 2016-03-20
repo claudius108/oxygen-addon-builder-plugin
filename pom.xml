@@ -23,9 +23,22 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>ro.kuberam.oxygen</groupId>
-			<artifactId>addon-builder</artifactId>
-			<version>0.15</version>
+			<groupId>com.oxygenxml</groupId>
+			<artifactId>oxygen</artifactId>
+			<version>${oxygen-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oxygenxml</groupId>
+			<artifactId>oxygen-annotations</artifactId>
+			<version>${oxygen-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="ro.kuberam.oxygen.addonBuilder.javafx.Controller" spacing="5" alignment="CENTER">
+<TextField fx:id="textField" promptText="Enter message here"/>
+    <Button text="Print message" onAction="#printMessage" />    
+</VBox>

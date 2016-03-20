@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx xmlns="http://www.lisa.org/tmx14" xmlns:tei="http://www.tei-c.org/ns/1.0" version="1.4">
+	<header creationtool="tamboti" creationtoolversion="1.5" segtype="block" o-tmf="tmx" adminlang="en-us"
+		srclang="en" datatype="xml" />
+	<body file="oxygen/16/frameworks/opf/description.html">
+		<tu tuid="language-selecting-select1">
+			<tuv xml:lang="en">
+				<seg tei:test="value-of-attribute-tei:test" a="value-of-attribute-a">rac</seg>
+			</tuv>
+			<t tei:test="value-of-attribute-tei:test" a="value-of-attribute-a" b="value-of-attribute-b" />
+			<t>
+				<new />
+			</t>
+			<t />
+		</tu>
+		<mediaobject objectwidth="textsize" orient="port">
+			<image objectname="icons/Gasturbine_Typ_SGT6-8000H.PNG" />
+		</mediaobject>
+		<sense level="I." xml:id="id6f07bf10-bfe8-410b-a831-e4df247f5e7a">
+			<def>Pron. pers. art., învechit şi regional, nearticulat (înlocuieşte, de
+				obicei, nume de persoane \nşi,
+				învechit şi regional, mai ales în Mold., şi
+				nume de lucruri; pentru unii vorbitori şi cu o nuanţă de
+				politeţe) Ţine
+				locul persoanei despre care se vorbeşte.
+			</def>
+			<def />
+			<cit>
+				<quote>citat 2</quote>
+				<bibl>
+					<ptr target="ABC MAR." />
+					<date type="">2001</date>
+					<citedRange>detalii 2</citedRange>
+				</bibl>
+			</cit>
+			<sense level="I.1." xml:id="idab8184fe-8888-443f-a6b0-3fdc0af11c44">
+				<def>(La nominativ) El, ea.</def>
+				<cit>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<sense level="I.1.a)" xml:id="idae85242c-0290-49f4-b4e3-96380fd869fa">
+					<def>(Cu funcţie de subiect, aşezat înaintea sau, rar, în urma
+						predicatului, are rolul de evidenţiere a
+						autorului acţiunii)
+					</def>
+					<cit>
+						<quote>Tătarii... au dat în urma oştilor celor protivnice şi,
+							agiungându-se în Moldova la pădurea
+							Bacăului, dânsele n-au stat
+							la bătaie.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Dânsul are să trăiască Şi mulţi ani să vieţuiască.</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Feciorul lui Busuioc ... din când în când îi zicea câte-o
+							vorbă, pe care numai dânsa putea s-o
+							înţeleagă.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Dar iată-i! Dânşii ies Mai mulţii Erau o sută şi-acum ei sunt
+							o mie.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Ce hotărăşte dânsul, aia e sfânt. </quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<sense level="I.1.a.1" xml:id="id255d9659-c3e0-48cf-b39c-b377ebd301f1" value="adverbial-locution">
+						<def>dafdfsd</def>
+						<def>asdasdsa</def>
+						<usg type="" />
+						<cit>
+							<quote />
+							<bibl>
+								<ptr target="" />
+								<date type="" />
+								<citedRange />
+							</bibl>
+						</cit>
+						<sense level="I.1.a.1.1" xml:id="id593b69bc-4005-4dab-b8d5-8537d96daad1" value="compound">
+							<form type="compound" />
+							<def>daasam</def>
+							<cit>
+								<quote />
+								<bibl>
+									<ptr target="ABC MAR." />
+									<date type="" />
+									<citedRange />
+								</bibl>
+							</cit>
+							<sense level="I.1.a.1.1.1" xml:id="idb766f683-9c6a-4f95-9cd8-af4e08b1f754" value="saying">
+								<form type="unitate-semantică-subsumată" />
+								<def>
+									definiţie cu font tip 22
+									<hi rend="bold">bold</hi>
+								</def>
+								<xr type="syn">
+									<ref target="">
+										<oRef type="" />
+										<lbl />
+									</ref>
+								</xr>
+								<def />
+								<cit>
+									<quote value="" />
+									<bibl>
+										<ptr target="" />
+										<date type="" />
+										<citedRange />
+									</bibl>
+								</cit>
+								<cit>
+									<quote>citat 1</quote>
+									<bibl>
+										<ptr target="ABC" />
+										<date type="">2000</date>
+										<citedRange>detalii 1</citedRange>
+									</bibl>
+								</cit>
+								<cit>
+									<quote />
+									<bibl>
+										<ptr target="" />
+										<date type="" notBefore="" notAfter="" />
+										<citedRange />
+									</bibl>
+								</cit>
+							</sense>
+							<sense level="I.1.a.1.1.2" xml:id="ida0d0171a-065b-434a-9a3f-b1daf9149285">
+								<form type="proverb">proverb</form>
+								<def />
+								<cit>
+									<quote />
+									<bibl>
+										<ptr target="ABC MAR." />
+										<date type="" />
+										<citedRange />
+									</bibl>
+								</cit>
+							</sense>
+						</sense>
+						<sense level="" xml:id="ida7fef130-dd19-4cb9-8fe7-a6d0afa14586">
+							<def>definiţie</def>
+							<cit>
+								<quote />
+								<bibl>
+									<ptr target="" />
+									<date type="" />
+									<citedRange />
+								</bibl>
+							</cit>
+						</sense>
+					</sense>
+				</sense>
+				<sense level="I.1.b)" xml:id="id33de4a2e-248d-4229-b256-5c91c29413ac">
+					<def>(Aşezat după predicate exprimate prin verbe de declaraţie sau în
+						propoziţii incidente, are rolul de
+						a marca insistenţa asupra
+						autorului acţiunii sau de a evita repetarea acestuia)
+					</def>
+					<cit>
+						<quote>O, şopteşte-mi - zice dânsul - tu cu ochii plini d-eres Dulci
+							cuvinte ne-nţelese, însă pline
+							de-nţeles.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Mi-am pierdut cumpătul, îşi zise dânsul cu amărăciune. </quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Bietul meu Jeannotl exclamă dânsa.</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Până atunci, cum zice dânsa, ne-o coace.</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Agapia îl prigonea [pe' Mitrea]. Zicea dânsa: Mai bine îl
+							fătam mânz şi-l mânca un lup.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+				</sense>
+				<sense level="c)" xml:id="id91129699-e97a-4b41-b99d-285b842251a3">
+					<def>(însoţit
+						de &#8222;şi&#8221;
+						adverbial, cu funcţia de reluare a subiectului)
+					</def>
+					<cit>
+						<quote>Toţi arhiereii lumei şi dânşii sânguri trăbue să se chiame la
+							sobor şi să hotărască dogmele
+							credinţii, lăsând pre toţi
+							ceilalţi afară, veri clirici, veri mireni.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Şi nu că o iubesc pentru altceva, căci şi dânsa este o muere
+							ca toate celelalte, ci numai pentru
+							credinţa şi cinstea ei,
+							lucru cel mai scump din lume la o nevastă cu bărbat.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Ioana plângea şi dânsa.</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<cit>
+						<quote>Ei vor aplauda desigur biografia subţire Care s-o-ncerca
+							s-arăte că n-ai fost vrun lucru mare,
+							C-ai fost om cum sunt şi
+							dânşii.
+						</quote>
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+					<sense level="c.1" value="◊" xml:id="idac79a3c0-2338-4f0f-b81f-d2048e1e62a9">
+						<def />
+						<cit>
+							<quote />
+							<bibl>
+								<ptr target="" />
+								<date type="" />
+								<citedRange />
+							</bibl>
+						</cit>
+					</sense>
+					<sense level="c.2" xml:id="id10ea6963-8976-4a76-827b-94e076dabca8">
+						<def />
+						<cit>
+							<quote />
+							<bibl>
+								<ptr target="" />
+								<date type="" />
+								<citedRange />
+							</bibl>
+						</cit>
+					</sense>
+				</sense>
+			</sense>
+			<sense level="I.2." xml:id="id4f1e6164-5c19-499f-b13e-355f98e1717f">
+				<def>(La genitiv şi dativ; înlocuieşte numele unui atribut sau al unui
+					complement indirect)
+				</def>
+				<cit>
+					<quote>Crescând extensia vreunui concept scade intensia dânsului, şi
+						scăzându-i intensia, îi creşte
+						extensia.
+					</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>Urmează ca doamna ministru să descâlcească iţele urât încurcate
+						de predecesorii dânsei.
+					</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>I-am dat dânsului.</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+			</sense>
+			<sense level="I.3." xml:id="id2fd04ce5-c76f-44d6-89f7-c96524d8428a">
+				<def>(La acuzativ; precedat de diverse prepoziţii, înlocuieşte numele unui
+					complement indirect sau
+					circumstanţial sau al unui atribut)
+				</def>
+				<cit>
+					<quote>Că de la Dumnedzeu e mila multă, de la Dins mântuirea.</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>Intrămu în casa lui Filipu ... şi lăcuimu la dinsu. </quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>Eu scoşu de la densu spata şi tăiaiu capul lui.</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>Atunce aduseră la dâns prunci.</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+			</sense>
+		</sense>
+		<sense level="II." xml:id="ida42165c3-1686-4d57-8fa9-71b40d6aa214">
+			<def>Subst.</def>
+			<cit>
+				<quote />
+				<bibl>
+					<ptr target="" />
+					<date type="" />
+					<citedRange />
+				</bibl>
+			</cit>
+			<sense level="II.2" xml:id="idb445ff8f-19c0-4237-bc2d-1e907fac53f6">
+				<def>S. m. şi f. (Popular) Soţ1 (2), soţie (3).</def>
+				<cit>
+					<quote>Să ştii că dânsu-al meu e supărat!</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+			</sense>
+			<sense level="II.2." xml:id="idc7b254ae-881f-4cd9-8fb2-f39189034db6">
+				<def>S. f. (Eufemistic, în credinţele populare, mai ales prin Mold.; la pl.)
+					Iele.
+				</def>
+				<cit>
+					<quote>Stăi pe loc, ce, te-au apucat dânsele?</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>Dânsele sau ielele, spun babele, sunt foarte rele. Au putere de a
+						lua cuiva minţile ... să-l facă
+						din om neom.
+					</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+			</sense>
+			<sense level="II.3." xml:id="idbf1b2380-0eaf-487a-8add-e8a858e254bc">
+				<def>S. f. (Popular; şi în sintagma de dânsele) Boală (reumatică) despre
+					care se crede că este provocată
+					de iele.
+				</def>
+				<cit>
+					<quote>Femeile
+						ştiutoare din Bucovina spun că această plantă este bună
+						pentru boala: &#8222;De-dânsele&#8221;.
+					</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>fle dânsele" se numeşte un morb în feliul reumatismului, însă,
+						după cum spune poporul, e cu mult
+						mai periculos, fiindcă se întinde
+						peste tot corpul.
+					</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<cit>
+					<quote>L-au întâlnit... Ele le cu săgetături şi cu ... de Dânsele. </quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+			</sense>
+			<sense level="II.4." xml:id="id5dc5d1a9-39fd-4749-8a33-72dc805dd966">
+				<def>S.
+					f. (Bot; prin Mold. şi prin Bucov.; şi în sintagma de dânsele)
+					Numele unor plante erbacee folosite în
+					medicina populară pentru tratarea
+					bolii &#8222;de
+					dânsele&#8221;,
+					v. d â n s u 1 (II 3):
+				</def>
+				<cit>
+					<quote />
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+				<sense level="II.4.a)" xml:id="id3a25417a-5634-432f-ad8d-1f82f9cf85a7">
+					<def>Equisetum palustre.</def>
+					<cit>
+						<quote />
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+				</sense>
+				<sense level="II.4.b)" xml:id="id68700a3b-721e-463d-b545-d4cdb3c19fd4">
+					<def>Geranium phaeum.</def>
+					<cit>
+						<quote />
+						<bibl>
+							<ptr target="" />
+							<date type="" />
+							<citedRange />
+						</bibl>
+					</cit>
+				</sense>
+			</sense>
+			<sense level="II.5." xml:id="id253ea773-b204-4a6c-82df-83f9bf0318fb">
+				<def>S. m. (Popular; eufemistic) Lup (Canis lupus).</def>
+				<cit>
+					<quote>Românul din toate unghiurile ţării, când e nevoit să vorbească de
+						lup... zice: dânsul, pădurarul
+						sau hoţul.
+					</quote>
+					<bibl>
+						<ptr target="" />
+						<date type="" />
+						<citedRange />
+					</bibl>
+				</cit>
+			</sense>
+		</sense>
+	</body>
+</tmx>
