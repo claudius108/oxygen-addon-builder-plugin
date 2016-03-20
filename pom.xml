@@ -15,6 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.8</java-version>
+		<oxygen-version>17.1.0.2</oxygen-version>
 		<sourceforge-repo-url>sftp://claudius108@web.sourceforge.net:/home/user-web/claudius108/htdocs/repos/${project.artifactId}</sourceforge-repo-url>
 		<addon-location>http://claudius108.users.sourceforge.net/repos/${project.artifactId}/${project.artifactId}.jar</addon-location>
 		<timestamp>${maven.build.timestamp}</timestamp>
@@ -38,6 +39,31 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>8.0.66</version>
+			<systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oxygenxml</groupId>
+			<artifactId>oxygen-saxon9he</artifactId>
+			<version>${oxygen-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>rhino</groupId>
+			<artifactId>js</artifactId>
+			<version>1.7R2</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
