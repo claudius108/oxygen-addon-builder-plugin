@@ -99,6 +99,14 @@
 					</configuration>
 				</plugin>
 				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.4.1</version>
+				</plugin>
+				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>wagon-maven-plugin</artifactId>
 					<version>1.0</version>
@@ -106,10 +114,6 @@
 						<serverId>sourceforge</serverId>
 						<url>${sourceforge-repo-url}</url>
 					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.7</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.wagon</groupId>
@@ -120,10 +124,35 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>${oxygen-author-home}/plugins/${project.artifactId}</directory>
+									<followSymlinks>false</followSymlinks>
+									<includes>
+										<include>**/*</include>
+									</includes>
+								</fileset>
+							</filesets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-resources</id>
+						<id>filter-plugin-descriptors</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -144,73 +173,140 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4.1</version>
-				<executions>
-					<execution>
-						<id>make-addon-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<finalName>${project.artifactId}</finalName>
-							<appendAssemblyId>false</appendAssemblyId>
-							<descriptors>
-								<descriptor>assembly.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jarsigner-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<id>sign</id>
-						<phase>package</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-						<configuration>
-							<keystore>${basedir}/cryptographic-materials/oxygen-addon-builder.jks</keystore>
-							<alias>oxygen-addon-builder</alias>
-							<storepass>oxygen</storepass>
-							<keypass>oxygen</keypass>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>wagon-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>publish-project-archive-to-frs</id>
-						<phase>package</phase>
-						<goals>
-							<goal>upload-single</goal>
-						</goals>
-						<configuration>
-							<fromFile>${project.build.directory}/${project.artifactId}.jar</fromFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>publish-project-descriptor-to-repo</id>
-						<phase>package</phase>
-						<goals>
-							<goal>upload-single</goal>
-						</goals>
-						<configuration>
-							<fromFile>${project.build.directory}/addon.xml</fromFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>install-plugin-to-oxygen-home</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>install-plugin-descriptor-to-oxygen-home</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${oxygen-author-home}/plugins/${project.artifactId}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>plugin.xml</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>install-plugin-jar-to-oxygen-home</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${oxygen-author-home}/plugins/${project.artifactId}/lib</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.artifactId}.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>deploy-plugin</id>
+			<distributionManagement>
+				<repository>
+					<id>internal.repo</id>
+					<name>Temporary Staging Repository</name>
+					<url>file://${project.build.directory}</url>
+				</repository>
+			</distributionManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>make-addon-jar</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+									<finalName>oxygen-${project.artifactId}</finalName>
+									<appendAssemblyId>false</appendAssemblyId>
+									<attach>false</attach>
+									<descriptors>
+										<descriptor>assembly.xml</descriptor>
+									</descriptors>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jarsigner-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<id>sign</id>
+								<phase>package</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+								<configuration>
+									<archive>${project.build.directory}/oxygen-${project.artifactId}.jar</archive>
+									<keystore>${basedir}/cryptographic-materials/oxygen-addon-builder.jks</keystore>
+									<alias>oxygen-addon-builder</alias>
+									<storepass>oxygen</storepass>
+									<keypass>oxygen</keypass>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>publish-project-archive-to-frs</id>
+								<phase>package</phase>
+								<goals>
+									<goal>upload-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${project.build.directory}/oxygen-${project.artifactId}.jar</fromFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>publish-project-descriptor-to-repo</id>
+								<phase>package</phase>
+								<goals>
+									<goal>upload-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${project.build.directory}/addon.xml</fromFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
