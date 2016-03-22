@@ -56,15 +56,16 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 				if (toolbarId.equals("AddonBuilderToolbar")) {
 					List<JComponent> comps = new ArrayList<JComponent>();
 
-					String url = null;
+					String addonBuilderToolbarContentPath = null;
 					try {
-						url = new URL("file:" + pluginInstallDir + File.separator + "components"
+						addonBuilderToolbarContentPath = new URL("file:" + pluginInstallDir + File.separator + "components"
 								+ File.separator + "addon-builder-toolbar.html").toExternalForm();
+						logger.debug("addonBuilderToolbarContentPath: " + addonBuilderToolbarContentPath);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
 
-					JFXPanel panel = new JavaFXPanel("", url, new FrameworkGeneratingBridge(),
+					JFXPanel panel = new JavaFXPanel("", addonBuilderToolbarContentPath, new FrameworkGeneratingBridge(),
 							"OxygenAddonBuilder");
 
 					panel.setPreferredSize(new Dimension(300, 45));
