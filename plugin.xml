@@ -9,7 +9,7 @@
     class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPlugin"
     classLoaderType="preferReferencedResources">
     <runtime>
-        <library name="lib/addon-builder.jar" />
+        <library name="lib/${project.artifactId}.jar" />
     </runtime>
     <extension type="WorkspaceAccess" class="ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension" />
     <toolbar id="AddonBuilderToolbar" initialSide="NORTH" initialRow="1"/>
