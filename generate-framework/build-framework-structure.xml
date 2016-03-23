@@ -5,7 +5,7 @@
 	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}target${file.separator}" />
 	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
 	<property name="oxygenAddonBuilder.path-to-oxygenAuthor.jar" value="${oxygenAddonBuilder.frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" />
-	<property name="oxygenAddonBuilder.path-to-addon-builder.jar" value="${oxygenAddonBuilder.frameworkDir}java${file.separator}addon-builder.jar" />
+	<property name="oxygenAddonBuilder.path-to-addon-builder.jar" value="${oxygenAddonBuilder.frameworkDir}java${file.separator}addon-builder-plugin.jar" />
 	<property name="oxygenAddonBuilder.path-to-log4j.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/log4j.jar" />
 	<property name="oxygenAddonBuilder.path-to-commons-io.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/commons-io-1.3.1.jar" />
 
@@ -13,7 +13,7 @@
 
 	<target name="build-framework">
 
-		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
+		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder-plugin.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
 		<copy todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
 				<filename name="framework.less" />
