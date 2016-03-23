@@ -69,7 +69,7 @@
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
 		<jar destfile="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
 		<jar destfile="${oxygenAddonBuilder.frameworkArchivePath}" basedir="${oxygenAddonBuilder.frameworksDir}" includes="${oxygenAddonBuilder.frameworkId}/**/*.*" excludes="${oxygenAddonBuilder.frameworkId}/target/" />
-		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}dlri.jks" alias="dlri" storepass="dlrisigner" keypass="dlrisigner" />
+		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
 		<echo>Delete selectively the content of '${oxygenAddonBuilder.frameworkTargetDir}' directory...</echo>
 		<delete includeemptydirs="true">
 			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
