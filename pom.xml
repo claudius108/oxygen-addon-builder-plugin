@@ -15,11 +15,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.8</java-version>
-		<oxygen-version>17.1.0.2</oxygen-version>
-		<sourceforge-repo-url>sftp://claudius108@web.sourceforge.net:/home/user-web/claudius108/htdocs/repos/${project.artifactId}</sourceforge-repo-url>
-		<addon-location>http://claudius108.users.sourceforge.net/repos/${project.artifactId}/${project.artifactId}.jar</addon-location>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
+		<oxygen.sdk.version>17.1.0.2</oxygen.sdk.version>
+		<plugin-final-name>oxygen-${project.artifactId}</plugin-final-name>
+		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${plugin-final-name}/${plugin-final-name}.jar</addon-location>
+		<github.global.server>github</github.global.server>
 	</properties>
 
 	<dependencies>
@@ -107,18 +108,9 @@
 					<version>2.4.1</version>
 				</plugin>
 				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>wagon-maven-plugin</artifactId>
-					<version>1.0</version>
-					<configuration>
-						<serverId>sourceforge</serverId>
-						<url>${sourceforge-repo-url}</url>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.wagon</groupId>
-					<artifactId>wagon-ssh</artifactId>
-					<version>2.9</version>
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.11</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -258,7 +250,7 @@
 								</goals>
 								<configuration>
 									<outputDirectory>${project.build.directory}</outputDirectory>
-									<finalName>oxygen-${project.artifactId}</finalName>
+									<finalName>${plugin-final-name}</finalName>
 									<appendAssemblyId>false</appendAssemblyId>
 									<attach>false</attach>
 									<descriptors>
@@ -280,7 +272,7 @@
 									<goal>sign</goal>
 								</goals>
 								<configuration>
-									<archive>${project.build.directory}/oxygen-${project.artifactId}.jar</archive>
+									<archive>${project.build.directory}/${plugin-final-name}.jar</archive>
 									<keystore>${basedir}/cryptographic-materials/oxygen-addon-builder.jks</keystore>
 									<alias>oxygen-addon-builder</alias>
 									<storepass>oxygen</storepass>
@@ -290,30 +282,29 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
+						<groupId>com.github.github</groupId>
+						<artifactId>site-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>publish-project-archive-to-frs</id>
-								<phase>package</phase>
 								<goals>
-									<goal>upload-single</goal>
+									<goal>site</goal>
 								</goals>
-								<configuration>
-									<fromFile>${project.build.directory}/oxygen-${project.artifactId}.jar</fromFile>
-								</configuration>
-							</execution>
-							<execution>
-								<id>publish-project-descriptor-to-repo</id>
 								<phase>package</phase>
-								<goals>
-									<goal>upload-single</goal>
-								</goals>
-								<configuration>
-									<fromFile>${project.build.directory}/addon.xml</fromFile>
-								</configuration>
 							</execution>
 						</executions>
+						<configuration>
+							<message>'${project.artifactId}' v. ${project.version}</message>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<branch>refs/heads/master</branch>
+							<merge>true</merge>
+							<includes>
+								<include>${plugin-final-name}.jar</include>
+								<include>addon.xml</include>
+							</includes>
+							<repositoryName>oxygen-addons</repositoryName>
+							<repositoryOwner>claudius108</repositoryOwner>
+							<path>${plugin-final-name}</path>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
