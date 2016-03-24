@@ -27,13 +27,13 @@
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen</artifactId>
-			<version>${oxygen-version}</version>
+			<version>${oxygen.sdk.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen-annotations</artifactId>
-			<version>${oxygen-version}</version>
+			<version>${oxygen.sdk.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen-saxon9he</artifactId>
-			<version>${oxygen-version}</version>
+			<version>${oxygen.sdk.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
