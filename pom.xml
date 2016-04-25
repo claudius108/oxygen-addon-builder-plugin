@@ -5,7 +5,7 @@
 
 	<groupId>ro.kuberam.oxygen</groupId>
 	<artifactId>addon-builder-plugin</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<packaging>jar</packaging>
 
 	<prerequisites>
@@ -254,7 +254,7 @@
 									<appendAssemblyId>false</appendAssemblyId>
 									<attach>false</attach>
 									<descriptors>
-										<descriptor>assembly.xml</descriptor>
+										<descriptor>build/assembly.xml</descriptor>
 									</descriptors>
 								</configuration>
 							</execution>
