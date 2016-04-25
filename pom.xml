@@ -17,7 +17,7 @@
 		<java-version>1.8</java-version>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
-		<oxygen.sdk.version>17.1.0.2</oxygen.sdk.version>
+		<oxygen-version>18.0.0</oxygen-version>
 		<plugin-final-name>oxygen-${project.artifactId}</plugin-final-name>
 		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${plugin-final-name}/${plugin-final-name}.jar</addon-location>
 		<github.global.server>github</github.global.server>
@@ -27,13 +27,13 @@
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen</artifactId>
-			<version>${oxygen.sdk.version}</version>
+			<version>${oxygen-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen-annotations</artifactId>
-			<version>${oxygen.sdk.version}</version>
+			<version>${oxygen-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>com.oxygenxml</groupId>
 			<artifactId>oxygen-saxon9he</artifactId>
-			<version>${oxygen.sdk.version}</version>
+			<version>${oxygen-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -110,7 +110,7 @@
 				<plugin>
 					<groupId>com.github.github</groupId>
 					<artifactId>site-maven-plugin</artifactId>
-					<version>0.11</version>
+					<version>0.12</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
