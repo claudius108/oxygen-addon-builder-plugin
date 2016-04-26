@@ -3,8 +3,12 @@ package ro.kuberam.oxygen.addonBuilder.parser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +41,9 @@ public class ParsingResult {
 	public Map<String, String> datalists = new HashMap<String, String>();
 	public ArrayList<String> actions = new ArrayList<String>();
 
-	public void writeToFile(File javaDirectory, File addonDirectory) throws FileNotFoundException,
-			IOException {
+	public void writeToFile(File javaDirectory, File addonDirectory) throws FileNotFoundException, IOException {
+		Charset utf8 = StandardCharsets.UTF_8;
+
 		Path cssResourcesDirectory = Paths.get(addonDirectory.getAbsolutePath(), "resources", "css");
 
 		IOUtilities.serializeObjectToFile(javaDirectory, observers, "observers");
@@ -52,23 +57,34 @@ public class ParsingResult {
 		// TODO: when Oxygen will use commons-io >= 2.1, the function
 		// writeStringToFile(File file, String data, boolean append) will be
 		// used instead of the following one
-		FileUtils.writeStringToFile(new File(cssResourcesDirectory + File.separator
-				+ "framework.less"), attachedTemplates);
+		// Files.copy(sourcePath, targetPath.resolve(sourceItem),
+		// StandardCopyOption.REPLACE_EXISTING);
+		// FileUtils.writeStringToFile(new File(cssResourcesDirectory +
+		// File.separator + "framework.less"),
+		// attachedTemplates);
+		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
+				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
 		// processing the datalists
-		FileUtils.writeStringToFile(new File(cssResourcesDirectory + File.separator + "datalists.less"),
-				Utils.generateDatalistImportStatements(datalists));
+		Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
+		Files.delete(datalistsDirectory);
+		Files.createDirectory(datalistsDirectory);
+
+		Files.write(cssResourcesDirectory.resolve("datalists.less"),
+				Utils.generateDatalistImportStatements(datalists).getBytes(utf8), StandardOpenOption.APPEND);
 
 		for (Map.Entry<String, String> datalist : datalists.entrySet()) {
 			String datalistId = datalist.getKey();
-			String content = "@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";";
 
-			FileUtils.writeStringToFile(new File(cssResourcesDirectory + File.separator + datalistId
-					+ ".less"), content);
+			ArrayList<String> lines = new ArrayList<>();
+			lines.add("@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";");
+			lines.add("\n");
+
+			Files.write(datalistsDirectory.resolve(datalistId + ".less"), lines, utf8, StandardOpenOption.CREATE,
+					StandardOpenOption.APPEND);
 		}
 
-		String actionsFileContent = "@charset \"utf-8\"; "
-				+ actions.stream().collect(Collectors.joining(" "));
+		String actionsFileContent = "@charset \"utf-8\"; " + actions.stream().collect(Collectors.joining(" "));
 		FileUtils.writeStringToFile(new File(cssResourcesDirectory + File.separator + "actions.less"),
 				actionsFileContent);
 	}

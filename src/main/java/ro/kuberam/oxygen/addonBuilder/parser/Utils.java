@@ -8,7 +8,7 @@ public class Utils {
 		String datalistImportStatements = "";
 
 		for (Map.Entry<String, String> datalist : datalists.entrySet()) {
-			datalistImportStatements += "@import \"" + datalist.getKey() + ".less\"; ";
+			datalistImportStatements += "@import \"datalists/" + datalist.getKey() + ".less\"; ";
 		}
 
 		datalistImportStatements = datalistImportStatements.trim();
