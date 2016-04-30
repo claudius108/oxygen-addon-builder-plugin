@@ -40,7 +40,7 @@ public class OpenFileInNewTabOperation implements AuthorOperation {
 	
 	/**
 	 * This operation is designated to allow editing of XML fragment of a main document in new editors, opened in new tabs.
-	 * When the data in the new editors is changed, the main document is updated accordingly.
+	 * When the data in the new editors is saved, the main document is updated accordingly.
 	 */
 
 	/**
