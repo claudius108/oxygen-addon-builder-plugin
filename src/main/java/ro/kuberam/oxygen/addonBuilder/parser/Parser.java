@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1273,6 +1273,7 @@ public class Parser {
 			bridge.oxygenInstallDir = oxygenInstallDir;
 			bridge._generateFramework(addonDirectory);
 		} else {
+			logger.debug("execute with arguments" + args);
 			new Parser(new File(args[0]), args[1], new File(args[2]));
 		}
 	}
