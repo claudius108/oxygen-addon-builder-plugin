@@ -67,24 +67,24 @@ public class ParsingResult {
 		// attachedTemplates);
 		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-		Files.write(cssResourcesDirectory.resolve("datalists.less"),
-				Utils.generateDatalistImportStatements(datalists).getBytes(utf8), StandardOpenOption.APPEND);
-		
+		Files.write(cssResourcesDirectory.resolve("datalists.less"), Utils.generateDatalistImportStatements(datalists),
+				utf8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
 		// processing the datalists
 		Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
 		Files.walkFileTree(datalistsDirectory, new SimpleFileVisitor<Path>() {
-			   @Override
-			   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-			       Files.delete(file);
-			       return FileVisitResult.CONTINUE;
-			   }
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+				Files.delete(file);
+				return FileVisitResult.CONTINUE;
+			}
 
-			   @Override
-			   public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-			       Files.delete(dir);
-			       return FileVisitResult.CONTINUE;
-			   }
-			});
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+				Files.delete(dir);
+				return FileVisitResult.CONTINUE;
+			}
+		});
 		Files.createDirectory(datalistsDirectory);
 
 		for (Map.Entry<String, String> datalist : datalists.entrySet()) {

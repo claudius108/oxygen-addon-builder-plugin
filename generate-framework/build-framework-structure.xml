@@ -17,7 +17,6 @@
 		<copy todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
 				<filename name="framework.less" />
-				<filename name="datalists.less" />
 				<filename name="actions.less" />
 			</fileset>
 		</copy>
