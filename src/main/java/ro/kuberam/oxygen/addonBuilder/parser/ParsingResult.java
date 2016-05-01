@@ -5,10 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,14 +67,25 @@ public class ParsingResult {
 		// attachedTemplates);
 		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-
-		// processing the datalists
-		Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
-		Files.delete(datalistsDirectory);
-		Files.createDirectory(datalistsDirectory);
-
 		Files.write(cssResourcesDirectory.resolve("datalists.less"),
 				Utils.generateDatalistImportStatements(datalists).getBytes(utf8), StandardOpenOption.APPEND);
+		
+		// processing the datalists
+		Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
+		Files.walkFileTree(datalistsDirectory, new SimpleFileVisitor<Path>() {
+			   @Override
+			   public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+			       Files.delete(file);
+			       return FileVisitResult.CONTINUE;
+			   }
+
+			   @Override
+			   public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+			       Files.delete(dir);
+			       return FileVisitResult.CONTINUE;
+			   }
+			});
+		Files.createDirectory(datalistsDirectory);
 
 		for (Map.Entry<String, String> datalist : datalists.entrySet()) {
 			String datalistId = datalist.getKey();
