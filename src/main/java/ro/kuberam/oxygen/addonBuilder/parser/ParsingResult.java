@@ -43,10 +43,9 @@ public class ParsingResult {
 	public String prolog = "";
 	public Map<String, String> datalists = new HashMap<String, String>();
 	public ArrayList<String> actions = new ArrayList<String>();
+	private Charset utf8 = StandardCharsets.UTF_8;
 
 	public void writeToFile(File javaDirectory, File addonDirectory) throws FileNotFoundException, IOException {
-		Charset utf8 = StandardCharsets.UTF_8;
-
 		Path cssResourcesDirectory = Paths.get(addonDirectory.getAbsolutePath(), "resources", "css");
 
 		IOUtilities.serializeObjectToFile(javaDirectory, observers, "observers");
@@ -67,39 +66,35 @@ public class ParsingResult {
 		// attachedTemplates);
 		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-		Files.write(cssResourcesDirectory.resolve("datalists.less"), Utils.generateDatalistImportStatements(datalists),
-				utf8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-		// processing the datalists
-		Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
-		Files.walkFileTree(datalistsDirectory, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				Files.delete(file);
-				return FileVisitResult.CONTINUE;
-			}
-
-			@Override
-			public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-				Files.delete(dir);
-				return FileVisitResult.CONTINUE;
-			}
-		});
-		Files.createDirectory(datalistsDirectory);
-
-		for (Map.Entry<String, String> datalist : datalists.entrySet()) {
-			String datalistId = datalist.getKey();
-
-			ArrayList<String> lines = new ArrayList<>();
-			lines.add("@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";");
-			lines.add("\n");
-
-			Files.write(datalistsDirectory.resolve(datalistId + ".less"), lines, utf8, StandardOpenOption.CREATE,
-					StandardOpenOption.APPEND);
-		}
+		// generate datalists
+		generateDatalists(cssResourcesDirectory);
 
 		String actionsFileContent = "@charset \"utf-8\"; " + actions.stream().collect(Collectors.joining(" "));
 		FileUtils.writeStringToFile(new File(cssResourcesDirectory + File.separator + "actions.less"),
 				actionsFileContent);
+	}
+
+	private void generateDatalists(Path cssResourcesDirectory) {
+		try {
+			Files.write(cssResourcesDirectory.resolve("datalists.less"),
+					Utils.generateDatalistImportStatements(datalists), utf8, StandardOpenOption.CREATE,
+					StandardOpenOption.TRUNCATE_EXISTING);
+			Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
+			Utils.deleteDirectoryContent(datalistsDirectory);
+			Files.createDirectory(datalistsDirectory);
+			for (Map.Entry<String, String> datalist : datalists.entrySet()) {
+				String datalistId = datalist.getKey();
+
+				ArrayList<String> lines = new ArrayList<>();
+				lines.add("@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";");
+				lines.add("\n");
+
+				Files.write(datalistsDirectory.resolve(datalistId + ".less"), lines, utf8, StandardOpenOption.CREATE,
+						StandardOpenOption.APPEND);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
