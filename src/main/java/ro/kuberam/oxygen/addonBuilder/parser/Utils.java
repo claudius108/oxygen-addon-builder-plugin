@@ -6,21 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Map;
 
 public class Utils {
-
-	public static ArrayList<String> generateDatalistImportStatements(Map<String, String> datalists) {
-		ArrayList<String> datalistImportStatements = new ArrayList<>();
-		datalistImportStatements.add("@charset \"utf-8\";");
-
-		for (Map.Entry<String, String> datalist : datalists.entrySet()) {
-			datalistImportStatements.add("@import \"datalists/" + datalist.getKey() + ".less\";");
-		}
-
-		return datalistImportStatements;
-	}
 
 	public static void deleteDirectoryContent(Path directory) {
 		try {

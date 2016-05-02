@@ -77,14 +77,17 @@ public class ParsingResult {
 
 	private void generateDatalists(Path cssResourcesDirectory) {
 		try {
-			Files.write(cssResourcesDirectory.resolve("datalists.less"),
-					Utils.generateDatalistImportStatements(datalists), utf8, StandardOpenOption.CREATE,
-					StandardOpenOption.TRUNCATE_EXISTING);
 			Path datalistsDirectory = cssResourcesDirectory.resolve("datalists");
 			Utils.deleteDirectoryContent(datalistsDirectory);
 			Files.createDirectory(datalistsDirectory);
+
+			ArrayList<String> datalistImportStatements = new ArrayList<>();
+			datalistImportStatements.add("@charset \"utf-8\";");
+
 			for (Map.Entry<String, String> datalist : datalists.entrySet()) {
 				String datalistId = datalist.getKey();
+
+				datalistImportStatements.add("@import \"datalists/" + datalistId + ".less\";");
 
 				ArrayList<String> lines = new ArrayList<>();
 				lines.add("@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";");
@@ -93,6 +96,9 @@ public class ParsingResult {
 				Files.write(datalistsDirectory.resolve(datalistId + ".less"), lines, utf8, StandardOpenOption.CREATE,
 						StandardOpenOption.APPEND);
 			}
+
+			Files.write(cssResourcesDirectory.resolve("datalists.less"), datalistImportStatements, utf8,
+					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
