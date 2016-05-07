@@ -10,7 +10,7 @@
 		$( document ).ready(function() {
 			$("#tree").fancytree({
 				source: JSON.parse(OxygenAddonBuilder.list(window.location.search.substring(13),
-					"*.framework, addon.xq, **/target, addon-builder.jar, framework.jar")),
+					"*.framework, addon.xq, **/target, addon-builder-plugin.jar, framework.jar")),
 				extensions: ["edit"],
 			    edit: {
 			      triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
