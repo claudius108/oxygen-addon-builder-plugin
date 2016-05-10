@@ -5,13 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +28,7 @@ public class ParsingResult {
 	}
 
 	public Map<String, String> templates = new HashMap<String, String>();
-	public String attachedTemplates = "@charset \"utf-8\";  @import \"actions.less\"; @import \"datalists.less\"; * {-oxy-display-tags: none;} ";
+	public String attachedTemplates = "@charset \"utf-8\";  @import \"actions.less\"; @import \"datalists/datalists.less\"; * {-oxy-display-tags: none;} ";
 	public Map<String, Element> derivedActionElements = new HashMap<String, Element>();
 	public Map<String, String[]> observers = new HashMap<String, String[]>();
 	public Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
@@ -87,7 +84,7 @@ public class ParsingResult {
 			for (Map.Entry<String, String> datalist : datalists.entrySet()) {
 				String datalistId = datalist.getKey();
 
-				datalistImportStatements.add("@import \"datalists/" + datalistId + ".less\";");
+				datalistImportStatements.add("@import \"" + datalistId + ".less\";");
 
 				ArrayList<String> lines = new ArrayList<>();
 				lines.add("@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";");
@@ -97,7 +94,7 @@ public class ParsingResult {
 						StandardOpenOption.APPEND);
 			}
 
-			Files.write(cssResourcesDirectory.resolve("datalists.less"), datalistImportStatements, utf8,
+			Files.write(datalistsDirectory.resolve("datalists.less"), datalistImportStatements, utf8,
 					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
