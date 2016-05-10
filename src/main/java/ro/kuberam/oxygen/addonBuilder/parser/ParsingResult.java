@@ -12,9 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Element;
 
 import ro.kuberam.oxygen.addonBuilder.javafx.DialogModel;
@@ -25,10 +23,11 @@ public class ParsingResult {
 
 	public ParsingResult() {
 		actionsByClass.put("load", new ArrayList<String>());
+		actions.add("@charset \"utf-8\";");
 	}
 
 	public Map<String, String> templates = new HashMap<String, String>();
-	public String attachedTemplates = "@charset \"utf-8\";  @import \"actions.less\"; @import \"datalists/datalists.less\"; * {-oxy-display-tags: none;} ";
+	public String attachedTemplates = "@charset \"utf-8\";  @import \"actions/actions.less\"; @import \"datalists/datalists.less\"; * {-oxy-display-tags: none;} ";
 	public Map<String, Element> derivedActionElements = new HashMap<String, Element>();
 	public Map<String, String[]> observers = new HashMap<String, String[]>();
 	public Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
@@ -64,12 +63,21 @@ public class ParsingResult {
 		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-		// generate datalists
 		generateDatalists(cssResourcesDirectory);
+		generateActions(cssResourcesDirectory);
+	}
 
-		String actionsFileContent = "@charset \"utf-8\"; " + actions.stream().collect(Collectors.joining(" "));
-		FileUtils.writeStringToFile(new File(cssResourcesDirectory + File.separator + "actions.less"),
-				actionsFileContent);
+	private void generateActions(Path cssResourcesDirectory) {
+		try {
+			Path actionsDirectory = cssResourcesDirectory.resolve("actions");
+			Utils.deleteDirectoryContent(actionsDirectory);
+			Files.createDirectory(actionsDirectory);
+			
+			Files.write(actionsDirectory.resolve("actions.less"), actions, utf8,
+					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void generateDatalists(Path cssResourcesDirectory) {
