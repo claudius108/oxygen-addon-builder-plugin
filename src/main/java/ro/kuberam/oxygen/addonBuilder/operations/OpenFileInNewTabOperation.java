@@ -1,6 +1,5 @@
 package ro.kuberam.oxygen.addonBuilder.operations;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,7 +13,6 @@ import java.nio.file.StandardOpenOption;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import ro.sync.ecss.extensions.api.ArgumentDescriptor;
@@ -37,18 +35,19 @@ import ro.sync.exml.workspace.api.listeners.WSEditorListener;
 import ro.sync.util.URLUtil;
 
 public class OpenFileInNewTabOperation implements AuthorOperation {
-	
+
 	/**
-	 * This operation is designated to allow editing of XML fragment of a main document in new editors, opened in new tabs.
-	 * When the data in the new editors is saved, the main document is updated accordingly.
+	 * This operation is designated to allow editing of XML fragment of a main
+	 * document in new editors, opened in new tabs. When the data in the new
+	 * editors is saved, the main document is updated accordingly.
 	 */
 
 	/**
 	 * Logger for logging.
 	 */
 	private static final Logger logger = Logger.getLogger(OpenFileInNewTabOperation.class.getName());
-	
-	private static String xmlPi = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
+	private static String xmlPI = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	private static Charset utf8 = StandardCharsets.UTF_8;
 
 	/**
@@ -96,7 +95,7 @@ public class OpenFileInNewTabOperation implements AuthorOperation {
 
 			authorDocumentController.beginCompoundEdit();
 
-			Files.write(openedFile, (xmlPi + currentNodeAsString).getBytes(utf8), StandardOpenOption.CREATE,
+			Files.write(openedFile, (xmlPI + currentNodeAsString).getBytes(utf8), StandardOpenOption.CREATE,
 					StandardOpenOption.APPEND);
 
 			final PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
@@ -160,14 +159,14 @@ public class OpenFileInNewTabOperation implements AuthorOperation {
 
 					String currentContent = "";
 					try {
-						currentContent = FileUtils.readFileToString(
-								new File((Paths.get(openedLocation.toURI()).toAbsolutePath()).toString()), "UTF-8");
+						currentContent = new String(Files.readAllBytes(Paths.get(openedLocation.toURI())), "UTF-8");
+
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (URISyntaxException e) {
 						e.printStackTrace();
 					}
-					currentContent = currentContent.substring(xmlPi.length());
+					currentContent = currentContent.substring(xmlPI.length());
 
 					WSEditor mainEditor = PluginWorkspaceProvider.getPluginWorkspace().getEditorAccess(openerLocation,
 							PluginWorkspace.MAIN_EDITING_AREA);
