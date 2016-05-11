@@ -27,8 +27,7 @@ public class ProcessMutationRecord {
 			observers = (Map<String, String[]>) IOUtilities.deserializeObjectFromFile("/observers.ser");
 			connectObserverActions = (Map<String, ObserverConnection>) IOUtilities
 					.deserializeObjectFromFile("/connectObserverActions.ser");
-			nodeSelectors = (Map<String, String>) IOUtilities
-					.deserializeObjectFromFile("/nodeSelectors.ser");
+			nodeSelectors = (Map<String, String>) IOUtilities.deserializeObjectFromFile("/nodeSelectors.ser");
 			dialogs = (Map<String, DialogModel>) IOUtilities.deserializeObjectFromFile("/dialogs.ser");
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -39,8 +38,8 @@ public class ProcessMutationRecord {
 		}
 	}
 
-	public static void attributes(AuthorActionsProvider authorActionsProvider, int offset,
-			AuthorElement target, String attributeName, String attributeNamespace, String oldValue) {
+	public static void attributes(AuthorActionsProvider authorActionsProvider, int offset, AuthorElement target,
+			String attributeName, String attributeNamespace, String oldValue) {
 
 		AttrValue newAttrValueObj = target.getAttribute(attributeName);
 		String newAttrValue = newAttrValueObj.getValue();
@@ -59,12 +58,13 @@ public class ProcessMutationRecord {
 
 		if (attributeFilter.contains(attributeName)) {
 			for (String actionHandler : actionHandlers) {
-				javax.swing.AbstractAction action = (AbstractAction) authorActionsProvider
-						.getAuthorExtensionActions().get(actionHandler);
-				action.setEnabled(true);
-				authorActionsProvider.invokeAuthorExtensionActionInContext(authorActionsProvider
-						.getAuthorExtensionActions().get(actionHandler), offset);
-
+				javax.swing.AbstractAction action = (AbstractAction) authorActionsProvider.getAuthorExtensionActions()
+						.get(actionHandler);
+				if (action != null) {
+					action.setEnabled(true);
+					authorActionsProvider.invokeAuthorExtensionActionInContext(
+							authorActionsProvider.getAuthorExtensionActions().get(actionHandler), offset);
+				}
 			}
 		}
 
