@@ -68,70 +68,63 @@ public class DeleteOperation implements AuthorOperation {
 		String targetExpr = (String) targetExprObj;
 		logger.debug("targetExpr: " + targetExpr);
 
-		AuthorNode currentNode = null;
-		String currentNodeXpathExpr = null;
-
-		logger.debug("getSelectionStart offset: " + authorEditorAccess.getSelectionStart());
-
 		try {
-			currentNode = authorDocumentController.getNodeAtOffset(authorEditorAccess.getSelectionStart());
-			currentNodeXpathExpr = XML.getXPathExpression(authorDocumentController,
-					authorEditorAccess.getSelectionStart());
-		} catch (BadLocationException e) {
+			int caretOffset = authorEditorAccess.getCaretOffset();
+			logger.debug("caretOffset = " + caretOffset);
+			AuthorNode currentNode = authorDocumentController.getNodeAtOffset(caretOffset);
+			logger.debug("currentNode = " + currentNode);
+			String currentNodeXpathExpr = authorDocumentController.getXPathExpression(caretOffset);
+			logger.debug("currentNodeXpathExpr = " + currentNodeXpathExpr);
 
-			e.printStackTrace();
-		}
+			targetExpr = targetExpr.replace("$ua:context", currentNodeXpathExpr);
+			targetExpr = XML.completeXpathExpression(targetExpr);
 
-		logger.debug("currentNode.getName(): " + currentNode.getName());
-		logger.debug("currentNodeXpathExpr: " + currentNodeXpathExpr);
-		logger.debug("authorAccess.getEditorAccess().getCaretOffset(): "
-				+ authorEditorAccess.getCaretOffset());
-		logger.debug("currentNode.getStartOffset(): " + currentNode.getStartOffset());
+			AuthorNode parentNode = null;
 
-		logger.debug("currentNode for delete: " + currentNode);
+			Object[] targetNodeObjects = authorDocumentController.evaluateXPath(targetExpr, currentNode, false, true,
+					true, false, XPathVersion.XPATH_3_0);
 
-		targetExpr = targetExpr.replace("$ua:context", currentNodeXpathExpr);
-		targetExpr = XML.completeXpathExpression(targetExpr);
+			logger.debug("targetExpr processed for delete: " + targetExpr);
 
-		Object[] targetNodeObjects = authorDocumentController.evaluateXPath(targetExpr, currentNode, false,
-				true, true, false, XPathVersion.XPATH_3_0);
+			if (targetNodeObjects.length > 0 && targetNodeObjects[0] != null) {
+				for (int i = 0, il = targetNodeObjects.length; i < il; i++) {
+					Object targetNodeObject = targetNodeObjects[i];
 
-		logger.debug("targetExpr processed for delete: " + targetExpr);
+					if (targetNodeObject instanceof AuthorElementDomWrapper) {
+						AuthorNode targetNode = ((AuthorElementDomWrapper) targetNodeObject).getWrappedAuthorNode();
+						logger.debug("targetNode: " + targetNode);
+						
+						parentNode = targetNode.getParent();
 
-		if (targetNodeObjects.length > 0 && targetNodeObjects[0] != null) {
-			for (int i = 0, il = targetNodeObjects.length; i < il; i++) {
-				Object targetNodeObject = targetNodeObjects[i];
-
-				if (targetNodeObject instanceof AuthorElementDomWrapper) {
-					AuthorNode targetNode = ((AuthorElementDomWrapper) targetNodeObject)
-							.getWrappedAuthorNode();
-
-					authorDocumentController.deleteNode(targetNode);
-				}
-
-				if (targetNodeObject instanceof AuthorAttrDomWrapper) {
-					Attr targetNode = (Attr) targetNodeObject;
-					AuthorNode parentNode = ((AuthorNodeDomWrapper) targetNode.getOwnerElement())
-							.getWrappedAuthorNode();
-					AuthorElement parentElement = (AuthorElement) parentNode;
-
-					try {
-						CommonsOperationsUtil.setAttributeValue(authorDocumentController, parentElement,
-								new QName(targetNode.getNamespaceURI(), targetNode.getLocalName(),
-										targetNode.getPrefix()), Constants.valueOfAttributeToBeDeleted,
-								true);
-					} catch (Exception e) {
-						e.printStackTrace();
+						authorDocumentController.deleteNode(targetNode);
 					}
 
-					authorEditorAccess.refresh();
+					if (targetNodeObject instanceof AuthorAttrDomWrapper) {
+						Attr targetNode = (Attr) targetNodeObject;
+						parentNode = ((AuthorNodeDomWrapper) targetNode.getOwnerElement()).getWrappedAuthorNode();
+						AuthorElement parentElement = (AuthorElement) parentNode;
+
+						try {
+							CommonsOperationsUtil.setAttributeValue(
+									authorDocumentController, parentElement, new QName(targetNode.getNamespaceURI(),
+											targetNode.getLocalName(), targetNode.getPrefix()),
+									Constants.valueOfAttributeToBeDeleted, true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						authorEditorAccess.refresh();
+					}
+
 				}
-
 			}
-		}
+			logger.debug("parentNode: " + parentNode);
 
-		authorEditorAccess.setCaretPosition(currentNode.getStartOffset() + 1);
-		logger.debug("currentNode.getStartOffset(): " + currentNode.getStartOffset());
+			authorEditorAccess.setCaretPosition(caretOffset);
+
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 		logger.debug("================ end delete operation ============================\n");
 
 	}
