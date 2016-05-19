@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
-
 import ro.kuberam.oxygen.addonBuilder.utils.XML;
 import ro.kuberam.oxygen.addonBuilder.utils.XQuery;
 import ro.sync.ecss.extensions.api.ArgumentDescriptor;
@@ -24,9 +23,7 @@ import ro.sync.ecss.extensions.api.AuthorOperation;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.XPathVersion;
 import ro.sync.ecss.extensions.api.access.AuthorEditorAccess;
-import ro.sync.ecss.extensions.api.content.OffsetInformation;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.ecss.extensions.api.node.AuthorParentNode;
 import ro.sync.util.editorvars.EditorVariables;
 
 public class ReplaceOperation implements AuthorOperation {
@@ -64,15 +61,15 @@ public class ReplaceOperation implements AuthorOperation {
 	public ReplaceOperation() {
 		arguments = new ArgumentDescriptor[3];
 
-		ArgumentDescriptor argumentDescriptor = new ArgumentDescriptor(ARGUMENT_ACTION,
-				ArgumentDescriptor.TYPE_STRING, "The choice for the operation.");
+		ArgumentDescriptor argumentDescriptor = new ArgumentDescriptor(ARGUMENT_ACTION, ArgumentDescriptor.TYPE_STRING,
+				"The choice for the operation.");
 		arguments[0] = argumentDescriptor;
-		argumentDescriptor = new ArgumentDescriptor(ARGUMENT_SOURCE_LOCATION,
-				ArgumentDescriptor.TYPE_STRING, "The source expression for the operation.");
+		argumentDescriptor = new ArgumentDescriptor(ARGUMENT_SOURCE_LOCATION, ArgumentDescriptor.TYPE_STRING,
+				"The source expression for the operation.");
 		arguments[1] = argumentDescriptor;
 
-		argumentDescriptor = new ArgumentDescriptor(ARGUMENT_TARGET_LOCATION,
-				ArgumentDescriptor.TYPE_STRING, "The target expression for the operation.");
+		argumentDescriptor = new ArgumentDescriptor(ARGUMENT_TARGET_LOCATION, ArgumentDescriptor.TYPE_STRING,
+				"The target expression for the operation.");
 		arguments[2] = argumentDescriptor;
 	}
 
@@ -101,181 +98,195 @@ public class ReplaceOperation implements AuthorOperation {
 		logger.debug("sourceExpr: " + sourceExpr);
 		String targetExpr = (String) targetExprObj;
 
-		int caretOffset = authorEditorAccess.getCaretOffset();
-		logger.debug("caret offset: " + caretOffset);
-		OffsetInformation contentInformationAtOffset = null;
 		try {
-			contentInformationAtOffset = authorDocumentController
-					.getContentInformationAtOffset(caretOffset);
-		} catch (BadLocationException e2) {
-			e2.printStackTrace();
-		}
-		logger.debug("contentInformationAtOffset: " + contentInformationAtOffset);
-		logger.debug("contentInformationAtOffset: "
-				+ contentInformationAtOffset.getNodeForOffset().getName());
+			int caretOffset = authorEditorAccess.getCaretOffset();
+			logger.debug("caretOffset = " + caretOffset);
+			AuthorNode currentNode = authorDocumentController.getNodeAtOffset(caretOffset);
+			logger.debug("currentNode = " + currentNode);
+			String currentNodeXpathExpr = authorDocumentController.getXPathExpression(caretOffset);
+			logger.debug("currentNodeXpathExpr = " + currentNodeXpathExpr);
 
-		AuthorNode nodeForMarkerOffset = contentInformationAtOffset.getNodeForMarkerOffset();
-		logger.debug("nodeForMarkerOffset: " + nodeForMarkerOffset);
+			// int caretOffset = authorEditorAccess.getCaretOffset();
+			// logger.debug("caret offset: " + caretOffset);
+			// OffsetInformation contentInformationAtOffset = null;
+			// try {
+			// contentInformationAtOffset =
+			// authorDocumentController.getContentInformationAtOffset(caretOffset);
+			// } catch (BadLocationException e2) {
+			// e2.printStackTrace();
+			// }
+			// logger.debug("contentInformationAtOffset: " +
+			// contentInformationAtOffset.getNodeForOffset().getName());
+			//
+			// AuthorNode nodeForMarkerOffset =
+			// contentInformationAtOffset.getNodeForMarkerOffset();
+			// logger.debug("nodeForMarkerOffset: " + nodeForMarkerOffset);
+			//
+			// AuthorNode currentNode = null;
+			// String currentNodeXpathExpr = null;
+			//
+			// try {
+			// if (nodeForMarkerOffset != null) {
+			// currentNode = nodeForMarkerOffset;
+			// logger.debug("current node is readonly");
+			// currentNodeXpathExpr =
+			// XML.getXPathExpression(authorDocumentController,
+			// (AuthorParentNode)
+			// currentNode);
+			// } else {
+			// currentNode =
+			// authorDocumentController.getNodeAtOffset(authorEditorAccess.getSelectionStart());
+			// currentNodeXpathExpr =
+			// XML.getXPathExpression(authorDocumentController,
+			// authorEditorAccess.getSelectionStart());
+			// }
+			// logger.debug("current node name: " + currentNode.getName());
+			// logger.debug("currentNode XPath expression = " +
+			// currentNodeXpathExpr);
+			// } catch (BadLocationException e) {
+			// e.printStackTrace();
+			// }
 
-		AuthorNode currentNode = null;
-		String currentNodeXpathExpr = null;
-		
-		try {
-			if (nodeForMarkerOffset != null) {
-				currentNode = nodeForMarkerOffset;
-				logger.debug("current node is readonly");
-				currentNodeXpathExpr = XML.getXPathExpression(authorDocumentController,
-						(AuthorParentNode) currentNode);
-			} else {
-				currentNode = authorDocumentController.getNodeAtOffset(authorEditorAccess
-						.getSelectionStart());
-				currentNodeXpathExpr = XML.getXPathExpression(authorDocumentController,
-						authorEditorAccess.getSelectionStart());
+			sourceExpr = sourceExpr.replace("$ua:context", currentNodeXpathExpr).trim();
+			sourceExpr = authorAccess.getUtilAccess().expandEditorVariables(sourceExpr, null);
+			sourceExpr = XQuery.completeXqueryScript(sourceExpr);
+			targetExpr = targetExpr.replace("$ua:context", currentNodeXpathExpr);
+			targetExpr = XML.completeXpathExpression(targetExpr);
+			logger.debug("targetExpr: " + targetExpr);
+
+			URI baseURI = null;
+			try {
+				baseURI = new URI(authorAccess.getUtilAccess().expandEditorVariables(EditorVariables.FRAMEWORK_URL,
+						authorAccess.getEditorAccess().getEditorLocation()));
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
 			}
-			logger.debug("current node name: " + currentNode.getName());
-			logger.debug("currentNode XPath expression = " + currentNodeXpathExpr);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
+			logger.debug("baseURI: " + baseURI.toASCIIString());
 
-		sourceExpr = sourceExpr.replace("$ua:context", currentNodeXpathExpr).trim();
-		sourceExpr = authorAccess.getUtilAccess().expandEditorVariables(sourceExpr, null);
-		sourceExpr = XQuery.completeXqueryScript(sourceExpr);
-		targetExpr = targetExpr.replace("$ua:context", currentNodeXpathExpr);
-		targetExpr = XML.completeXpathExpression(targetExpr);
-		logger.debug("targetExpr: " + targetExpr);
+			logger.debug("sourceExpr: " + sourceExpr);
+			XdmValue sourceSequence = XQueryOperation.query(authorEditorAccess.createContentReader(),
+					new ByteArrayInputStream(sourceExpr.getBytes(StandardCharsets.UTF_8)), true, baseURI);
+			logger.debug("processedSourceExpr: " + sourceSequence.getUnderlyingValue().toString());
 
-		URI baseURI = null;
-		try {
-			baseURI = new URI(authorAccess.getUtilAccess().expandEditorVariables(
-					EditorVariables.FRAMEWORK_URL, authorAccess.getEditorAccess().getEditorLocation()));
-		} catch (URISyntaxException e1) {
-			e1.printStackTrace();
-		}
-		logger.debug("baseURI: " + baseURI.toASCIIString());
-
-		logger.debug("sourceExpr: " + sourceExpr);
-		XdmValue sourceSequence = XQueryOperation.query(authorEditorAccess.createContentReader(),
-				new ByteArrayInputStream(sourceExpr.getBytes(StandardCharsets.UTF_8)), true, baseURI);
-		logger.debug("processedSourceExpr: " + sourceSequence.getUnderlyingValue().toString());
-
-		// generate $rlist list
-		ArrayList<XdmItem> rlist = new ArrayList<XdmItem>();
-		int nonAttributesNodesNumber = 0;
-		int attributesNodesNumber = 0;
-		for (int i = 0; i < sourceSequence.size(); i++) {
-			XdmItem item = sourceSequence.itemAt(i);
-			logger.debug("item: " + item.toString());
-
-			if (item.isAtomicValue()) {
-				++nonAttributesNodesNumber;
-				rlist.add(item);
-			} else {
-				XdmNode node = (XdmNode) item;
-				String nodeKind = node.getNodeKind().name();
-				logger.debug("nodeKind: " + nodeKind);
-
-				switch (nodeKind) {
-				case "ELEMENT":
-				case "TEXT":
-				case "COMMENT":
-				case "PROCESSING_INSTRUCTION":
-					++nonAttributesNodesNumber;
-					rlist.add(item);
-					break;
-				case "ATTRIBUTE":
-					++attributesNodesNumber;
-					rlist.add(item);
-					break;
-				case "DOCUMENT":
-					++nonAttributesNodesNumber;
-					rlist.add(XQueryOperation.getDocumentElement(node));
-					break;
-				}
-			}
-		}
-
-		Object[] targetObjects = authorDocumentController.evaluateXPath(targetExpr, currentNode, false,
-				true, true, false, XPathVersion.XPATH_3_0);
-
-		if (targetObjects.length == 0) {
-			throw new AuthorOperationException(ErrorMessages.err_XUDY0027);
-		}
-
-		Object targetObject = targetObjects[0];
-		logger.debug("targetObject: " + targetObject);
-
-		String targetKind = UpdatePrimitives.getOxygenNodeKind(targetObject);
-		logger.debug("targetKind: " + targetKind);
-
-		AuthorNode parent = UpdatePrimitives.getOxygenParentNode(targetObject, targetKind);
-		logger.debug("parent: " + parent);
-
-		if (targetObjects.length > 1
-				|| !"ELEMENT ATTRIBUTE TEXT COMMENT PROCESSING_INSTRUCTION".contains(targetKind)) {
-			throw new AuthorOperationException(ErrorMessages.err_XUTY0008);
-		}
-
-		// replace node ...
-		if (targetChoice.equals("After")) {
-			if (parent == null) {
-				throw new AuthorOperationException(ErrorMessages.err_XUDY0009);
-			}
-
-			if ("ELEMENT TEXT COMMENT PROCESSING_INSTRUCTION".contains(targetKind)
-					&& (attributesNodesNumber > 0)) {
-				throw new AuthorOperationException(ErrorMessages.err_XUTY0010);
-			}
-
-			if (targetKind.equals("ATTRIBUTE")) {
-				if (nonAttributesNodesNumber > 0) {
-					throw new AuthorOperationException(ErrorMessages.err_XUTY0011);
-				}
-			}
-
-			UpdatePrimitives.replaceNode(targetObject, rlist, authorDocumentController, targetKind);
-		}
-
-		// replace value of node ...
-		if (targetChoice.equals("Before")) {
-			StringBuilder textSb = new StringBuilder();
-			String delim = "";
-
-			for (int i = 0; i < rlist.size(); i++) {
-				XdmItem item = rlist.get(i);
-				textSb.append(delim);
+			// generate $rlist list
+			ArrayList<XdmItem> rlist = new ArrayList<XdmItem>();
+			int nonAttributesNodesNumber = 0;
+			int attributesNodesNumber = 0;
+			for (int i = 0; i < sourceSequence.size(); i++) {
+				XdmItem item = sourceSequence.itemAt(i);
+				logger.debug("item: " + item.toString());
 
 				if (item.isAtomicValue()) {
-					textSb.append(item.getStringValue());
+					++nonAttributesNodesNumber;
+					rlist.add(item);
 				} else {
 					XdmNode node = (XdmNode) item;
 					String nodeKind = node.getNodeKind().name();
+					logger.debug("nodeKind: " + nodeKind);
 
 					switch (nodeKind) {
-					case "TEXT":
-						textSb.append(node.getStringValue());
-						break;
 					case "ELEMENT":
-						textSb.append(node.getUnderlyingNode().getStringValue());
+					case "TEXT":
+					case "COMMENT":
+					case "PROCESSING_INSTRUCTION":
+						++nonAttributesNodesNumber;
+						rlist.add(item);
+						break;
+					case "ATTRIBUTE":
+						++attributesNodesNumber;
+						rlist.add(item);
+						break;
+					case "DOCUMENT":
+						++nonAttributesNodesNumber;
+						rlist.add(XQueryOperation.getDocumentElement(node));
 						break;
 					}
 				}
+			}
+			logger.debug("rlist: " + rlist);
 
-				delim = "";
+			Object[] targetObjects = authorDocumentController.evaluateXPath(targetExpr, currentNode, false, true, true,
+					false, XPathVersion.XPATH_3_0);
+
+			if (targetObjects.length == 0) {
+				throw new AuthorOperationException(ErrorMessages.err_XUDY0027);
 			}
 
-			String text = textSb.toString();
+			Object targetObject = targetObjects[0];
+			logger.debug("targetObject: " + targetObject);
 
-			if (targetKind.equals("ELEMENT")) {
-				UpdatePrimitives.replaceElementContent(targetObject, text, authorDocumentController,
-						targetKind);
+			String targetKind = UpdatePrimitives.getOxygenNodeKind(targetObject);
+			logger.debug("targetKind: " + targetKind);
+
+			AuthorNode parent = UpdatePrimitives.getOxygenParentNode(targetObject, targetKind);
+			logger.debug("parent: " + parent);
+
+			if (targetObjects.length > 1
+					|| !"ELEMENT ATTRIBUTE TEXT COMMENT PROCESSING_INSTRUCTION".contains(targetKind)) {
+				throw new AuthorOperationException(ErrorMessages.err_XUTY0008);
 			}
 
-			if ("ATTRIBUTE TEXT COMMENT PROCESSING_INSTRUCTION".contains(targetKind)) {
-				UpdatePrimitives.replaceValue(targetObject, text, authorDocumentController, targetKind,
-						parent);
+			// replace node ...
+			if (targetChoice.equals("After")) {
+				if (parent == null) {
+					throw new AuthorOperationException(ErrorMessages.err_XUDY0009);
+				}
+
+				if ("ELEMENT TEXT COMMENT PROCESSING_INSTRUCTION".contains(targetKind) && (attributesNodesNumber > 0)) {
+					throw new AuthorOperationException(ErrorMessages.err_XUTY0010);
+				}
+
+				if (targetKind.equals("ATTRIBUTE")) {
+					if (nonAttributesNodesNumber > 0) {
+						throw new AuthorOperationException(ErrorMessages.err_XUTY0011);
+					}
+				}
+
+				UpdatePrimitives.replaceNode(targetObject, rlist, authorDocumentController, targetKind);
 			}
 
+			// replace value of node ...
+			if (targetChoice.equals("Before")) {
+				StringBuilder textSb = new StringBuilder();
+				String delim = "";
+
+				for (int i = 0; i < rlist.size(); i++) {
+					XdmItem item = rlist.get(i);
+					textSb.append(delim);
+
+					if (item.isAtomicValue()) {
+						textSb.append(item.getStringValue());
+					} else {
+						XdmNode node = (XdmNode) item;
+						String nodeKind = node.getNodeKind().name();
+
+						switch (nodeKind) {
+						case "TEXT":
+							textSb.append(node.getStringValue());
+							break;
+						case "ELEMENT":
+							textSb.append(node.getUnderlyingNode().getStringValue());
+							break;
+						}
+					}
+
+					delim = "";
+				}
+
+				String text = textSb.toString();
+
+				if (targetKind.equals("ELEMENT")) {
+					UpdatePrimitives.replaceElementContent(targetObject, text, authorDocumentController, targetKind);
+				}
+
+				if ("ATTRIBUTE TEXT COMMENT PROCESSING_INSTRUCTION".contains(targetKind)) {
+					UpdatePrimitives.replaceValue(targetObject, text, authorDocumentController, targetKind, parent);
+				}
+			}
+
+			authorEditorAccess.setCaretPosition(caretOffset);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
 		}
 
 		logger.debug("================ end replace operation ============================\n");

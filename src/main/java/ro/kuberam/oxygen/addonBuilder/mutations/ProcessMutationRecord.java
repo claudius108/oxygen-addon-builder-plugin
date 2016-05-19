@@ -8,7 +8,10 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 
+import org.apache.log4j.Logger;
+
 import ro.kuberam.oxygen.addonBuilder.javafx.DialogModel;
+import ro.kuberam.oxygen.addonBuilder.operations.DeleteOperation;
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
@@ -17,6 +20,11 @@ import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvid
 @SuppressWarnings("unchecked")
 public class ProcessMutationRecord {
 
+	/**
+	 * Logger for logging.
+	 */
+	private static final Logger logger = Logger.getLogger(DeleteOperation.class.getName());
+	
 	public static Map<String, String[]> observers;
 	private static Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
 	private static Map<String, String> nodeSelectors = new HashMap<String, String>();

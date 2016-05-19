@@ -57,8 +57,8 @@ public class Parser {
 	private ArrayList<SimpleAction> simpleActions = new ArrayList<SimpleAction>();
 	private ParsingResult parsingResult;
 
-	private static String[] actionParameters = { "name", "description", "largeIconPath", "smallIconPath",
-			"accessKey", "accelerator" };
+	private static String[] actionParameters = { "name", "description", "largeIconPath", "smallIconPath", "accessKey",
+			"accelerator" };
 	private static Map<String, String> insertExprTargetChoiceValues = new HashMap<String, String>();
 	private static Map<String, String> replaceExprTargetChoiceValues = new HashMap<String, String>();
 	private static Pattern extractTemplateIdPattern = Pattern
@@ -91,9 +91,9 @@ public class Parser {
 		stream.close();
 
 		String xqueryFrameworkDescriptorAsString = new String(buffer, System.getProperty("file.encoding"));
-		xqueryFrameworkDescriptorAsString = (xqueryFrameworkDescriptorAsString.length() > 0 && xqueryFrameworkDescriptorAsString
-				.charAt(0) == '\uFEFF') ? xqueryFrameworkDescriptorAsString.substring(1)
-				: xqueryFrameworkDescriptorAsString;
+		xqueryFrameworkDescriptorAsString = (xqueryFrameworkDescriptorAsString.length() > 0
+				&& xqueryFrameworkDescriptorAsString.charAt(0) == '\uFEFF')
+						? xqueryFrameworkDescriptorAsString.substring(1) : xqueryFrameworkDescriptorAsString;
 		File frameworkDescriptor = new File(addonDirectory + File.separator + frameworkId + ".framework");
 
 		parsingResult = new ParsingResult();
@@ -106,8 +106,8 @@ public class Parser {
 			s.writeOutput("<?xml version=\"1.0\" encoding=\"UTF-8\"?" + ">");
 			xqueryParser.parse_XQuery();
 		} catch (ParseException pe) {
-			throw new RuntimeException("ParseException while processing "
-					+ xqueryFrameworkDescriptorAsString + ":\n" + xqueryParser.getErrorMessage(pe));
+			throw new RuntimeException("ParseException while processing " + xqueryFrameworkDescriptorAsString + ":\n"
+					+ xqueryParser.getErrorMessage(pe));
 		} finally {
 			w.close();
 		}
@@ -124,8 +124,7 @@ public class Parser {
 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document xqueryParserOutputDoc = db
-				.parse(new ByteArrayInputStream(xqueryParserOutput.toByteArray()));
+		Document xqueryParserOutputDoc = db.parse(new ByteArrayInputStream(xqueryParserOutput.toByteArray()));
 		Element xqueryParserOutputDocumentElement = xqueryParserOutputDoc.getDocumentElement();
 
 		// process variable declarations
@@ -133,11 +132,9 @@ public class Parser {
 		prolog.append("declare namespace ua = \"http://expath.org/ns/user-agent\"; ");
 		String delim = "";
 
-		NodeList namespaceDeclElements = xqueryParserOutputDocumentElement
-				.getElementsByTagName("NamespaceDecl");
+		NodeList namespaceDeclElements = xqueryParserOutputDocumentElement.getElementsByTagName("NamespaceDecl");
 		for (int i = 0, il = namespaceDeclElements.getLength(); i < il; i++) {
-			prolog.append(delim).append(((Element) namespaceDeclElements.item(i)).getTextContent())
-					.append("; ");
+			prolog.append(delim).append(((Element) namespaceDeclElements.item(i)).getTextContent()).append("; ");
 			delim = "";
 		}
 
@@ -177,10 +174,11 @@ public class Parser {
 
 		// load and the tree template
 		baseTreeGeneratorTemplate = parsingResult.prolog
-				+ new Scanner(new FileInputStream(new File(addonDirectory + File.separator + "target"
-						+ File.separator + "tree-template.xq")), "UTF-8").useDelimiter("\\A").next();
-		System.out.println("variableElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
-				/ 1000.0);
+				+ new Scanner(
+						new FileInputStream(new File(
+								addonDirectory + File.separator + "target" + File.separator + "tree-template.xq")),
+						"UTF-8").useDelimiter("\\A").next();
+		System.out.println("variableElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
@@ -191,8 +189,7 @@ public class Parser {
 		// process function calls
 		long functionCallElementsStart = (long) (TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 		System.out.println("functionCallElementsStart: " + functionCallElementsStart);
-		NodeList functionCallElements = xqueryParserOutputDocumentElement
-				.getElementsByTagName("FunctionCall");
+		NodeList functionCallElements = xqueryParserOutputDocumentElement.getElementsByTagName("FunctionCall");
 		for (int i = 0, il = functionCallElements.getLength(); i < il; i++) {
 			Element functionCallElement = (Element) functionCallElements.item(i);
 
@@ -232,13 +229,13 @@ public class Parser {
 
 				if (eventType.equals("load")) {
 					if (listener.contains("oxy:execute-action-by-name")) {
-						listener = _processStringLiteral(listener.replaceAll(
-								"oxy:execute-action-by-name\\(", "").replaceAll("\\)", ""));
+						listener = _processStringLiteral(
+								listener.replaceAll("oxy:execute-action-by-name\\(", "").replaceAll("\\)", ""));
 						parsingResult.actionsByName.add(listener);
 					}
 					if (listener.contains("oxy:execute-action-by-class")) {
-						listener = _processStringLiteral(listener.replaceAll(
-								"oxy:execute-action-by-class\\(", "").replaceAll("\\)", ""));
+						listener = _processStringLiteral(
+								listener.replaceAll("oxy:execute-action-by-class\\(", "").replaceAll("\\)", ""));
 						parsingResult.actionsByClass.get("load").add(listener);
 					}
 				}
@@ -254,8 +251,8 @@ public class Parser {
 
 		}
 
-		System.out.println("functionCallElements: "
-				+ TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
+		System.out
+				.println("functionCallElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		for (Map.Entry<String, Element> derivedActionElement : derivedActionElements.entrySet()) {
 			actionsWriter.writeStartElement("action");
@@ -305,13 +302,11 @@ public class Parser {
 
 		// write actions to the *.framework file
 		Document frameworkDoc = db.parse(frameworkDescriptor);
-		Node actionArrayElement = frameworkDoc.getDocumentElement().getElementsByTagName("action-array")
-				.item(0);
+		Node actionArrayElement = frameworkDoc.getDocumentElement().getElementsByTagName("action-array").item(0);
 		Node actionArrayElementParent = actionArrayElement.getParentNode();
 		actionArrayElementParent.removeChild(actionArrayElement);
 
-		actionArrayElementParent.appendChild(frameworkDoc.importNode(actionsOutputDoc.getDocumentElement(),
-				true));
+		actionArrayElementParent.appendChild(frameworkDoc.importNode(actionsOutputDoc.getDocumentElement(), true));
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
@@ -322,8 +317,7 @@ public class Parser {
 		// write the files with observers, actions by class, etc.
 		parsingResult.writeToFile(targetDirectory, addonDirectory);
 
-		System.out
-				.println("duration: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
+		System.out.println("duration: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 	}
 
@@ -360,8 +354,8 @@ public class Parser {
 		String processedTemplateContent = "";
 
 		for (int i = 0, il = templateContentAsXml.getLength(); i < il; i++) {
-			processedTemplateContent += _processHTMLTemplateContent(templateContentAsXml.item(i),
-					parsingResult, templateId);
+			processedTemplateContent += _processHTMLTemplateContent(templateContentAsXml.item(i), parsingResult,
+					templateId);
 		}
 
 		processedTemplateContent = processedTemplateContent.trim();
@@ -382,14 +376,12 @@ public class Parser {
 				Node varRefElement = varRefElements.item(i);
 				String variableName = varRefElement.getTextContent();
 				String variableValue = parsingResult.variables.get(variableName);
-				enclosedExpressionTextContent = enclosedExpressionTextContent
-						.replace(variableName, variableValue).replaceAll("^\\{\\s*", "")
-						.replaceAll("\\s*\\}$", "");
+				enclosedExpressionTextContent = enclosedExpressionTextContent.replace(variableName, variableValue)
+						.replaceAll("^\\{\\s*", "").replaceAll("\\s*\\}$", "");
 			}
 		}
 
-		enclosedExpressionTextContent = _processXpathExpression(enclosedExpressionTextContent,
-				parsingResult);
+		enclosedExpressionTextContent = _processXpathExpression(enclosedExpressionTextContent, parsingResult);
 
 		if (enclosedExpressionTextContent.startsWith("oxy_xpath_start<")) {
 			enclosedExpressionTextContent = enclosedExpressionTextContent.replace("oxy_xpath_start", "")
@@ -480,8 +472,7 @@ public class Parser {
 		String result = "";
 		if (textContent.contains("oxy:get-template(")) {
 			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
-			textContent = textContent.replace("ua:get-template(oxy:get-template(", "").replaceAll(
-					"\\)\\)$", "");
+			textContent = textContent.replace("ua:get-template(oxy:get-template(", "").replaceAll("\\)\\)$", "");
 			String templateName = textContent.substring(1, textContent.indexOf("\","));
 			String optionsMap = textContent.substring(textContent.indexOf("\",") + 2).trim();
 
@@ -533,8 +524,8 @@ public class Parser {
 
 		result = XML.xmlToString(node, "NO", "YES");
 
-		parsingResult.dialogs.put(templateId, new DialogModel(templateId, type, title, style.width,
-				style.height, style.resize, style.margin, dataSrc, "OxygenAddonBuilder", result));
+		parsingResult.dialogs.put(templateId, new DialogModel(templateId, type, title, style.width, style.height,
+				style.resize, style.margin, dataSrc, "OxygenAddonBuilder", result));
 
 		return result;
 	}
@@ -565,8 +556,7 @@ public class Parser {
 	private String treeElementTemplate(Node node) {
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 		oxyEditorDescriptor.setType("");
-		oxyEditorDescriptor
-				.setRendererClassName("ro.kuberam.oxygen.addonBuilder.templates.java.tree.TreeFormControl");
+		oxyEditorDescriptor.setRendererClassName("ro.kuberam.oxygen.addonBuilder.templates.java.tree.TreeFormControl");
 		oxyEditorDescriptor
 				.setSwingEditorClassName("ro.kuberam.oxygen.addonBuilder.templates.java.tree.TreeFormControl");
 		Node treeitemNode = ((Element) node).getElementsByTagName("treeitem").item(0);
@@ -620,9 +610,8 @@ public class Parser {
 	}
 
 	private String _processOxyXpathExpression(String textContent) {
-		textContent = "\""
-				+ textContent.replaceAll(oxyXpathExpressionStartMarker, "\" oxy_xpath(\"").replaceAll(
-						oxyXpathExpressionEndMarker, "\") \"") + "\"";
+		textContent = "\"" + textContent.replaceAll(oxyXpathExpressionStartMarker, "\" oxy_xpath(\"")
+				.replaceAll(oxyXpathExpressionEndMarker, "\") \"") + "\"";
 		textContent = textContent.replaceAll("\"\"", "").replaceAll(" \" \" ", " ").trim();
 		return textContent;
 	}
@@ -655,8 +644,7 @@ public class Parser {
 		return oxyEditorDescriptor.toString();
 	}
 
-	private void _processDataAttribute(String attrName, String attrValue,
-			OxyEditorDescriptor oxyEditorDescriptor) {
+	private void _processDataAttribute(String attrName, String attrValue, OxyEditorDescriptor oxyEditorDescriptor) {
 		if (attrName.startsWith("data-") && !attrName.equals("data-ua-ref")) {
 			attrValue = (attrValue instanceof String) ? "\"" + attrValue + "\"" : attrValue;
 			attrValue = (attrValue.equals("\"false\"")) ? "false" : attrValue;
@@ -684,8 +672,7 @@ public class Parser {
 		}
 
 		String ref = (refAttrNode == null) ? "" : refAttrNode.getNodeValue();
-		String contenteditable = (contenteditableAttrNode == null) ? "" : contenteditableAttrNode
-				.getNodeValue();
+		String contenteditable = (contenteditableAttrNode == null) ? "" : contenteditableAttrNode.getNodeValue();
 		String size = (sizeAttrNode == null) ? "" : sizeAttrNode.getNodeValue();
 		size = ((multipleAttrNode == null) && size.equals("")) ? "4" : size;
 		String appearance = (appearanceAttrNode == null) ? "" : appearanceAttrNode.getNodeValue();
@@ -731,7 +718,11 @@ public class Parser {
 				break;
 			default:
 				// result +=
-				// "oxy_editor(rendererClassName, \"ro.kuberam.oxygen.addonBuilder.templates.java.select.SelectFormControl\", swingEditorClassName, \"ro.kuberam.oxygen.addonBuilder.templates.java.select.SelectFormControl\", ";
+				// "oxy_editor(rendererClassName,
+				// \"ro.kuberam.oxygen.addonBuilder.templates.java.select.SelectFormControl\",
+				// swingEditorClassName,
+				// \"ro.kuberam.oxygen.addonBuilder.templates.java.select.SelectFormControl\",
+				// ";
 				//
 				// result = _processReferenceAttribute(result, ref,
 				// parsingResult);
@@ -809,8 +800,7 @@ public class Parser {
 					actionID = "simpleAction" + UUID.randomUUID().toString().replaceAll("-", "");
 					String templateId = attrValue.replaceAll("ua:show-template\\('", "");
 
-					SimpleAction simpleAction = new SimpleAction(actionID, node.getTextContent(),
-							templateId);
+					SimpleAction simpleAction = new SimpleAction(actionID, node.getTextContent(), templateId);
 					simpleActions.add(simpleAction);
 
 					oxyEditorDescriptor.setActionID(actionID);
@@ -820,11 +810,12 @@ public class Parser {
 					action = "@" + attrValue.replaceAll("oxy:xquery\\('", "");
 					oxyEditorDescriptor.setAction(action);
 				}
-				
+
 				if (attrValue.contains("oxy:xquery-update")) {
+					System.out.println(attrValue);
 					action = "@" + attrValue.replaceAll("oxy:xquery-update\\('", "");
 					oxyEditorDescriptor.setAction(action);
-				}				
+				}
 
 			}
 
@@ -870,8 +861,8 @@ public class Parser {
 	}
 
 	private String _removeOxyXpathExpressionMarkers(String oxyXpathExpression) {
-		return oxyXpathExpression.replaceAll(oxyXpathExpressionStartMarker, "").replaceAll(
-				oxyXpathExpressionEndMarker, "");
+		return oxyXpathExpression.replaceAll(oxyXpathExpressionStartMarker, "").replaceAll(oxyXpathExpressionEndMarker,
+				"");
 	}
 
 	private void _processReferenceAttribute(OxyEditorDescriptor oxyEditorDescriptor, String attrValue,
@@ -907,11 +898,24 @@ public class Parser {
 			oxyAction.setArgument("action", "After");
 
 			parsingResult.actions.add(oxyAction.toLessDeclaration());
+		} else if (script.startsWith("oxy:execute-xquery-update-script")) {
+			// create action description in CSS-like style
+			OxyAction oxyAction = new OxyAction();
+
+			oxyAction.setId(_processStringLiteral(functionIdArgument.getTextContent()));
+			createActionDescription(oxyAction, functionParametersArgument);
+			oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
+
+			script = script.replace("oxy:execute-xquery-update-script(\"", "");
+			script = script.substring(0, script.lastIndexOf("\")"));
+			oxyAction.setArgument("script", script);
+
+			parsingResult.actions.add(oxyAction.toLessDeclaration());
 		} else {
 
 			actionsWriter.writeStartElement("action");
-			_writeAction(_processStringLiteral(functionIdArgument.getTextContent()),
-					functionParametersArgument, codeBlockArgument);
+			_writeAction(_processStringLiteral(functionIdArgument.getTextContent()), functionParametersArgument,
+					codeBlockArgument);
 			actionsWriter.writeEndElement();
 		}
 
@@ -942,12 +946,10 @@ public class Parser {
 		_processCodeBlockArgument(codeBlockArgument, actionId);
 	}
 
-	private void ua__observer(Element functionCallElement, ParsingResult parsingResult)
-			throws XMLStreamException {
+	private void ua__observer(Element functionCallElement, ParsingResult parsingResult) throws XMLStreamException {
 		NodeList argumentElements = functionCallElement.getElementsByTagName("Argument");
 		String id = _processStringLiteral(argumentElements.item(0).getTextContent());
-		String[] actionHandlers = _processStringLiteral(argumentElements.item(1).getTextContent()).split(
-				" ");
+		String[] actionHandlers = _processStringLiteral(argumentElements.item(1).getTextContent()).split(" ");
 		parsingResult.observers.put(id, actionHandlers);
 	}
 
@@ -977,13 +979,12 @@ public class Parser {
 			options.put("attributeFilter", valueAsList);
 		}
 
-		parsingResult.connectObserverActions.put(nodeSelector, new ObserverConnection(observerHandler,
-				nodeSelector, options));
+		parsingResult.connectObserverActions.put(nodeSelector,
+				new ObserverConnection(observerHandler, nodeSelector, options));
 		parsingResult.nodeSelectors.put(nodeSelector, "xpath");
 	}
 
-	private void _processCodeBlockArgument(Element argumentElement, String actionId)
-			throws XMLStreamException {
+	private void _processCodeBlockArgument(Element argumentElement, String actionId) throws XMLStreamException {
 		NodeList ifExprElements = argumentElement.getElementsByTagName("IfExpr");
 		int ifExprElementsNumber = ifExprElements.getLength();
 
@@ -994,8 +995,8 @@ public class Parser {
 		for (int i = 0, il = ifExprElementsNumber; i < il; i++) {
 			Element ifExprElement = (Element) ifExprElements.item(i);
 
-			_writeBasicActionMode(ifExprElement, ifExprElement.getElementsByTagName("Expr").item(0)
-					.getTextContent(), actionId);
+			_writeBasicActionMode(ifExprElement, ifExprElement.getElementsByTagName("Expr").item(0).getTextContent(),
+					actionId);
 		}
 
 		if (ifExprElementsNumber == 0) {
@@ -1025,8 +1026,7 @@ public class Parser {
 
 			for (int i = 0; i < updatingExprElementsNumber; i++) {
 				String simpleActionId = "derivedAction" + UUID.randomUUID().toString().replaceAll("-", "");
-				derivedActionElements.put(simpleActionId, (Element) updatingExprElements.item(i)
-						.getParentNode());
+				derivedActionElements.put(simpleActionId, (Element) updatingExprElements.item(i).getParentNode());
 				simpleActionIds += simpleActionId + "\r";
 			}
 
@@ -1038,8 +1038,8 @@ public class Parser {
 		} else {
 			authorOperationName = argumentElement.getTextContent();
 			if (authorOperationName.contains("oxy:execute-action-by-class")) {
-				authorOperationName = _processStringLiteral(authorOperationName.replaceAll(
-						"oxy:execute-action-by-class\\(", "").replaceAll("\\)", ""));
+				authorOperationName = _processStringLiteral(
+						authorOperationName.replaceAll("oxy:execute-action-by-class\\(", "").replaceAll("\\)", ""));
 			} else if (authorOperationName.contains("ua:range-surround-contents")) {
 				NodeList argumentElements = argumentElement.getElementsByTagName("Argument");
 				_writeEntryElement("fragment", argumentElements.item(2).getTextContent());
@@ -1047,8 +1047,7 @@ public class Parser {
 				actionsWithCaretContext.add(actionId);
 			} else if (authorOperationName.contains("oxy:execute-xquery-script")) {
 				NodeList argumentElements = argumentElement.getElementsByTagName("Argument");
-				_writeEntryElement("script", _processStringLiteral(argumentElements.item(0)
-						.getTextContent()));
+				_writeEntryElement("script", _processStringLiteral(argumentElements.item(0).getTextContent()));
 				_writeEntryElement("action", "After");
 				authorOperationName = "ro.sync.ecss.extensions.commons.operations.XQueryOperation";
 				actionsWithCaretContext.add(actionId);
@@ -1067,7 +1066,8 @@ public class Parser {
 		// operation,
 		// "ro.sync.ecss.extensions.commons.operations.XQueryOperation",
 		// arg-script,
-		// "import module namespace biblio = 'http://dlri.ro/ns/biblio/' at 'form-controls/search.xq'; biblio:run()",
+		// "import module namespace biblio = 'http://dlri.ro/ns/biblio/' at
+		// 'form-controls/search.xq'; biblio:run()",
 		// arg-action, "After"
 		// )
 	}
@@ -1092,8 +1092,8 @@ public class Parser {
 		return authorOperationName;
 	}
 
-	private void _processFunctionParameters(Element functionParametersArgument) throws DOMException,
-			XMLStreamException {
+	private void _processFunctionParameters(Element functionParametersArgument)
+			throws DOMException, XMLStreamException {
 		Map<String, String> actionArgumentsMap = new HashMap<String, String>();
 		actionArgumentsMap.put("name", "");
 		actionArgumentsMap.put("description", "");
@@ -1135,11 +1135,10 @@ public class Parser {
 	}
 
 	private String _processRenameExpr(Element updatingExprElement) throws XMLStreamException {
-		_writeEntryElement("elementName",
-				_processStringLiteral(updatingExprElement.getElementsByTagName("NewNameExpr").item(0)
-						.getTextContent()));
-		_writeEntryElement("elementLocation", updatingExprElement.getElementsByTagName("TargetExpr")
-				.item(0).getTextContent());
+		_writeEntryElement("elementName", _processStringLiteral(
+				updatingExprElement.getElementsByTagName("NewNameExpr").item(0).getTextContent()));
+		_writeEntryElement("elementLocation",
+				updatingExprElement.getElementsByTagName("TargetExpr").item(0).getTextContent());
 
 		return "ro.sync.ecss.extensions.commons.operations.RenameElementOperation";
 	}
@@ -1147,11 +1146,9 @@ public class Parser {
 	private String _processInsertExpr(Element updatingExprElement) throws XMLStreamException {
 		String actionArgument = updatingExprElement.getElementsByTagName("InsertExprTargetChoice").item(0)
 				.getTextContent();
-		Element sourceExprElement = (Element) updatingExprElement.getElementsByTagName("SourceExpr")
-				.item(0);
+		Element sourceExprElement = (Element) updatingExprElement.getElementsByTagName("SourceExpr").item(0);
 		// replace . with $ua:context in insertExprElement
-		NodeList contextItemExprElementsForSourceExpr = updatingExprElement
-				.getElementsByTagName("ContextItemExpr");
+		NodeList contextItemExprElementsForSourceExpr = updatingExprElement.getElementsByTagName("ContextItemExpr");
 		for (int i = 0, il = contextItemExprElementsForSourceExpr.getLength(); i < il; i++) {
 			contextItemExprElementsForSourceExpr.item(i).getFirstChild().setTextContent("$ua:context");
 		}
@@ -1167,8 +1164,8 @@ public class Parser {
 	}
 
 	private String _processDeleteExpr(Element updatingExprElement) throws XMLStreamException {
-		_writeEntryElement("elementLocation", updatingExprElement.getElementsByTagName("TargetExpr")
-				.item(0).getTextContent());
+		_writeEntryElement("elementLocation",
+				updatingExprElement.getElementsByTagName("TargetExpr").item(0).getTextContent());
 
 		return "ro.kuberam.oxygen.addonBuilder.operations.DeleteOperation";
 	}
@@ -1186,14 +1183,12 @@ public class Parser {
 		actionArgument = actionArgument.replace("replace ", "").replace(" with ", "");
 
 		// replace . with $ua:context in replaceExprElement
-		NodeList contextItemExprElementsForInsertExpr = updatingExprElement
-				.getElementsByTagName("ContextItemExpr");
+		NodeList contextItemExprElementsForInsertExpr = updatingExprElement.getElementsByTagName("ContextItemExpr");
 		for (int i = 0, il = contextItemExprElementsForInsertExpr.getLength(); i < il; i++) {
 			contextItemExprElementsForInsertExpr.item(i).getFirstChild().setTextContent("$ua:context");
 		}
 
-		String sourceExpr = replaceExprElementChildren.item(replaceExprElementChildrenNumber - 1)
-				.getTextContent();
+		String sourceExpr = replaceExprElementChildren.item(replaceExprElementChildrenNumber - 1).getTextContent();
 		String targetExpr = updatingExprElement.getElementsByTagName("TargetExpr").item(0).getTextContent();
 
 		_writeEntryElement("replaceAction", replaceExprTargetChoiceValues.get(actionArgument));
@@ -1205,13 +1200,22 @@ public class Parser {
 		// _writeEntryElement("targetLocation", ".");
 		// _writeEntryElement("action", "Replace");
 		// _writeEntryElement("script",
-		// "<a xmlns=\"http://www.tei-c.org/ns/1.0\">{doc('content-models/usg-datalist.xml')/*/*[@value = /*:TEI/*:text[1]/*:body[1]/*:entry[1]/*:form[2]/*:usg[1]/@value]}</a>");
+		// "<a
+		// xmlns=\"http://www.tei-c.org/ns/1.0\">{doc('content-models/usg-datalist.xml')/*/*[@value
+		// =
+		// /*:TEI/*:text[1]/*:body[1]/*:entry[1]/*:form[2]/*:usg[1]/@value]}</a>");
 		// _writeEntryElement("script",
-		// "declare variable $document := /; doc('content-models/usg-datalist.xml')/*/*[@value = $document/*:TEI/*:text[1]/*:body[1]/*:entry[1]/*:form[2]/*:usg[1]/@value]");
+		// "declare variable $document := /;
+		// doc('content-models/usg-datalist.xml')/*/*[@value =
+		// $document/*:TEI/*:text[1]/*:body[1]/*:entry[1]/*:form[2]/*:usg[1]/@value]");
 		// _writeEntryElement("script",
-		// "declare variable $document := /; doc('content-models/usg-datalist.xml')/*/*[@value = $document/*:TEI/*:text[1]/*:body[1]/*:entry[1]/*:form[2]/*:usg[1]/@value]/@label/string()");
+		// "declare variable $document := /;
+		// doc('content-models/usg-datalist.xml')/*/*[@value =
+		// $document/*:TEI/*:text[1]/*:body[1]/*:entry[1]/*:form[2]/*:usg[1]/@value]/@label/string()");
 		// _writeEntryElement("script",
-		// "declare variable $document := /; doc('content-models/usg-datalist.xml')/*/*[@value = $document/TEI/text[1]/body[1]/entry[1]/form[2]/usg[1]/@value]/@label/string()");
+		// "declare variable $document := /;
+		// doc('content-models/usg-datalist.xml')/*/*[@value =
+		// $document/TEI/text[1]/body[1]/entry[1]/form[2]/usg[1]/@value]/@label/string()");
 		// _writeEntryElement("script", "'acum'");
 		//
 		// _writeEntryElement("name", "test-attribute");
@@ -1240,11 +1244,11 @@ public class Parser {
 		String processedNodeSelector = "";
 
 		if (nodeSelector.contains("ua-dt:xpath-selector")) {
-			processedNodeSelector = _xpath2css(_processStringLiteral(nodeSelector.replaceAll(
-					"ua-dt:xpath-selector\\(", "").replaceAll("\\)$", "")));
+			processedNodeSelector = _xpath2css(_processStringLiteral(
+					nodeSelector.replaceAll("ua-dt:xpath-selector\\(", "").replaceAll("\\)$", "")));
 		} else {
-			processedNodeSelector = _processStringLiteral(nodeSelector.replaceAll("ua-dt:css-selector\\(",
-					"").replaceAll("\\)$", ""));
+			processedNodeSelector = _processStringLiteral(
+					nodeSelector.replaceAll("ua-dt:css-selector\\(", "").replaceAll("\\)$", ""));
 		}
 
 		return processedNodeSelector;
@@ -1261,18 +1265,19 @@ public class Parser {
 	public static void main(String args[]) throws Exception {
 		if (args.length == 0) {
 			String frameworkId = "dlridev";
-//			String oxygenInstallDir = "/home/claudius/oxygen/current";
+			// String oxygenInstallDir = "/home/claudius/oxygen/current";
 			String oxygenInstallDir = "C:/Program Files/Oxygen XML Author 17";
-			
-//			File addonDirectory = new File(oxygenInstallDir + "/frameworks/" + frameworkId);
+
+			// File addonDirectory = new File(oxygenInstallDir + "/frameworks/"
+			// + frameworkId);
 			File addonDirectory = new File(oxygenInstallDir + "/frameworks/" + frameworkId);
-			
-//			AddonBuilderPluginExtension.pluginInstallDir = new File(
-//					"/home/claudius/.com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
-			
+
+			// AddonBuilderPluginExtension.pluginInstallDir = new File(
+			// "/home/claudius/.com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
+
 			AddonBuilderPluginExtension.pluginInstallDir = new File(
 					"C:/Users/claudius.teodorescu/AppData/Roaming/com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
-			
+
 			FrameworkGeneratingBridge bridge = new FrameworkGeneratingBridge();
 			bridge.frameworkId = frameworkId;
 			bridge.oxygenInstallDir = oxygenInstallDir;
@@ -1285,4 +1290,8 @@ public class Parser {
 
 }
 
-//"C:/Program Files/Oxygen XML Author 17\tools\ant\bin\ant" -f "C:\Users\claudius.teodorescu\AppData\Roaming\com.oxygenxml.author\extensions\v17.1\plugins\http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml\addon-builder-plugin\generate-framework\build-framework-structure.xml" build-framework -DoxygenAddonBuilder.frameworksDir="C:\Program Files\Oxygen XML Author 17\frameworks" -DoxygenAddonBuilder.frameworkId=dlridev -DoxygenAddonBuilder.pluginInstallDir="C:\Users\claudius.teodorescu\AppData\Roaming\com.oxygenxml.author\extensions\v17.1\plugins\http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml\addon-builder-plugin"
+// "C:/Program Files/Oxygen XML Author 17\tools\ant\bin\ant" -f
+// "C:\Users\claudius.teodorescu\AppData\Roaming\com.oxygenxml.author\extensions\v17.1\plugins\http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml\addon-builder-plugin\generate-framework\build-framework-structure.xml"
+// build-framework -DoxygenAddonBuilder.frameworksDir="C:\Program Files\Oxygen
+// XML Author 17\frameworks" -DoxygenAddonBuilder.frameworkId=dlridev
+// -DoxygenAddonBuilder.pluginInstallDir="C:\Users\claudius.teodorescu\AppData\Roaming\com.oxygenxml.author\extensions\v17.1\plugins\http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml\addon-builder-plugin"
