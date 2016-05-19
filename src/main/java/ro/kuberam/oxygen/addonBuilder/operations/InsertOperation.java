@@ -205,9 +205,9 @@ public class InsertOperation implements AuthorOperation {
 				}
 			}
 
-			if (!parentKind.equals("ELEMENT")) {
-				throw new AuthorOperationException(ErrorMessages.err_XUDY0030);
-			}
+//			if (!parentKind.equals("ELEMENT")) {
+//				throw new AuthorOperationException(ErrorMessages.err_XUDY0030);
+//			}
 
 			// starting the updates
 			if (alist.size() > 0) {
