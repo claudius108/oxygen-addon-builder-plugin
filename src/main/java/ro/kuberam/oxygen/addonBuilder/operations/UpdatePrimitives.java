@@ -204,6 +204,8 @@ public class UpdatePrimitives {
 			XdmNode node = clist.get(i);
 			if (!node.isAtomicValue()) {
 				String nodeKind = node.getNodeKind().name();
+				logger.debug("nodeKind: " + nodeKind);
+				
 				switch (nodeKind) {
 				case "ELEMENT":
 					try {

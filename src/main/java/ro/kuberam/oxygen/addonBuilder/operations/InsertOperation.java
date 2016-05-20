@@ -90,6 +90,7 @@ public class InsertOperation implements AuthorOperation {
 		Object targetExprObj = args.getArgumentValue(ARGUMENT_TARGET_LOCATION);
 
 		String targetChoice = (String) actionObj;
+		logger.debug("targetChoice: " + targetChoice);
 		String sourceExpr = (String) sourceExprObj;
 		logger.debug("sourceExpr: " + sourceExpr);
 		String targetExpr = (String) targetExprObj;
@@ -170,8 +171,11 @@ public class InsertOperation implements AuthorOperation {
 			Object targetObject = targetObjects[0];
 			String targetKind = UpdatePrimitives.getOxygenNodeKind(targetObject);
 			logger.debug("targetKind: " + targetKind);
+
 			AuthorNode target = UpdatePrimitives.getOxygenNode(targetObject, targetKind);
+			logger.debug("target: " + target);
 			AuthorNode parent = target.getParent();
+			logger.debug("parent: " + parent);
 
 			if (targetChoice.contains("Inside")) {
 				if (targetObjectsNumber > 1) {
