@@ -934,6 +934,8 @@ public class Parser {
 				oxyAction.setName(argumentValue);
 			case "description":
 				oxyAction.setDescription(argumentValue);
+			case "icon":
+				oxyAction.setIcon(argumentValue);
 			}
 
 		}
