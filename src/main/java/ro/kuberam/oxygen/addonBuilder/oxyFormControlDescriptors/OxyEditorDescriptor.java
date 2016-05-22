@@ -6,6 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 public class OxyEditorDescriptor {
 
 	private String type = "";
@@ -61,8 +64,7 @@ public class OxyEditorDescriptor {
 	}
 
 	public String getSwingEditorClassName() {
-		return (swingEditorClassName != null ? "swingEditorClassName, \"" + swingEditorClassName + "\", "
-				: "");
+		return (swingEditorClassName != null ? "swingEditorClassName, \"" + swingEditorClassName + "\", " : "");
 	}
 
 	public void setSwingEditorClassName(String swingEditorClassName) {
@@ -79,8 +81,7 @@ public class OxyEditorDescriptor {
 		try {
 			property = this.getClass().getDeclaredField(propertyName);
 			property.set(this, propertyValue);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException
-				| IllegalAccessException e) {
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			customProperties.put(propertyName, propertyValue);
 		}
 	}
@@ -113,7 +114,7 @@ public class OxyEditorDescriptor {
 	public void setActionID(String actionID) {
 		this.actionID = actionID;
 	}
-	
+
 	public String getAction() {
 		action = (action != null ? "action, \"" + action + "\", " : "");
 		action = (action.contains("\"@")) ? action.replace("\"", "") : action;
@@ -122,7 +123,7 @@ public class OxyEditorDescriptor {
 
 	public void setAction(String action) {
 		this.action = action;
-	}	
+	}
 
 	public String getActionContext() {
 		return (actionContext != null ? "actionContext, " + actionContext + ", " : "");
@@ -174,8 +175,8 @@ public class OxyEditorDescriptor {
 
 	public String getValues() {
 		values = (values != null ? "values, " + _formatOxyXpathExpression(values) + ", " : "");
-		values = (values.contains("\"@")) ? values.replace("\"", "") : values; 
-		
+		values = (values.contains("\"@")) ? values.replace("\"", "") : values;
+
 		return values;
 	}
 
@@ -238,11 +239,31 @@ public class OxyEditorDescriptor {
 		this.color = color;
 	}
 
+	public void processAndSetLabelsAndValues(NodeList nodeChildNodes) {
+		StringBuilder values = new StringBuilder();
+		StringBuilder labels = new StringBuilder();
+		String delim = "";
+
+		for (int i = 0, il = nodeChildNodes.getLength(); i < il; i++) {
+			Node childNode = nodeChildNodes.item(i);
+			String childNodeName = childNode.getNodeName();
+
+			if (childNodeName.equals("option")) {
+				values.append(delim).append(childNode.getAttributes().getNamedItem("value").getNodeValue());
+				labels.append(delim).append(childNode.getAttributes().getNamedItem("label").getNodeValue());
+				delim = ",";
+			}
+
+		}
+
+		this.setValues(values.toString());
+		this.setLabels(labels.toString());
+	}
+
 	public String toString() {
 		return ("oxy_editor(" + getType() + getRendererClassName() + getSwingEditorClassName() + getEdit()
 				+ getActionID() + getAction() + getActionContext() + getCustomProperties() + getTransparent()
-				+ getVisible() + getDisabled() + getShowIcon() + getValues() + getLabels() + getColumns()
-				+ getRows() + getContentType() + getSelectionMode() + getEditable() + getColor()).replaceAll(", $", "")
-				+ ")";
+				+ getVisible() + getDisabled() + getShowIcon() + getValues() + getLabels() + getColumns() + getRows()
+				+ getContentType() + getSelectionMode() + getEditable() + getColor()).replaceAll(", $", "") + ")";
 	}
 }

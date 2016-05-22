@@ -679,24 +679,8 @@ public class Parser {
 
 		NodeList nodeChildNodes = node.getChildNodes();
 
-		StringBuilder values = new StringBuilder();
-		StringBuilder labels = new StringBuilder();
-		String delim = "";
+		oxyEditorDescriptor.processAndSetLabelsAndValues(nodeChildNodes);
 
-		for (int i = 0, il = nodeChildNodes.getLength(); i < il; i++) {
-			Node childNode = nodeChildNodes.item(i);
-			String childNodeName = childNode.getNodeName();
-
-			if (childNodeName.equals("option")) {
-				values.append(delim).append(childNode.getAttributes().getNamedItem("value").getNodeValue());
-				labels.append(delim).append(childNode.getAttributes().getNamedItem("label").getNodeValue());
-				delim = ",";
-			}
-
-		}
-
-		oxyEditorDescriptor.setValues(values.toString());
-		oxyEditorDescriptor.setLabels(labels.toString());
 		oxyEditorDescriptor.setColumns(Integer.toString(style.width));
 
 		if (multipleAttrNode == null) {
@@ -752,7 +736,7 @@ public class Parser {
 
 	private String inputHTMLElementTemplate(Node node, ParsingResult parsingResult) {
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
-		oxyEditorDescriptor.setType("text");
+		String type = "text";
 		NamedNodeMap nodeAttrs = node.getAttributes();
 
 		for (int i = 0, il = nodeAttrs.getLength(); i < il; i++) {
@@ -771,10 +755,17 @@ public class Parser {
 			if (attrName.equals("list")) {
 				oxyEditorDescriptor.setValues("@" + attrValue);
 			}
+
+			if (attrName.equals("type")) {
+				type = attrValue;
+			}
 		}
 
+		oxyEditorDescriptor.setType(type);
+
 		return oxyEditorDescriptor.toString();
-	}
+	}// oxy_checkbox(edit, "@cert", values, "high", uncheckedValues, "high",
+		// labels, "sigur")
 
 	private String buttonElementTemplate(Node node) {
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
