@@ -239,14 +239,14 @@ public class OxyEditorDescriptor {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	
+
 	public String getUncheckedValues() {
-		return (uncheckedValues != null ? "uncheckedValues, " + uncheckedValues + ", " : "");
+		return (uncheckedValues != null ? "uncheckedValues, " + _formatOxyXpathExpression(uncheckedValues) + ", " : "");
 	}
 
 	public void setUncheckedValues(String uncheckedValues) {
 		this.uncheckedValues = uncheckedValues;
-	}	
+	}
 
 	public void processAndSetLabelsAndValues(NodeList nodeChildNodes) {
 		StringBuilder values = new StringBuilder();
@@ -271,8 +271,10 @@ public class OxyEditorDescriptor {
 
 	public String toString() {
 		return ("oxy_editor(" + getType() + getRendererClassName() + getSwingEditorClassName() + getEdit()
-				+ getActionID() + getAction() + getActionContext() + getTransparent()
-				+ getVisible() + getDisabled() + getShowIcon() + getValues() + getLabels() + getColumns() + getRows()
-				+ getContentType() + getSelectionMode() + getEditable() + getColor() + getCustomProperties()).replaceAll(", $", "") + ")";
+				+ getActionID() + getAction() + getActionContext() + getTransparent() + getVisible() + getDisabled()
+				+ getShowIcon() + getValues() + getLabels() + getColumns() + getRows() + getContentType()
+				+ getSelectionMode() + getEditable() + getColor() + getUncheckedValues() + getCustomProperties())
+						.replaceAll(", $", "")
+				+ ")";
 	}
 }

@@ -677,9 +677,9 @@ public class Parser {
 		size = ((multipleAttrNode == null) && size.equals("")) ? "4" : size;
 		String appearance = (appearanceAttrNode == null) ? "" : appearanceAttrNode.getNodeValue();
 
-		NodeList nodeChildNodes = node.getChildNodes();
+		NodeList childNodes = node.getChildNodes();
 
-		oxyEditorDescriptor.processAndSetLabelsAndValues(nodeChildNodes);
+		oxyEditorDescriptor.processAndSetLabelsAndValues(childNodes);
 
 		oxyEditorDescriptor.setColumns(Integer.toString(style.width));
 
@@ -739,6 +739,8 @@ public class Parser {
 		String type = "text";
 		NamedNodeMap nodeAttrs = node.getAttributes();
 
+		String values = "";
+
 		for (int i = 0, il = nodeAttrs.getLength(); i < il; i++) {
 			Node attr = nodeAttrs.item(i);
 			String attrName = attr.getNodeName();
@@ -759,13 +761,24 @@ public class Parser {
 			if (attrName.equals("type")) {
 				type = attrValue;
 			}
+
+			if (attrName.equals("value")) {
+				values = attrValue;
+			}
+		}
+
+		switch (type) {
+		case "radio":
+			type = "check";
+			oxyEditorDescriptor.setLabels(node.getTextContent().trim());
+			oxyEditorDescriptor.setValues(values);
+			oxyEditorDescriptor.setUncheckedValues(values);
 		}
 
 		oxyEditorDescriptor.setType(type);
 
 		return oxyEditorDescriptor.toString();
-	}// oxy_checkbox(edit, "@cert", values, "high", uncheckedValues, "high",
-		// labels, "sigur")
+	}
 
 	private String buttonElementTemplate(Node node) {
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
@@ -803,7 +816,6 @@ public class Parser {
 				}
 
 				if (attrValue.contains("oxy:xquery-update")) {
-					System.out.println(attrValue);
 					action = "@" + attrValue.replaceAll("oxy:xquery-update\\('", "");
 					oxyEditorDescriptor.setAction(action);
 				}
