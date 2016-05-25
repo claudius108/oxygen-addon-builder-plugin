@@ -31,6 +31,7 @@ public class OxyEditorDescriptor {
 	private String selectionMode;
 	private String color;
 	private String uncheckedValues;
+	private String hasMultipleValues;
 	private Map<String, String> customProperties = new LinkedHashMap<String, String>();
 
 	public OxyEditorDescriptor() {
@@ -248,6 +249,14 @@ public class OxyEditorDescriptor {
 		this.uncheckedValues = uncheckedValues;
 	}
 
+	public String getHasMultipleValues() {
+		return (hasMultipleValues != null ? "hasMultipleValues, " + hasMultipleValues + ", " : "");
+	}
+
+	public void setHasMultipleValues(String hasMultipleValues) {
+		this.hasMultipleValues = hasMultipleValues;
+	}
+
 	public void processAndSetLabelsAndValues(NodeList nodeChildNodes) {
 		StringBuilder values = new StringBuilder();
 		StringBuilder labels = new StringBuilder();
@@ -273,8 +282,7 @@ public class OxyEditorDescriptor {
 		return ("oxy_editor(" + getType() + getRendererClassName() + getSwingEditorClassName() + getEdit()
 				+ getActionID() + getAction() + getActionContext() + getTransparent() + getVisible() + getDisabled()
 				+ getShowIcon() + getValues() + getLabels() + getColumns() + getRows() + getContentType()
-				+ getSelectionMode() + getEditable() + getColor() + getUncheckedValues() + getCustomProperties())
-						.replaceAll(", $", "")
-				+ ")";
+				+ getSelectionMode() + getEditable() + getColor() + getUncheckedValues() + getHasMultipleValues()
+				+ getCustomProperties()).replaceAll(", $", "") + ")";
 	}
 }
