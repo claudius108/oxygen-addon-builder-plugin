@@ -900,7 +900,6 @@ public class Parser {
 			script = script.substring(0, script.lastIndexOf("\")"));
 			oxyAction.setArgument("script", script);
 			oxyAction.setArgument("action", "After");
-			oxyAction.setArgument("sourceLocation", "parent::*");
 
 			parsingResult.actions.add(oxyAction.toLessDeclaration());
 		} else if (script.startsWith("oxy:execute-xquery-update-script")) {
