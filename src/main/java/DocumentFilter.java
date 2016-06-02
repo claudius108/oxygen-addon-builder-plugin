@@ -1,5 +1,3 @@
-package ${oxygenAddonBuilder.frameworkId};
-
 import java.util.Map;
 
 import javax.swing.text.BadLocationException;
@@ -14,7 +12,6 @@ import ro.sync.ecss.extensions.api.content.OffsetInformation;
 import ro.sync.ecss.extensions.api.node.AttrValue;
 import ro.sync.ecss.extensions.api.node.AuthorElement;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.ecss.extensions.api.node.AuthorParentNode;
 import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvider;
 import ro.kuberam.oxygen.addonBuilder.Constants;
 

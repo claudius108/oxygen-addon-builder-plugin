@@ -1295,9 +1295,3 @@ public class Parser {
 	}
 
 }
-
-// "C:/Program Files/Oxygen XML Author 17\tools\ant\bin\ant" -f
-// "C:\Users\claudius.teodorescu\AppData\Roaming\com.oxygenxml.author\extensions\v17.1\plugins\http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml\addon-builder-plugin\generate-framework\build-framework-structure.xml"
-// build-framework -DoxygenAddonBuilder.frameworksDir="C:\Program Files\Oxygen
-// XML Author 17\frameworks" -DoxygenAddonBuilder.frameworkId=dlridev
-// -DoxygenAddonBuilder.pluginInstallDir="C:\Users\claudius.teodorescu\AppData\Roaming\com.oxygenxml.author\extensions\v17.1\plugins\http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml\addon-builder-plugin"
