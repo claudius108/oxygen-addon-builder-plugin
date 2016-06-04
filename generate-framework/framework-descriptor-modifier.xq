@@ -41,7 +41,7 @@ declare updating function local:process-authorExtensionStateListener-field() {
     (
         delete node $authorExtensionStateListener-item/element()
         ,
-        insert node element String {concat($framework-id, ".AuthorExtensionStateListener")} into $authorExtensionStateListener-item
+        insert node element String {"AuthorExtensionStateListener"} into $authorExtensionStateListener-item
     )
 };
 

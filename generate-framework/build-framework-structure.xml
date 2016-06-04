@@ -63,7 +63,6 @@
 				<include name="tree-template.xq" />
 			</fileset>
 		</delete>
-		<echo>Compile '${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}' directory...</echo>
 		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="${ant.java.version}" target="${ant.java.version}" classpath="${oxygenAddonBuilder.path-to-addon-builder-plugin.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" fork="true" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
 		<jar destfile="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
