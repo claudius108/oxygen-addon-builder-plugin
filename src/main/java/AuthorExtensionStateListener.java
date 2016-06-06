@@ -5,26 +5,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
+import ro.sync.ecss.css.EditorContent;
+import ro.sync.ecss.css.StaticContent;
+import ro.sync.ecss.css.Styles;
 import ro.sync.ecss.extensions.api.AuthorAccess;
+import ro.sync.ecss.extensions.api.AuthorCaretEvent;
+import ro.sync.ecss.extensions.api.AuthorCaretListener;
 import ro.sync.ecss.extensions.api.AuthorOperation;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.access.AuthorEditorAccess;
+import ro.sync.ecss.extensions.api.node.AttrValue;
+import ro.sync.ecss.extensions.api.node.AuthorElement;
+import ro.sync.ecss.extensions.api.node.AuthorNode;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvider;
 
 @SuppressWarnings("unchecked")
-public class AuthorExtensionStateListener implements
-		ro.sync.ecss.extensions.api.AuthorExtensionStateListener {
+public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api.AuthorExtensionStateListener {
 
 	private AuthorAccess authorAccess;
 	private static ArrayList<String> actionsByName = new ArrayList<String>();
 	private static Map<String, ArrayList<String>> actionsByClass = new HashMap<String, ArrayList<String>>();
+	private static Map<String, String> unicodeCharacters = new HashMap<String, String>();
 
-	//loading the serialized objects
+	// loading the serialized objects
 	static {
 		try {
 			actionsByName = (ArrayList<String>) IOUtilities.deserializeObjectFromFile("/actionsByName.ser");
 			actionsByClass = (Map<String, ArrayList<String>>) IOUtilities
 					.deserializeObjectFromFile("/actionsByClass.ser");
+
+			unicodeCharacters.put("fr", "éàèùâêîôûëïüÿçœæ");
 
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
@@ -87,6 +98,47 @@ public class AuthorExtensionStateListener implements
 				e.printStackTrace();
 			}
 		}
+
+		// add the caret listener
+		authorEditorAccess.addAuthorCaretListener(new AuthorCaretListener() {
+			@Override
+			public void caretMoved(AuthorCaretEvent caretEvent) {
+				AuthorNode currentNode = caretEvent.getNode();
+
+				if (currentNode.getType() != AuthorNode.NODE_TYPE_ELEMENT) {
+					return;
+				}
+
+				AttrValue xmlIdAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
+
+				if (xmlIdAttrValue == null) {
+					return;
+				}
+
+				Styles styles = authorEditorAccess.getStyles(currentNode);
+
+				StaticContent[] mixedContent = styles.getMixedContent();
+				if (mixedContent == null) {
+					return;
+				}
+
+				for (int i = 0; i < mixedContent.length; i++) {
+					if (mixedContent[i].getType() == 4) {
+						EditorContent editorContent = (EditorContent) mixedContent[i];
+						Map<String, Object> editorProperties = editorContent.getProperties();
+						String editorType = (String) editorProperties.get("type");
+						
+						if (!editorType.equals("text")) {
+							continue;
+						}
+
+						String lang = xmlIdAttrValue.getValue();
+						PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
+								unicodeCharacters.get(lang));
+					}
+				}
+			}
+		});
 
 	}
 
