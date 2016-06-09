@@ -13,8 +13,8 @@
 
 	<target name="build-framework">
 
-		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder-plugin.jar" todir="${oxygenAddonBuilder.frameworkDir}${file.separator}java" />
-		<copy todir="${oxygenAddonBuilder.frameworkDir}${file.separator}resources${file.separator}css">
+		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder-plugin.jar" todir="${oxygenAddonBuilder.frameworkDir}java" />
+		<copy todir="${oxygenAddonBuilder.frameworkDir}resources${file.separator}css">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
 				<filename name="framework.less" />
 				<filename name="actions.less" />
@@ -38,7 +38,10 @@
 			<filterchain>
 				<expandproperties />
 			</filterchain>
-		</copy>
+		</copy>		
+		
+		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.properties" todir="${oxygenAddonBuilder.frameworkTargetDir}" />
+				
 		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" filtering="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}java" />
 			<filterchain>
@@ -65,7 +68,7 @@
 		</delete>
 		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="${ant.java.version}" target="${ant.java.version}" classpath="${oxygenAddonBuilder.path-to-addon-builder-plugin.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" fork="true" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
-		<jar destfile="${oxygenAddonBuilder.frameworkDir}${file.separator}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
+		<jar destfile="${oxygenAddonBuilder.frameworkDir}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
 		<jar destfile="${oxygenAddonBuilder.frameworkArchivePath}" basedir="${oxygenAddonBuilder.frameworksDir}" includes="${oxygenAddonBuilder.frameworkId}/**/*.*" excludes="${oxygenAddonBuilder.frameworkId}/target/" />
 		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
 		<echo>Delete selectively the content of '${oxygenAddonBuilder.frameworkTargetDir}' directory...</echo>
