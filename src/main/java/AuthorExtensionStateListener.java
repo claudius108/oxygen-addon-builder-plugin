@@ -1,8 +1,10 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
 import ro.sync.ecss.css.EditorContent;
@@ -26,7 +28,7 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 	private AuthorAccess authorAccess;
 	private static ArrayList<String> actionsByName = new ArrayList<String>();
 	private static Map<String, ArrayList<String>> actionsByClass = new HashMap<String, ArrayList<String>>();
-	private static Map<String, String> unicodeCharacters = new HashMap<String, String>();
+	private static Properties scripts = new Properties();
 
 	// loading the serialized objects
 	static {
@@ -35,8 +37,9 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			actionsByClass = (Map<String, ArrayList<String>>) IOUtilities
 					.deserializeObjectFromFile("/actionsByClass.ser");
 
-			unicodeCharacters.put("fr", "éàèùâêîôûëïüÿçœæ");
-
+			InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/scripts.properties");
+			scripts.load(scriptsIs);
+			scriptsIs.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -127,14 +130,14 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 						EditorContent editorContent = (EditorContent) mixedContent[i];
 						Map<String, Object> editorProperties = editorContent.getProperties();
 						String editorType = (String) editorProperties.get("type");
-						
+
 						if (!editorType.equals("text")) {
 							continue;
 						}
 
 						String lang = xmlIdAttrValue.getValue();
 						PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
-								unicodeCharacters.get(lang));
+								scripts.get(lang));
 					}
 				}
 			}
