@@ -24,9 +24,6 @@ import ro.sync.util.URLUtil;
 
 public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtension {
 
-	/**
-	 * Logger for logging.
-	 */
 	private static final Logger logger = Logger.getLogger(AddonBuilderPluginExtension.class.getName());
 
 	private static StandalonePluginWorkspace pluginWorkspaceAccess;

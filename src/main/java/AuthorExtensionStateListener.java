@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
 import ro.sync.ecss.css.EditorContent;
 import ro.sync.ecss.css.StaticContent;
@@ -24,6 +26,8 @@ import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvid
 
 @SuppressWarnings("unchecked")
 public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api.AuthorExtensionStateListener {
+
+	private static final Logger logger = Logger.getLogger(AuthorExtensionStateListener.class.getName());
 
 	private AuthorAccess authorAccess;
 	private static ArrayList<String> actionsByName = new ArrayList<String>();
@@ -107,12 +111,14 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			@Override
 			public void caretMoved(AuthorCaretEvent caretEvent) {
 				AuthorNode currentNode = caretEvent.getNode();
+				logger.debug("currentNode = " + currentNode);
 
 				if (currentNode.getType() != AuthorNode.NODE_TYPE_ELEMENT) {
 					return;
 				}
 
 				AttrValue xmlIdAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
+				logger.debug("xmlIdAttrValue = " + xmlIdAttrValue);
 
 				if (xmlIdAttrValue == null) {
 					return;
@@ -121,21 +127,28 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 				Styles styles = authorEditorAccess.getStyles(currentNode);
 
 				StaticContent[] mixedContent = styles.getMixedContent();
+
 				if (mixedContent == null) {
 					return;
 				}
 
-				for (int i = 0; i < mixedContent.length; i++) {
+				int mixedContentLength = mixedContent.length;
+				logger.debug("mixedContentLength = " + mixedContentLength);
+
+				for (int i = 0; i < mixedContentLength; i++) {
 					if (mixedContent[i].getType() == 4) {
 						EditorContent editorContent = (EditorContent) mixedContent[i];
 						Map<String, Object> editorProperties = editorContent.getProperties();
 						String editorType = (String) editorProperties.get("type");
+						logger.debug("editorType = " + editorType);
 
 						if (!editorType.equals("text")) {
 							continue;
 						}
 
 						String lang = xmlIdAttrValue.getValue();
+						logger.debug("lang = " + lang);
+
 						PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
 								scripts.get(lang));
 					}
