@@ -40,7 +40,7 @@
 			</filterchain>
 		</copy>		
 		
-		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.properties" todir="${oxygenAddonBuilder.frameworkTargetDir}" />
+		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.xml" todir="${oxygenAddonBuilder.frameworkTargetDir}" />
 				
 		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" filtering="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}java" />

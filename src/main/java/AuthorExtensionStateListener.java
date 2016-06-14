@@ -37,8 +37,8 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			actionsByClass = (Map<String, ArrayList<String>>) IOUtilities
 					.deserializeObjectFromFile("/actionsByClass.ser");
 
-			InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/scripts.properties");
-			scripts.load(scriptsIs);
+			InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/scripts.xml");
+			scripts.loadFromXML(scriptsIs);
 			scriptsIs.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
