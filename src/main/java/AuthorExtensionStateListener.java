@@ -1,3 +1,6 @@
+import java.awt.Component;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -5,6 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +23,7 @@ import ro.sync.ecss.css.Styles;
 import ro.sync.ecss.extensions.api.AuthorAccess;
 import ro.sync.ecss.extensions.api.AuthorCaretEvent;
 import ro.sync.ecss.extensions.api.AuthorCaretListener;
+import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorOperation;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
 import ro.sync.ecss.extensions.api.access.AuthorEditorAccess;
@@ -67,9 +76,10 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 		this.setAuthorAccess(authorAccess);
 
 		final AuthorEditorAccess authorEditorAccess = authorAccess.getEditorAccess();
+		final AuthorDocumentController authorDocumentController = authorAccess.getDocumentController();
 
 		// Add document filter.
-		authorAccess.getDocumentController().setDocumentFilter(new DocumentFilter(authorAccess));
+		authorDocumentController.setDocumentFilter(new DocumentFilter(authorAccess));
 
 		// invoke actions by name
 		AuthorActionsProvider actionsProvider = authorEditorAccess.getActionsProvider();
@@ -106,56 +116,42 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			}
 		}
 
-		// add the caret listener
-		authorEditorAccess.addAuthorCaretListener(new AuthorCaretListener() {
+		JPanel authorComponent = (JPanel) authorEditorAccess.getAuthorComponent();
+		authorComponent.addFocusListener(new FocusListener() {
+
 			@Override
-			public void caretMoved(AuthorCaretEvent caretEvent) {
-				AuthorNode currentNode = caretEvent.getNode();
-				logger.debug("currentNode = " + currentNode);
+			public void focusGained(FocusEvent event) {
+			}
 
-				if (currentNode.getType() != AuthorNode.NODE_TYPE_ELEMENT) {
-					return;
-				}
+			@Override
+			public void focusLost(FocusEvent event) {
+				Component formControl = event.getOppositeComponent();
+				boolean isFormControl = detectFormControl(authorComponent, formControl, false);
 
-				AttrValue xmlIdAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
-				logger.debug("xmlIdAttrValue = " + xmlIdAttrValue);
-
-				if (xmlIdAttrValue == null) {
-					return;
-				}
-
-				Styles styles = authorEditorAccess.getStyles(currentNode);
-
-				StaticContent[] mixedContent = styles.getMixedContent();
-
-				if (mixedContent == null) {
-					return;
-				}
-
-				int mixedContentLength = mixedContent.length;
-				logger.debug("mixedContentLength = " + mixedContentLength);
-
-				for (int i = 0; i < mixedContentLength; i++) {
-					if (mixedContent[i].getType() == 4) {
-						EditorContent editorContent = (EditorContent) mixedContent[i];
-						Map<String, Object> editorProperties = editorContent.getProperties();
-						String editorType = (String) editorProperties.get("type");
-						logger.debug("editorType = " + editorType);
-
-						if (!editorType.equals("text")) {
-							continue;
-						}
-
-						String lang = xmlIdAttrValue.getValue();
-						logger.debug("lang = " + lang);
-
-						PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
-								scripts.get(lang));
+				if (isFormControl && formControl instanceof JTextComponent) {
+					AuthorNode currentNode = null;
+					try {
+						currentNode = authorDocumentController.getNodeAtOffset(authorEditorAccess.getCaretOffset());
+					} catch (BadLocationException e) {
+						e.printStackTrace();
 					}
+					logger.debug("currentNode = " + currentNode);
+
+					AttrValue xmlIdAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
+					logger.debug("xmlIdAttrValue = " + xmlIdAttrValue);
+
+					if (xmlIdAttrValue == null) {
+						return;
+					}
+
+					String lang = xmlIdAttrValue.getValue();
+					logger.debug("lang = " + lang);
+
+					PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
+							scripts.get(lang));
 				}
 			}
 		});
-
 	}
 
 	@Override
@@ -168,6 +164,18 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 
 	public void setAuthorAccess(AuthorAccess authorAccess) {
 		this.authorAccess = authorAccess;
+	}
+
+	private boolean detectFormControl(JPanel authorComponent, Component formControl, boolean isFormControl) {
+		Component formControlParent = formControl.getParent();
+
+		if (formControlParent.equals(authorComponent)) {
+			isFormControl = true;
+		} else {
+			detectFormControl(authorComponent, formControlParent, false);
+		}
+
+		return isFormControl;
 	}
 
 }
