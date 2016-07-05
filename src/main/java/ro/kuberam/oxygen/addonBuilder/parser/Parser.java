@@ -212,7 +212,7 @@ public class Parser {
 			}
 
 			if (functionName.equals("oxy:uuid")) {
-				functionCallElement.setTextContent("'id-${uuid}'");
+				functionCallElement.setTextContent("'uuid-${uuid}'");
 			}
 
 			if (functionName.equals("ua-dt:xpath-selector")) {
