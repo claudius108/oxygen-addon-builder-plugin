@@ -882,7 +882,7 @@ public class Parser {
 	private void ua__action(Element functionCallElement) throws XMLStreamException {
 		NodeList argumentElements = functionCallElement.getElementsByTagName("Argument");
 
-		Node functionIdArgument = argumentElements.item(0);
+		String functionId = _processStringLiteral(argumentElements.item(0).getTextContent());
 		Element functionParametersArgument = (Element) argumentElements.item(1);
 		Element codeBlockArgument = (Element) argumentElements.item(2);
 
@@ -892,40 +892,35 @@ public class Parser {
 			// create action description in CSS-like style
 			OxyAction oxyAction = new OxyAction();
 
-			oxyAction.setId(_processStringLiteral(functionIdArgument.getTextContent()));
-			createActionDescription(oxyAction, functionParametersArgument);
+			createActionDescription(functionId, oxyAction, functionParametersArgument, script);
 			oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryOperation");
-
-			script = script.replace("oxy:execute-xquery-script(\"", "");
-			script = script.substring(0, script.lastIndexOf("\")"));
-			oxyAction.setArgument("script", script);
-			oxyAction.setArgument("action", "After");
 
 			parsingResult.actions.add(oxyAction.toLessDeclaration());
 		} else if (script.startsWith("oxy:execute-xquery-update-script")) {
 			// create action description in CSS-like style
 			OxyAction oxyAction = new OxyAction();
 
-			oxyAction.setId(_processStringLiteral(functionIdArgument.getTextContent()));
-			createActionDescription(oxyAction, functionParametersArgument);
-			oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
+			System.out.println();
+			createActionDescription(functionId, oxyAction, functionParametersArgument, script);
 
-			script = script.replace("oxy:execute-xquery-update-script(\"", "");
-			script = script.substring(0, script.lastIndexOf("\")"));
-			oxyAction.setArgument("script", script);
+			System.out.println(oxyAction.toLessDeclaration());
+			System.out.println();
+
+			oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
 
 			parsingResult.actions.add(oxyAction.toLessDeclaration());
 		} else {
 
 			actionsWriter.writeStartElement("action");
-			_writeAction(_processStringLiteral(functionIdArgument.getTextContent()), functionParametersArgument,
-					codeBlockArgument);
+			_writeAction(functionId, functionParametersArgument, codeBlockArgument);
 			actionsWriter.writeEndElement();
 		}
 
 	}
 
-	private void createActionDescription(OxyAction oxyAction, Element functionParametersArgument) {
+	private void createActionDescription(String functionId, OxyAction oxyAction, Element functionParametersArgument, String script) {
+		oxyAction.setId(functionId);
+		
 		NodeList mapKeyExprElements = functionParametersArgument.getElementsByTagName("MapKeyExpr");
 		NodeList mapValueExprElements = functionParametersArgument.getElementsByTagName("MapValueExpr");
 
@@ -933,16 +928,24 @@ public class Parser {
 			String argumentName = _processStringLiteral(mapKeyExprElements.item(i).getTextContent());
 			String argumentValue = _processStringLiteral(mapValueExprElements.item(i).getTextContent());
 
+			System.out.println("argumentName: " + argumentName + ", argumentValue: " + argumentValue);
+
 			switch (argumentName) {
 			case "name":
 				oxyAction.setName(argumentValue);
 			case "description":
 				oxyAction.setDescription(argumentValue);
-			case "icon":
+			case "smallIconPath":
 				oxyAction.setIcon(argumentValue);
 			}
 
+			System.out.println(oxyAction.toLessDeclaration());
+
 		}
+		
+		script = script.substring(script.indexOf("\"") + 1);
+		script = script.substring(0, script.lastIndexOf("\")"));
+		oxyAction.setArgument("script", script);
 	}
 
 	private void _writeAction(String actionId, Element functionParametersArgument, Element codeBlockArgument)
@@ -1043,6 +1046,7 @@ public class Parser {
 			// other functions
 		} else {
 			authorOperationName = argumentElement.getTextContent();
+
 			if (authorOperationName.contains("oxy:execute-action-by-class")) {
 				authorOperationName = _processStringLiteral(
 						authorOperationName.replaceAll("oxy:execute-action-by-class\\(", "").replaceAll("\\)", ""));
