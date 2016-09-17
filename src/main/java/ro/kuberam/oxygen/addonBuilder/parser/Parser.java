@@ -907,7 +907,6 @@ public class Parser {
 			String script) {
 		OxyAction oxyAction = new OxyAction();
 		
-		logger.debug("");
 		oxyAction.setId(functionId);
 
 		NodeList mapKeyExprElements = functionParametersArgument.getElementsByTagName("MapKeyExpr");
@@ -917,8 +916,6 @@ public class Parser {
 			String argumentName = _processStringLiteral(mapKeyExprElements.item(i).getTextContent());
 			String argumentValue = _processStringLiteral(mapValueExprElements.item(i).getTextContent());
 
-			logger.debug("argumentName: " + argumentName + ", argumentValue: " + argumentValue);
-			
 			if (argumentName.equals("name")) {
 				oxyAction.setName(argumentValue);
 			}
@@ -940,8 +937,6 @@ public class Parser {
 //				oxyAction.setIcon(argumentValue);
 //			}
 
-			logger.debug(oxyAction.toLessDeclaration());
-
 		}
 
 		oxyAction.setOperation(operation);
@@ -949,9 +944,6 @@ public class Parser {
 		script = script.substring(script.indexOf("\"") + 1);
 		script = script.substring(0, script.lastIndexOf("\")"));
 		oxyAction.setArgument("script", script);
-
-		logger.debug(oxyAction.toLessDeclaration());
-		logger.debug("");
 
 		return oxyAction.toLessDeclaration();
 	}
