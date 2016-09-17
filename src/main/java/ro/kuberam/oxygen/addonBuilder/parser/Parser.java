@@ -889,26 +889,11 @@ public class Parser {
 		String script = codeBlockArgument.getTextContent();
 
 		if (script.startsWith("oxy:execute-xquery-script")) {
-			// create action description in CSS-like style
-			OxyAction oxyAction = new OxyAction();
-
-			createActionDescription(functionId, oxyAction, functionParametersArgument, script);
-			oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryOperation");
-
-			parsingResult.actions.add(oxyAction.toLessDeclaration());
+			parsingResult.actions.add(createActionDescription(functionId, functionParametersArgument,
+					"ro.sync.ecss.extensions.commons.operations.XQueryOperation", script));
 		} else if (script.startsWith("oxy:execute-xquery-update-script")) {
-			// create action description in CSS-like style
-			OxyAction oxyAction = new OxyAction();
-
-			System.out.println();
-			createActionDescription(functionId, oxyAction, functionParametersArgument, script);
-
-			System.out.println(oxyAction.toLessDeclaration());
-			System.out.println();
-
-			oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
-
-			parsingResult.actions.add(oxyAction.toLessDeclaration());
+			parsingResult.actions.add(createActionDescription(functionId, functionParametersArgument,
+					"ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation", script));
 		} else {
 
 			actionsWriter.writeStartElement("action");
@@ -918,9 +903,13 @@ public class Parser {
 
 	}
 
-	private void createActionDescription(String functionId, OxyAction oxyAction, Element functionParametersArgument, String script) {
-		oxyAction.setId(functionId);
+	private String createActionDescription(String functionId, Element functionParametersArgument, String operation,
+			String script) {
+		OxyAction oxyAction = new OxyAction();
 		
+		logger.debug("");
+		oxyAction.setId(functionId);
+
 		NodeList mapKeyExprElements = functionParametersArgument.getElementsByTagName("MapKeyExpr");
 		NodeList mapValueExprElements = functionParametersArgument.getElementsByTagName("MapValueExpr");
 
@@ -928,24 +917,43 @@ public class Parser {
 			String argumentName = _processStringLiteral(mapKeyExprElements.item(i).getTextContent());
 			String argumentValue = _processStringLiteral(mapValueExprElements.item(i).getTextContent());
 
-			System.out.println("argumentName: " + argumentName + ", argumentValue: " + argumentValue);
-
-			switch (argumentName) {
-			case "name":
+			logger.debug("argumentName: " + argumentName + ", argumentValue: " + argumentValue);
+			
+			if (argumentName.equals("name")) {
 				oxyAction.setName(argumentValue);
-			case "description":
+			}
+			
+			if (argumentName.equals("description")) {
 				oxyAction.setDescription(argumentValue);
-			case "smallIconPath":
+			}
+			
+			if (argumentName.equals("smallIconPath")) {
 				oxyAction.setIcon(argumentValue);
 			}
 
-			System.out.println(oxyAction.toLessDeclaration());
+//			switch (argumentName) {
+//			case "name":
+//				oxyAction.setName(argumentValue);
+//			case "description":
+//				oxyAction.setDescription(argumentValue);
+//			case "smallIconPath":
+//				oxyAction.setIcon(argumentValue);
+//			}
+
+			logger.debug(oxyAction.toLessDeclaration());
 
 		}
-		
+
+		oxyAction.setOperation(operation);
+
 		script = script.substring(script.indexOf("\"") + 1);
 		script = script.substring(0, script.lastIndexOf("\")"));
 		oxyAction.setArgument("script", script);
+
+		logger.debug(oxyAction.toLessDeclaration());
+		logger.debug("");
+
+		return oxyAction.toLessDeclaration();
 	}
 
 	private void _writeAction(String actionId, Element functionParametersArgument, Element codeBlockArgument)

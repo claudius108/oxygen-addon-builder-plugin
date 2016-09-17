@@ -33,7 +33,7 @@ public class OxyAction {
 	}
 
 	private String getName() {
-		return (name != null) ? "name, \"" + name + "\", " : "";
+		return (name != null) ? "name, \"" + name + "\"" : "";
 	}
 
 	public void setDescription(String description) {
@@ -41,7 +41,7 @@ public class OxyAction {
 	}
 
 	private String getDescription() {
-		return (description != null) ? "description, \"" + description + "\", " : "";
+		return (description != null) ? ", description, \"" + description + "\"" : "";
 	}
 
 	public void setIcon(String icon) {
@@ -49,7 +49,7 @@ public class OxyAction {
 	}
 
 	private String getIcon() {
-		return (icon != null) ? "icon, \"" + icon + "\", " : "";
+		return (icon != null) ? ", icon, \"" + icon + "\"" : "";
 	}
 
 	public void setOperation(String operation) {
@@ -57,7 +57,7 @@ public class OxyAction {
 	}
 
 	private String getOperation() {
-		return (operation != null) ? "operation, \"" + operation + "\", " : "";
+		return (operation != null) ? ", operation, \"" + operation + "\"" : "";
 	}
 
 	private String getArguments() {
@@ -72,7 +72,9 @@ public class OxyAction {
 			delim = ", ";
 		}
 
-		return result.toString();
+		String arguments = result.toString();
+
+		return (arguments != null) ? ", " + arguments : "";
 	}
 
 	private String getID() {
@@ -80,7 +82,7 @@ public class OxyAction {
 	}
 
 	public String toLessDeclaration() {
-		return getId() + "oxy_action(" + getName() + getDescription() + getIcon() + getOperation()
-				+ getArguments() + ");";
+		return getId() + "oxy_action(" + getName() + getDescription() + getIcon() + getOperation() + getArguments()
+				+ ");";
 	}
 }
