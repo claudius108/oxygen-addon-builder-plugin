@@ -816,8 +816,8 @@ public class Parser {
 					oxyEditorDescriptor.setAction(action);
 				}
 
-				if (attrValue.contains("oxy:xquery-update")) {
-					action = "@" + attrValue.replaceAll("oxy:xquery-update\\('", "");
+				if (attrValue.contains("oxy:xquery-update-action")) {
+					action = "@" + attrValue.replaceAll("oxy:xquery-update-action\\('", "");
 					oxyEditorDescriptor.setAction(action);
 				}
 
