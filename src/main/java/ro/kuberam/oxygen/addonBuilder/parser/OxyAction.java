@@ -24,8 +24,8 @@ public class OxyAction {
 		this.id = id;
 	}
 
-	private String getId() {
-		return "@" + id + ": ";
+	public String getId() {
+		return this.id;
 	}
 
 	public void setName(String name) {
@@ -82,7 +82,7 @@ public class OxyAction {
 	}
 
 	public String toLessDeclaration() {
-		return getId() + "oxy_action(" + getName() + getDescription() + getIcon() + getOperation() + getArguments()
+		return "@" + getId() + ": " + "oxy_action(" + getName() + getDescription() + getIcon() + getOperation() + getArguments()
 				+ ");";
 	}
 }

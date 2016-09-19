@@ -827,7 +827,7 @@ public class Parser {
 					actionID = UUID.randomUUID().toString().replaceAll("-", "");
 					oxyEditorDescriptor.setAction("@" + actionID);
 					oxyAction.setId(actionID);
-					
+
 					processInnerHTMLcontent(oxyAction, node);
 
 					oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
@@ -892,7 +892,12 @@ public class Parser {
 			}
 
 			if (childNodeType == Node.ELEMENT_NODE) {
-				oxyAction.setIcon(childNode.getTextContent());
+				String childNodeLocalName = childNode.getLocalName();
+
+				if (childNodeLocalName.equals("img")) {
+					oxyAction.setName(oxyAction.getId());
+					oxyAction.setIcon(childNode.getAttributes().getNamedItem("src").getTextContent());
+				}
 			}
 		}
 	}
