@@ -821,6 +821,22 @@ public class Parser {
 					oxyEditorDescriptor.setAction(action);
 				}
 
+				if (attrValue.contains("oxy:xquery-update(")) {
+					OxyAction oxyAction = new OxyAction();
+
+					actionID = UUID.randomUUID().toString().replaceAll("-", "");
+					oxyEditorDescriptor.setAction("@" + actionID);
+					oxyAction.setId(actionID);
+					
+					processInnerHTMLcontent(oxyAction, node);
+
+					oxyAction.setOperation("ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
+
+					oxyAction.setArgument("script", attrValue.substring(attrValue.indexOf("'") + 1));
+
+					parsingResult.actions.add(oxyAction.toLessDeclaration());
+
+				}
 			}
 
 			if (attrName.equals("style")) {
@@ -862,6 +878,23 @@ public class Parser {
 		// System.out.println(oxyEditorDescriptor.toString());
 
 		return oxyEditorDescriptor.toString();
+	}
+
+	private void processInnerHTMLcontent(OxyAction oxyAction, Node node) {
+		NodeList childNodes = node.getChildNodes();
+
+		for (int i = 0, il = childNodes.getLength(); i < il; i++) {
+			Node childNode = childNodes.item(i);
+			int childNodeType = childNode.getNodeType();
+
+			if (childNodeType == Node.TEXT_NODE) {
+				oxyAction.setName(childNode.getTextContent());
+			}
+
+			if (childNodeType == Node.ELEMENT_NODE) {
+				oxyAction.setIcon(childNode.getTextContent());
+			}
+		}
 	}
 
 	private String _removeOxyXpathExpressionMarkers(String oxyXpathExpression) {
@@ -906,7 +939,7 @@ public class Parser {
 	private String createActionDescription(String functionId, Element functionParametersArgument, String operation,
 			String script) {
 		OxyAction oxyAction = new OxyAction();
-		
+
 		oxyAction.setId(functionId);
 
 		NodeList mapKeyExprElements = functionParametersArgument.getElementsByTagName("MapKeyExpr");
@@ -919,23 +952,23 @@ public class Parser {
 			if (argumentName.equals("name")) {
 				oxyAction.setName(argumentValue);
 			}
-			
+
 			if (argumentName.equals("description")) {
 				oxyAction.setDescription(argumentValue);
 			}
-			
+
 			if (argumentName.equals("smallIconPath")) {
 				oxyAction.setIcon(argumentValue);
 			}
 
-//			switch (argumentName) {
-//			case "name":
-//				oxyAction.setName(argumentValue);
-//			case "description":
-//				oxyAction.setDescription(argumentValue);
-//			case "smallIconPath":
-//				oxyAction.setIcon(argumentValue);
-//			}
+			// switch (argumentName) {
+			// case "name":
+			// oxyAction.setName(argumentValue);
+			// case "description":
+			// oxyAction.setDescription(argumentValue);
+			// case "smallIconPath":
+			// oxyAction.setIcon(argumentValue);
+			// }
 
 		}
 
