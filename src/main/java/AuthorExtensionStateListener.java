@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -17,12 +16,7 @@ import javax.swing.text.JTextComponent;
 import org.apache.log4j.Logger;
 
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
-import ro.sync.ecss.css.EditorContent;
-import ro.sync.ecss.css.StaticContent;
-import ro.sync.ecss.css.Styles;
 import ro.sync.ecss.extensions.api.AuthorAccess;
-import ro.sync.ecss.extensions.api.AuthorCaretEvent;
-import ro.sync.ecss.extensions.api.AuthorCaretListener;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorOperation;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
