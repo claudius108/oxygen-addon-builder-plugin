@@ -137,14 +137,14 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 					}
 					logger.debug("currentNode = " + currentNode);
 
-					AttrValue xmlIdAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
-					logger.debug("xmlIdAttrValue = " + xmlIdAttrValue);
+					AttrValue xmlLangAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
+					logger.debug("xmlLangAttrValue = " + xmlLangAttrValue);
 
-					if (xmlIdAttrValue == null) {
+					if (xmlLangAttrValue == null) {
 						return;
 					}
 
-					String lang = xmlIdAttrValue.getValue();
+					String lang = xmlLangAttrValue.getValue();
 					logger.debug("lang = " + lang);
 
 					PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
