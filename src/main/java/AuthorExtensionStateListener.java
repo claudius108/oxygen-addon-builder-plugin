@@ -127,6 +127,7 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			public void focusLost(FocusEvent event) {
 				Component formControl = event.getOppositeComponent();
 				boolean isFormControl = detectFormControl(authorComponent, formControl, false);
+				logger.debug("isFormControl = " + isFormControl);
 
 				if (isFormControl && formControl instanceof JTextComponent) {
 					AuthorNode currentNode = null;
