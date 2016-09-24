@@ -966,6 +966,10 @@ public class Parser {
 				oxyAction.setIcon(argumentValue);
 			}
 
+			if (operation.equals("ro.sync.ecss.extensions.commons.operations.XQueryOperation")) {
+				oxyAction.setArgument("action", "After");
+			}
+
 			// switch (argumentName) {
 			// case "name":
 			// oxyAction.setName(argumentValue);
@@ -1092,12 +1096,6 @@ public class Parser {
 				NodeList argumentElements = argumentElement.getElementsByTagName("Argument");
 				_writeEntryElement("fragment", argumentElements.item(2).getTextContent());
 				authorOperationName = "ro.sync.ecss.extensions.commons.operations.SurroundWithFragmentOperation";
-				actionsWithCaretContext.add(actionId);
-			} else if (authorOperationName.contains("oxy:execute-xquery-script")) {
-				NodeList argumentElements = argumentElement.getElementsByTagName("Argument");
-				_writeEntryElement("script", _processStringLiteral(argumentElements.item(0).getTextContent()));
-				_writeEntryElement("action", "After");
-				authorOperationName = "ro.sync.ecss.extensions.commons.operations.XQueryOperation";
 				actionsWithCaretContext.add(actionId);
 			} else {
 				authorOperationName = "ro.kuberam.oxygen.addonBuilder.operations.VoidOperation";
