@@ -150,6 +150,8 @@ public class ReplaceOperation implements AuthorOperation {
 			sourceExpr = sourceExpr.replace("$ua:context", currentNodeXpathExpr).trim();
 			sourceExpr = authorAccess.getUtilAccess().expandEditorVariables(sourceExpr, null);
 			sourceExpr = XQuery.completeXqueryScript(sourceExpr);
+			logger.debug("sourceExpr: " + sourceExpr);
+			
 			targetExpr = targetExpr.replace("$ua:context", currentNodeXpathExpr);
 			targetExpr = XML.completeXpathExpression(targetExpr);
 			logger.debug("targetExpr: " + targetExpr);
@@ -163,9 +165,9 @@ public class ReplaceOperation implements AuthorOperation {
 			}
 			logger.debug("baseURI: " + baseURI.toASCIIString());
 
-			logger.debug("sourceExpr: " + sourceExpr);
 			XdmValue sourceSequence = XQueryOperation.query(authorEditorAccess.createContentReader(),
 					new ByteArrayInputStream(sourceExpr.getBytes(StandardCharsets.UTF_8)), true, baseURI);
+			logger.debug("sourceSequence.size(): " + sourceSequence.size());
 			logger.debug("processedSourceExpr: " + sourceSequence.getUnderlyingValue().toString());
 
 			// generate $rlist list
@@ -259,6 +261,7 @@ public class ReplaceOperation implements AuthorOperation {
 					} else {
 						XdmNode node = (XdmNode) item;
 						String nodeKind = node.getNodeKind().name();
+						logger.debug("nodeKind: " + nodeKind);
 
 						switch (nodeKind) {
 						case "TEXT":
@@ -274,6 +277,7 @@ public class ReplaceOperation implements AuthorOperation {
 				}
 
 				String text = textSb.toString();
+				logger.debug("text: " + text);
 
 				if (targetKind.equals("ELEMENT")) {
 					UpdatePrimitives.replaceElementContent(targetObject, text, authorDocumentController, targetKind);

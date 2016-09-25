@@ -930,10 +930,15 @@ public class Parser {
 			parsingResult.actions.add(createActionDescription(functionId, functionParametersArgument,
 					"ro.sync.ecss.extensions.commons.operations.XQueryOperation", script));
 		} else if (script.startsWith("oxy:execute-xquery-update-script")) {
-			parsingResult.actions.add(createActionDescription(functionId, functionParametersArgument,
-					"ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation", script));
+			if (script.contains("actions/")) {
+				actionsWriter.writeStartElement("action");
+				_writeAction2(functionId, functionParametersArgument, script);
+				actionsWriter.writeEndElement();
+			} else {
+				parsingResult.actions.add(createActionDescription(functionId, functionParametersArgument,
+						"ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation", script));
+			}
 		} else {
-
 			actionsWriter.writeStartElement("action");
 			_writeAction(functionId, functionParametersArgument, codeBlockArgument);
 			actionsWriter.writeEndElement();
@@ -995,6 +1000,33 @@ public class Parser {
 		_writeFieldElement("id", actionId);
 		_processFunctionParameters(functionParametersArgument);
 		_processCodeBlockArgument(codeBlockArgument, actionId);
+	}
+
+	private void _writeAction2(String functionId, Element functionParametersArgument, String script) throws XMLStreamException {
+		_writeFieldElement("id", functionId);
+		_processFunctionParameters(functionParametersArgument);
+		
+		actionsWriter.writeStartElement("field");
+		actionsWriter.writeAttribute("name", "actionModes");
+		actionsWriter.writeStartElement("actionMode-array");
+
+		actionsWriter.writeStartElement("actionMode");
+		_writeFieldElement("xpathCondition", "");
+		actionsWriter.writeStartElement("field");
+		actionsWriter.writeAttribute("name", "argValues");
+		actionsWriter.writeStartElement("map");
+		
+		script = script.substring(script.indexOf("\"") + 1);
+		script = script.substring(0, script.lastIndexOf("\")"));
+		_writeEntryElement("script", script);
+
+		actionsWriter.writeEndElement();
+		actionsWriter.writeEndElement();
+		_writeFieldElement("operationID", "ro.sync.ecss.extensions.commons.operations.XQueryUpdateOperation");
+		actionsWriter.writeEndElement();
+		
+		actionsWriter.writeEndElement();
+		actionsWriter.writeEndElement();
 	}
 
 	private void ua__observer(Element functionCallElement, ParsingResult parsingResult) throws XMLStreamException {
