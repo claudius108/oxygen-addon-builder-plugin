@@ -211,10 +211,6 @@ public class Parser {
 				ua__connect_observer(functionCallElement, parsingResult);
 			}
 
-			if (functionName.equals("oxy:uuid")) {
-				functionCallElement.setTextContent("'uuid-${uuid}'");
-			}
-
 			if (functionName.equals("ua-dt:xpath-selector")) {
 				String textContent = functionCallElement.getTextContent();
 				functionCallElement.setTextContent(_processNodeSelector(textContent));
