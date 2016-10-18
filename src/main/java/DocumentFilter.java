@@ -2,7 +2,11 @@ import java.util.Map;
 
 import javax.swing.text.BadLocationException;
 
+import org.apache.log4j.Logger;
+
 import ro.kuberam.oxygen.addonBuilder.mutations.ProcessMutationRecord;
+import ro.sync.ecss.css.StaticContent;
+import ro.sync.ecss.css.Styles;
 import ro.sync.ecss.extensions.api.AuthorAccess;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorDocumentFilter;
@@ -16,6 +20,9 @@ import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvid
 import ro.kuberam.oxygen.addonBuilder.Constants;
 
 public class DocumentFilter extends AuthorDocumentFilter {
+
+	private static final Logger logger = Logger.getLogger(DocumentFilter.class.getName());
+
 	/**
 	 * The author access.
 	 */
@@ -50,12 +57,20 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 			e.printStackTrace();
 		}
-		AuthorElement currentElement = (AuthorElement) currentNode;
-		String currentElementName = currentElement.getLocalName();
-		int caretPosition = startOffset;
+
+		Styles styles = authorAccess.getEditorAccess().getStyles(currentNode);
+
+		StaticContent[] mixedContent = styles.getMixedContent();
+		logger.debug("mixedContent = " + mixedContent);
+		logger.debug("mixed content length = " + mixedContent.length);
+
+		if (mixedContent.length == 0) {
+			return true;
+		}
 
 		try {
 			OffsetInformation ci = authorDocumentController.getContentInformationAtOffset(startOffset);
+
 			if (ci.getNodeForMarkerOffset() != null) {
 				if (withBackspace && ci.getNodeForMarkerOffset().getStartOffset() == startOffset) {
 					if (ci.getNodeForMarkerOffset().getStartOffset() + 1 == ci.getNodeForMarkerOffset()
@@ -74,28 +89,27 @@ public class DocumentFilter extends AuthorDocumentFilter {
 	}
 
 	@Override
-	public void setAttribute(AuthorDocumentFilterBypass filterBypass, String attributeName,
-			AttrValue newAttrValueObj, AuthorElement currentElement) {
+	public void setAttribute(AuthorDocumentFilterBypass filterBypass, String attributeName, AttrValue newAttrValueObj,
+			AuthorElement currentElement) {
 
 		filterBypass.setAttribute(attributeName, newAttrValueObj, currentElement);
-		
+
 		if (currentElement.getAttribute(attributeName).getValue().equals(Constants.valueOfAttributeToBeDeleted)) {
-			filterBypass.removeAttribute(attributeName, currentElement);			
+			filterBypass.removeAttribute(attributeName, currentElement);
 		} else {
-			ProcessMutationRecord.attributes(authorActionsProvider, currentElement.getStartOffset() + 1,
-					currentElement, attributeName, null, null);		
+			ProcessMutationRecord.attributes(authorActionsProvider, currentElement.getStartOffset() + 1, currentElement,
+					attributeName, null, null);
 		}
 	}
-	
+
 	@Override
-	public void removeAttribute(AuthorDocumentFilterBypass filterBypass, String attributeName,
-			AuthorElement element) {
+	public void removeAttribute(AuthorDocumentFilterBypass filterBypass, String attributeName, AuthorElement element) {
 
 		filterBypass.removeAttribute(attributeName, element);
 		AttrValue attrValue = new AttrValue("");
 		authorDocumentController.setAttribute(attributeName, attrValue, element);
 
-	}	
+	}
 
 	@Override
 	public void insertText(AuthorDocumentFilterBypass filterBypass, int offset, String textContent) {
