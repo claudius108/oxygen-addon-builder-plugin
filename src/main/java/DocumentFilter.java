@@ -58,7 +58,7 @@ public class DocumentFilter extends AuthorDocumentFilter {
 			e.printStackTrace();
 		}
 
-		Styles styles = authorAccess.getEditorAccess().getStyles(currentNode);
+		Styles styles = authorEditorAccess.getStyles(currentNode);
 
 		StaticContent[] mixedContent = styles.getMixedContent();
 		logger.debug("mixedContent = " + mixedContent);
