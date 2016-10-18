@@ -78,7 +78,6 @@ public class DocumentFilter extends AuthorDocumentFilter {
 						return true;
 					}
 				}
-
 			}
 
 		} catch (BadLocationException e) {
