@@ -17,7 +17,7 @@
 		<java-version>1.8</java-version>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
-		<oxygen-version>18.0.0</oxygen-version>
+		<oxygen-version>18.1.0.0</oxygen-version>
 		<plugin-final-name>oxygen-${project.artifactId}</plugin-final-name>
 		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${plugin-final-name}/${plugin-final-name}.jar</addon-location>
 		<github.global.server>github</github.global.server>
