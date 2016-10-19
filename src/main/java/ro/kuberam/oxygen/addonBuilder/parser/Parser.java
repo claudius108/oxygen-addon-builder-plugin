@@ -457,32 +457,38 @@ public class Parser {
 		if (textContent.contains("oxy:get-template(")) {
 			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 			textContent = textContent.replace("ua:get-template(oxy:get-template(", "").replaceAll("\\)\\)$", "");
-			String templateName = textContent.substring(1, textContent.indexOf("\","));
+			String templateName = _processStringLiteral(textContent.substring(1, textContent.indexOf("\",")));
+			System.out.println("templateName = " + templateName);
 			String optionsMap = textContent.substring(textContent.indexOf("\",") + 2).trim();
 
 			optionsMap = optionsMap.substring(optionsMap.indexOf("{") + 1);
 			optionsMap = optionsMap.substring(0, optionsMap.indexOf("}")).trim();
+			System.out.println("optionsMap = " + optionsMap);
 
 			String[] options = optionsMap.split(",\\s+\"");
 
 			if (builtinFormControlNames.contains(templateName)) {
-				oxyEditorDescriptor.setType(_processStringLiteral(templateName));
+				oxyEditorDescriptor.setType(templateName);
 			} else {
-				templateName = _processStringLiteral(templateName);
 				oxyEditorDescriptor.setRendererClassName(templateName);
 				oxyEditorDescriptor.setSwingEditorClassName(templateName);
 			}
 
 			for (String option : options) {
 				String optionName = option.substring(0, option.indexOf(":=")).replace("\"", "").trim();
+				System.out.println("optionName = " + optionName);
 				String optionValue = option.substring(option.indexOf(":=") + 2).trim();
+
 				if (optionValue.startsWith("\"")) {
 					optionValue = optionValue.endsWith("\"") ? optionValue : optionValue + "\"";
 				} else {
 					optionValue = "oxy_xpath(\"" + optionValue + "\")";
 				}
-				oxyEditorDescriptor.setCustomProperty(optionName, _processStringLiteral(optionValue));
 
+				System.out.println("optionValue = " + _processStringLiteral(optionValue));
+
+				oxyEditorDescriptor.setCustomProperty(optionName, _processStringLiteral(optionValue));
+				System.out.println("oxyEditorDescriptor = " + oxyEditorDescriptor.toString());
 			}
 
 			result = oxyEditorDescriptor.toString();

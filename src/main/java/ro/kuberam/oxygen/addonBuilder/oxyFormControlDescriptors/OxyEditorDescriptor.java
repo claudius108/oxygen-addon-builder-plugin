@@ -16,14 +16,14 @@ public class OxyEditorDescriptor {
 	private String rendererClassName;
 	private String swingEditorClassName;
 	private String actionID;
-	private String action;
+	private String action = "";
 	private String actionContext;
 	private String transparent;
 	private String visible;
 	private String disabled;
 	private String showIcon;
 	private String editable;
-	private String values;
+	private String values = "";
 	private String labels;
 	private String columns;
 	private String rows;
@@ -99,10 +99,17 @@ public class OxyEditorDescriptor {
 		while (entryIterator.hasNext()) {
 
 			Entry<String, String> entry = entryIterator.next();
+			String entryKey = entry.getKey();
+			String entryValue = entry.getValue();
 
-			buffer.append(entry.getKey());
+			buffer.append(entryKey);
 			buffer.append(keyValueSeparator);
-			buffer.append("\"" + entry.getValue() + "\"");
+			if (entryKey.equals("itemLabel")) {
+				entryValue = "oxy_xpath(\"" + entryValue + "\")";
+			} else {
+				entryValue = "\"" + entry.getValue() + "\"";
+			}
+			buffer.append(entryValue);
 			buffer.append(separator);
 		}
 
@@ -118,7 +125,7 @@ public class OxyEditorDescriptor {
 	}
 
 	public String getAction() {
-		action = (action != null ? "action, \"" + action + "\", " : "");
+		action = (action != "" ? "action, \"" + action + "\", " : "");
 		action = (action.contains("\"@")) ? action.replace("\"", "") : action;
 		return action;
 	}
@@ -176,7 +183,7 @@ public class OxyEditorDescriptor {
 	}
 
 	public String getValues() {
-		values = (values != null ? "values, " + _formatOxyXpathExpression(values) + ", " : "");
+		values = (values != "" ? "values, " + _formatOxyXpathExpression(values) + ", " : "");
 		values = (values.contains("\"@")) ? values.replace("\"", "") : values;
 
 		return values;
