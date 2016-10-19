@@ -120,7 +120,7 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			@Override
 			public void focusLost(FocusEvent event) {
 				Component formControl = event.getOppositeComponent();
-				boolean isFormControl = detectFormControl(authorComponent, formControl);
+				boolean isFormControl = detectFormControl(authorComponent, formControl, false);
 				logger.debug("isFormControl = " + isFormControl);
 
 				if (isFormControl && formControl instanceof JTextComponent) {
@@ -161,14 +161,13 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 		this.authorAccess = authorAccess;
 	}
 
-	private boolean detectFormControl(JPanel authorComponent, Component formControl) {
-		boolean isFormControl = false;
-
+	private boolean detectFormControl(JPanel authorComponent, Component formControl, boolean isFormControl) {
 		Component formControlParent = formControl.getParent();
 
-		while (!isFormControl && formControlParent != null) {
-			isFormControl = formControlParent == authorComponent;
-			formControlParent = formControlParent.getParent();
+		if (formControlParent.equals(authorComponent)) {
+			isFormControl = true;
+		} else {
+			detectFormControl(authorComponent, formControlParent, false);
 		}
 
 		return isFormControl;

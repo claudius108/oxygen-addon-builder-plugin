@@ -64,9 +64,9 @@ public class DocumentFilter extends AuthorDocumentFilter {
 		logger.debug("mixedContent = " + mixedContent);
 		logger.debug("mixed content length = " + mixedContent.length);
 
-		if (mixedContent.length == 0) {
-			return true;
-		}
+//		if (mixedContent.length == 0) {
+//			return true;
+//		}
 
 		try {
 			OffsetInformation ci = authorDocumentController.getContentInformationAtOffset(startOffset);
