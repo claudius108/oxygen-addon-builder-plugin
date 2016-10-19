@@ -458,12 +458,10 @@ public class Parser {
 			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 			textContent = textContent.replace("ua:get-template(oxy:get-template(", "").replaceAll("\\)\\)$", "");
 			String templateName = _processStringLiteral(textContent.substring(1, textContent.indexOf("\",")));
-			System.out.println("templateName = " + templateName);
 			String optionsMap = textContent.substring(textContent.indexOf("\",") + 2).trim();
 
 			optionsMap = optionsMap.substring(optionsMap.indexOf("{") + 1);
 			optionsMap = optionsMap.substring(0, optionsMap.indexOf("}")).trim();
-			System.out.println("optionsMap = " + optionsMap);
 
 			String[] options = optionsMap.split(",\\s+\"");
 
@@ -476,7 +474,6 @@ public class Parser {
 
 			for (String option : options) {
 				String optionName = option.substring(0, option.indexOf(":=")).replace("\"", "").trim();
-				System.out.println("optionName = " + optionName);
 				String optionValue = option.substring(option.indexOf(":=") + 2).trim();
 
 				if (optionValue.startsWith("\"")) {
@@ -485,10 +482,8 @@ public class Parser {
 					optionValue = "oxy_xpath(\"" + optionValue + "\")";
 				}
 
-				System.out.println("optionValue = " + _processStringLiteral(optionValue));
 
 				oxyEditorDescriptor.setCustomProperty(optionName, _processStringLiteral(optionValue));
-				System.out.println("oxyEditorDescriptor = " + oxyEditorDescriptor.toString());
 			}
 
 			result = oxyEditorDescriptor.toString();
