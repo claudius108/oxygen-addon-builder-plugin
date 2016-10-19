@@ -100,15 +100,10 @@ public class OxyEditorDescriptor {
 
 			Entry<String, String> entry = entryIterator.next();
 			String entryKey = entry.getKey();
-			String entryValue = entry.getValue();
+			String entryValue = "\"" + entry.getValue() + "\"";
 
 			buffer.append(entryKey);
 			buffer.append(keyValueSeparator);
-			if (entryKey.equals("itemLabel")) {
-				entryValue = "oxy_xpath(\"" + entryValue + "\")";
-			} else {
-				entryValue = "\"" + entry.getValue() + "\"";
-			}
 			buffer.append(entryValue);
 			buffer.append(separator);
 		}
