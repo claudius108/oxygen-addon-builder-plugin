@@ -2,7 +2,7 @@
 <?xml-stylesheet href="${pluginTemplatesDir}css${file.separator}addon-descriptor.css" type="text/css"?>
 <xt:extensions xmlns:xt="http://www.oxygenxml.com/ns/extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
-	<xt:extension id="">
+	<xt:extension id="${oxygenAddonBuilder.frameworkId}">
 		<xt:location href="" />
 		<xt:version>1.0.0</xt:version>
 		<xt:oxy_version>18.1+</xt:oxy_version>
