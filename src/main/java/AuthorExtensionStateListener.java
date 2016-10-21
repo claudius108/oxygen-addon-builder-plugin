@@ -44,9 +44,12 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 			actionsByClass = (Map<String, ArrayList<String>>) IOUtilities
 					.deserializeObjectFromFile("/actionsByClass.ser");
 
-			InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/scripts.xml");
-			scripts.loadFromXML(scriptsIs);
-			scriptsIs.close();
+			if (AuthorExtensionStateListener.class.getResource("/scripts.xml") != null) {
+				InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/scripts.xml");
+				scripts.loadFromXML(scriptsIs);
+				scriptsIs.close();
+			}
+
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -111,42 +114,46 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 		}
 
 		JPanel authorComponent = (JPanel) authorEditorAccess.getAuthorComponent();
-		authorComponent.addFocusListener(new FocusListener() {
 
-			@Override
-			public void focusGained(FocusEvent event) {
-			}
+		if (scripts.size() > 0) {
+			authorComponent.addFocusListener(new FocusListener() {
 
-			@Override
-			public void focusLost(FocusEvent event) {
-				Component formControl = event.getOppositeComponent();
-				boolean isFormControl = detectFormControl(authorComponent, formControl);
-				logger.debug("isFormControl = " + isFormControl);
-
-				if (isFormControl && formControl instanceof JTextComponent) {
-					AuthorNode currentNode = null;
-					try {
-						currentNode = authorDocumentController.getNodeAtOffset(authorEditorAccess.getCaretOffset());
-					} catch (BadLocationException e) {
-						e.printStackTrace();
-					}
-					logger.debug("currentNode = " + currentNode);
-
-					AttrValue xmlLangAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
-					logger.debug("xmlLangAttrValue = " + xmlLangAttrValue);
-
-					if (xmlLangAttrValue == null) {
-						return;
-					}
-
-					String lang = xmlLangAttrValue.getValue();
-					logger.debug("lang = " + lang);
-
-					PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
-							scripts.get(lang));
+				@Override
+				public void focusGained(FocusEvent event) {
 				}
-			}
-		});
+
+				@Override
+				public void focusLost(FocusEvent event) {
+					Component formControl = event.getOppositeComponent();
+					boolean isFormControl = detectFormControl(authorComponent, formControl);
+					logger.debug("isFormControl = " + isFormControl);
+
+					if (isFormControl && formControl instanceof JTextComponent) {
+						AuthorNode currentNode = null;
+						try {
+							currentNode = authorDocumentController.getNodeAtOffset(authorEditorAccess.getCaretOffset());
+						} catch (BadLocationException e) {
+							e.printStackTrace();
+						}
+						logger.debug("currentNode = " + currentNode);
+
+						AttrValue xmlLangAttrValue = ((AuthorElement) currentNode).getAttribute("xml:lang");
+						logger.debug("xmlLangAttrValue = " + xmlLangAttrValue);
+
+						if (xmlLangAttrValue == null) {
+							return;
+						}
+
+						String lang = xmlLangAttrValue.getValue();
+						logger.debug("lang = " + lang);
+
+						PluginWorkspaceProvider.getPluginWorkspace().setGlobalObjectProperty("recently.used.characters",
+								scripts.get(lang));
+					}
+				}
+			});
+		}
+
 	}
 
 	@Override
