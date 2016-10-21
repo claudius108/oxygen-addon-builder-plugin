@@ -5,7 +5,7 @@
 	<xt:extension id="">
 		<xt:location href="" />
 		<xt:version>1.0.0</xt:version>
-		<xt:oxy_version>15.1+</xt:oxy_version>
+		<xt:oxy_version>18.1+</xt:oxy_version>
 		<xt:type>framework</xt:type>
 		<xt:author></xt:author>
 		<xt:name></xt:name>
