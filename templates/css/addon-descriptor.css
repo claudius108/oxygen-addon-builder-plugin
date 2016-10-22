@@ -27,7 +27,7 @@ xt|version {
 }
 
 xt|oxy_version {
-	content: "Oxygen version " oxy_combobox(edit, "#text", editable, true, values, "15.1+, 15.2+, 16.0+", labels, "14.0+, 15.1+, 15.2+, 16.0+");
+	content: "Oxygen version " oxy_combobox(edit, "#text", editable, true, values, "16.0+, 17.0+, 18.0+", labels, "16.0+, 17.0+, 18.0+");
 }
 
 xt|type {
@@ -47,5 +47,5 @@ xt|description {
 }
 
 xt|license {
-    content: "Addon description " oxy_textArea(edit, '#text', contentType, 'text/plain', rows, 10, columns, 30);
+    content: "Addon license " oxy_textArea(edit, '#text', contentType, 'text/plain', rows, 10, columns, 30);
 }
