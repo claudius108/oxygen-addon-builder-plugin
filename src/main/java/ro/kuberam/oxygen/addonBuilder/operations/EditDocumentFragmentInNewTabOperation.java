@@ -34,7 +34,7 @@ import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.listeners.WSEditorListener;
 import ro.sync.util.URLUtil;
 
-public class OpenDocumentFragmentInNewTabOperation implements AuthorOperation {
+public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 
 	/**
 	 * This operation is designated to allow editing of XML fragment of a main
@@ -45,7 +45,7 @@ public class OpenDocumentFragmentInNewTabOperation implements AuthorOperation {
 	/**
 	 * Logger for logging.
 	 */
-	private static final Logger logger = Logger.getLogger(OpenDocumentFragmentInNewTabOperation.class.getName());
+	private static final Logger logger = Logger.getLogger(EditDocumentFragmentInNewTabOperation.class.getName());
 
 	private static String xmlPI = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	private static Charset utf8 = StandardCharsets.UTF_8;
@@ -53,7 +53,7 @@ public class OpenDocumentFragmentInNewTabOperation implements AuthorOperation {
 	/**
 	 * Constructor.
 	 */
-	public OpenDocumentFragmentInNewTabOperation() {
+	public EditDocumentFragmentInNewTabOperation() {
 	}
 
 	/**
