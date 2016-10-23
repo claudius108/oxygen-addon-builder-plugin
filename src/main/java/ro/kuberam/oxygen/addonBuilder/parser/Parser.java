@@ -482,7 +482,6 @@ public class Parser {
 					optionValue = "oxy_xpath(\"" + optionValue + "\")";
 				}
 
-
 				oxyEditorDescriptor.setCustomProperty(optionName, _processStringLiteral(optionValue));
 			}
 
@@ -1000,6 +999,10 @@ public class Parser {
 
 		if (script.contains("actions/")) {
 			_writeEntryElement("script", script);
+		} else if (script.contains("ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation")) {
+			script = script.replaceAll("ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation\\('", "").replaceAll("'\\)", "");
+			_writeEntryElement("document_url", script);
+			authorOperationName = "ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation";
 		} else {
 			authorOperationName = script;
 		}

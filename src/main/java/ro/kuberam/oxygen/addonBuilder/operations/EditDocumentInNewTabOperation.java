@@ -58,16 +58,17 @@ public class EditDocumentInNewTabOperation implements AuthorOperation {
 		logger.debug("================ start EditDocumentInNewTabOperation ========================");
 
 		Object documentUrlObj = args.getArgumentValue(ARGUMENT_DOCUMENT_URL);
-		String documentUrl = (String) documentUrlObj;
-		logger.debug("documentUrl = " + documentUrl);
 
 		try {
-			URL ilirOntologyUrl = new URL(documentUrl);
+			URL documentUrl = new URL((String) documentUrlObj);
+			logger.debug("documentUrl = " + documentUrl);
+			String documentName = Paths.get(documentUrl.getPath()).getFileName().toString();
+			logger.debug("documentName = " + documentName);
 
-			Path path = Paths.get(System.getProperty("java.io.tmpdir"), "ilir.rdf");
+			Path path = Paths.get(System.getProperty("java.io.tmpdir"), documentName);
 			File file = path.toFile();
 			file.deleteOnExit();
-			FileUtils.copyURLToFile(ilirOntologyUrl, file);
+			FileUtils.copyURLToFile(documentUrl, file);
 
 			authorAccess.getWorkspaceAccess().open(file.toURI().toURL(), EditorPageConstants.PAGE_AUTHOR, "text/xml");
 
