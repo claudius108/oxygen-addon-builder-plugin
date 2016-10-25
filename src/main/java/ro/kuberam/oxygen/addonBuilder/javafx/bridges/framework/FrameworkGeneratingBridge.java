@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -52,7 +53,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		File addonDirectory = new File(AddonBuilderPluginExtension.frameworksDir + File.separator + frameworkId);
 		logger.debug("addonDirectory = " + addonDirectory);
-		
+
 		Matcher extractTemplateIdPatternMatcher = frameworkIdPattern.matcher(frameworkId);
 		if (!extractTemplateIdPatternMatcher.matches()) {
 			JOptionPane.showMessageDialog(new JFrame(),
@@ -77,6 +78,20 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		}
 	}
 
+	public void generateSelectedFramework(String frameworkIdArg) {
+		closeDialogWindow();
+
+		frameworkId = frameworkIdArg;
+
+		File addonDirectory = new File(AddonBuilderPluginExtension.frameworksDir + File.separator + frameworkId);
+		logger.debug("addonDirectory = " + addonDirectory);
+
+		_generateFramework(addonDirectory);
+
+		JOptionPane.showMessageDialog(new JFrame(), "The framework was generated!", "Success",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
 	public void generateFramework() {
 		WSEditor wseditor = pluginWorkspaceAccess.getCurrentEditorAccess(PluginWorkspace.MAIN_EDITING_AREA);
 		logger.debug("wseditor = " + wseditor);
@@ -87,10 +102,29 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			return;
 		}
 
+		URL[] editorLocations = pluginWorkspaceAccess.getAllEditorLocations(PluginWorkspace.MAIN_EDITING_AREA);
+		ArrayList<URL> eligibleEditorLocations = new ArrayList<URL>();
+
+		for (URL editorLocation : editorLocations) {
+			if (!editorLocation.getFile().contains("addon.xq")) {
+				continue;
+			}
+
+			eligibleEditorLocations.add(editorLocation);
+		}
+
+		if (eligibleEditorLocations.size() >= 2) {
+			displayFrameworkSelectDialog("generateSelectedFramework");
+			return;
+		}
+
+		logger.debug("eligibleEditorLocations = " + eligibleEditorLocations);
+
 		URL xqueryFrameworkDescriptorUrl = null;
 
 		try {
-			xqueryFrameworkDescriptorUrl = new URL(URLDecoder.decode(wseditor.getEditorLocation().toURI().toASCIIString(), "UTF-8"));
+			xqueryFrameworkDescriptorUrl = new URL(
+					URLDecoder.decode(wseditor.getEditorLocation().toURI().toASCIIString(), "UTF-8"));
 			logger.debug("xqueryFrameworkDescriptorUrl = " + xqueryFrameworkDescriptorUrl);
 
 			String protocol = xqueryFrameworkDescriptorUrl.getProtocol();
@@ -228,8 +262,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			String filePath = "\"" + AddonBuilderPluginExtension.pluginInstallDir + File.separator
 					+ "generate-framework" + File.separator + "build-framework-structure.xml" + "\"";
 
-			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath,
-					"build-framework",
+			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir.getAbsolutePath() + "\"",
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId, "-DoxygenAddonBuilder.pluginInstallDir=" + "\""
 							+ AddonBuilderPluginExtension.pluginInstallDir + "\"");
