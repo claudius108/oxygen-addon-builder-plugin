@@ -2,6 +2,8 @@ package ro.kuberam.oxygen.addonBuilder.javafx.bridges.framework;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +13,8 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +32,10 @@ import ro.sync.exml.editor.EditorPageConstants;
 import ro.sync.exml.editor.persistance.DocumentTypeEntryPO;
 import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.editor.WSEditor;
+import ro.sync.exml.workspace.api.editor.documenttype.DocumentTypeInformation;
+import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
+import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvider;
+import ro.sync.exml.workspace.api.standalone.actions.ActionsProvider;
 
 public class FrameworkGeneratingBridge extends BaseBridge {
 
@@ -93,15 +101,6 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	}
 
 	public void generateFramework() {
-		WSEditor wseditor = pluginWorkspaceAccess.getCurrentEditorAccess(PluginWorkspace.MAIN_EDITING_AREA);
-		logger.debug("wseditor = " + wseditor);
-
-		if (wseditor == null) {
-			JOptionPane.showMessageDialog(new JFrame(), "No XQuery script for addon configuration is opened!", "Error",
-					JOptionPane.INFORMATION_MESSAGE);
-			return;
-		}
-
 		URL[] editorLocations = pluginWorkspaceAccess.getAllEditorLocations(PluginWorkspace.MAIN_EDITING_AREA);
 		ArrayList<URL> eligibleEditorLocations = new ArrayList<URL>();
 
@@ -161,21 +160,27 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	public void _generateFramework(File addonDirectory) {
 		logger.debug("addonDirectory = " + addonDirectory.getAbsolutePath());
 
-		runAntBuildFile(addonDirectory.getParentFile(), frameworkId);
-
 		File frameworkDescriptor = new File(addonDirectory + File.separator + frameworkId + ".framework");
 		logger.debug("frameworkDescriptor = " + frameworkDescriptor);
+
+		File generateFrameworkModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
+				+ "generate-framework" + File.separator + "generate-framework.xql");
+		logger.debug("generateFrameworkModifier = " + generateFrameworkModifier);
+
+		try {
+			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(generateFrameworkModifier),
+					true, addonDirectory.toURI());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		runAntBuildFile(addonDirectory.getParentFile(), frameworkId);
 
 		File frameworkDescriptorModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
 				+ "generate-framework" + File.separator + "framework-descriptor-modifier.xql");
 		logger.debug("frameworkDescriptorModifier = " + frameworkDescriptorModifier);
-		
-		File generateFrameworkModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
-				+ "generate-framework" + File.separator + "generate-framework.xql");
-		logger.debug("generateFrameworkModifier = " + generateFrameworkModifier);		
 
 		try {
-			//XQueryOperation.update(frameworkDescriptor, generateFrameworkModifier);
 			XQueryOperation.update(frameworkDescriptor, frameworkDescriptorModifier);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -291,9 +296,11 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
 			String line;
+
 			while ((line = br.readLine()) != null) {
-				System.out.println(line);
+				logger.debug(line);
 			}
+
 			process.waitFor();
 		} catch (IOException e) {
 			e.printStackTrace();
