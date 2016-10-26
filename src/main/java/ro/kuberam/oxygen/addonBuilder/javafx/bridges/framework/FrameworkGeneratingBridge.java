@@ -167,10 +167,19 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
 		File frameworkDescriptorModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
-				+ "generate-framework" + File.separator + "framework-descriptor-modifier.xq");
-		logger.debug(frameworkDescriptorModifier);
+				+ "generate-framework" + File.separator + "framework-descriptor-modifier.xql");
+		logger.debug("frameworkDescriptorModifier = " + frameworkDescriptorModifier);
+		
+		File generateFrameworkModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
+				+ "generate-framework" + File.separator + "generate-framework.xql");
+		logger.debug("generateFrameworkModifier = " + generateFrameworkModifier);		
 
-		XQueryOperation.update(frameworkDescriptor, frameworkDescriptorModifier);
+		try {
+			XQueryOperation.update(frameworkDescriptor, generateFrameworkModifier);
+			XQueryOperation.update(frameworkDescriptor, frameworkDescriptorModifier);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		if (pluginWorkspaceAccess != null) {
 			pluginWorkspaceAccess.setGlobalObjectProperty("document.types.order", new DocumentTypeEntryPO[0]);

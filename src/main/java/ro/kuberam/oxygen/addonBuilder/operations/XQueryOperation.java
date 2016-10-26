@@ -104,17 +104,16 @@ public class XQueryOperation {
 				out.setOutputProperty(Serializer.Property.INDENT, "yes");
 				out.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");
 				try {
-					System.err.println("Rewriting " + rootUri);
+					logger.debug("Rewriting " + rootUri);
 					out.setOutputStream(new FileOutputStream(new File(rootUri)));
 					processor.writeXdmValue(root, out);
 				} catch (FileNotFoundException e) {
-					System.err.println("Could not write to file " + rootUri);
+					logger.debug("Could not write to file " + rootUri);
 				} catch (SaxonApiException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			} else {
-				System.err.println("Updated document not rewritten: location unknown or not updatable");
+				logger.debug("Updated document not rewritten: location unknown or not updatable");
 			}
 		}
 
