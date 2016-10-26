@@ -175,7 +175,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		logger.debug("generateFrameworkModifier = " + generateFrameworkModifier);		
 
 		try {
-			XQueryOperation.update(frameworkDescriptor, generateFrameworkModifier);
+			//XQueryOperation.update(frameworkDescriptor, generateFrameworkModifier);
 			XQueryOperation.update(frameworkDescriptor, frameworkDescriptorModifier);
 		} catch (Exception e) {
 			e.printStackTrace();
