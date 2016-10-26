@@ -112,19 +112,21 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 			eligibleEditorLocations.add(editorLocation);
 		}
+		logger.debug("eligibleEditorLocations = " + eligibleEditorLocations);
 
-		if (eligibleEditorLocations.size() >= 2) {
+		int eligibleEditorLocationsSize = eligibleEditorLocations.size();
+		logger.debug("eligibleEditorLocationsSize = " + eligibleEditorLocationsSize);
+
+		if (eligibleEditorLocationsSize > 1 || eligibleEditorLocationsSize == 0) {
 			displayFrameworkSelectDialog("generateSelectedFramework");
 			return;
 		}
-
-		logger.debug("eligibleEditorLocations = " + eligibleEditorLocations);
 
 		URL xqueryFrameworkDescriptorUrl = null;
 
 		try {
 			xqueryFrameworkDescriptorUrl = new URL(
-					URLDecoder.decode(wseditor.getEditorLocation().toURI().toASCIIString(), "UTF-8"));
+					URLDecoder.decode(eligibleEditorLocations.get(0).toURI().toASCIIString(), "UTF-8"));
 			logger.debug("xqueryFrameworkDescriptorUrl = " + xqueryFrameworkDescriptorUrl);
 
 			String protocol = xqueryFrameworkDescriptorUrl.getProtocol();
