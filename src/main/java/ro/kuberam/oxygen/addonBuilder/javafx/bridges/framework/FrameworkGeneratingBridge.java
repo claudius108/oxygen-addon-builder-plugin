@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -159,17 +160,24 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 	public void _generateFramework(File addonDirectory) {
 		logger.debug("addonDirectory = " + addonDirectory.getAbsolutePath());
+		
+		File pluginInstallDir = AddonBuilderPluginExtension.pluginInstallDir;
 
 		File frameworkDescriptor = new File(addonDirectory + File.separator + frameworkId + ".framework");
 		logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
-		File generateFrameworkModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
+		File generateFrameworkModifier = new File(pluginInstallDir + File.separator
 				+ "generate-framework" + File.separator + "generate-framework.xql");
 		logger.debug("generateFrameworkModifier = " + generateFrameworkModifier);
 
+		Map<String, String> generateFrameworkParameters = new HashMap<String, String>();
+		generateFrameworkParameters.put("pluginInstallDir", pluginInstallDir.getAbsolutePath());
+		logger.debug("generateFrameworkParameters = " + generateFrameworkParameters);
+		
 		try {
+			
 			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(generateFrameworkModifier),
-					true, addonDirectory.toURI());
+					true, addonDirectory.toURI(), generateFrameworkParameters);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

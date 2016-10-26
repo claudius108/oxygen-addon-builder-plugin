@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -182,7 +183,7 @@ public class TreeFormControl extends InplaceEditorRendererAdapter {
 			String content = XQueryOperation
 					.query(authorEditorAccess.createContentReader(),
 							new ByteArrayInputStream(treeTemplate.getBytes(StandardCharsets.UTF_8)), true,
-							null).itemAt(0).toString();
+							null, new HashMap<String, String>()).itemAt(0).toString();
 
 			//logger.debug("content = " + content);
 

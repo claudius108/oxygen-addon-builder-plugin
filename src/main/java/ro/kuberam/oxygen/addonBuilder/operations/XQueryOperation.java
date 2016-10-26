@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -18,11 +20,13 @@ import net.sf.saxon.om.TreeModel;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XQueryCompiler;
 import net.sf.saxon.s9api.XQueryEvaluator;
 import net.sf.saxon.s9api.XQueryExecutable;
+import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
@@ -35,24 +39,29 @@ public class XQueryOperation {
 	 */
 	private static final Logger logger = Logger.getLogger(XQueryOperation.class.getName());
 
-	public static XdmValue query(Reader xml, InputStream xquery, boolean omitXmlDeclaration, URI baseURI) {
+	public static XdmValue query(Reader xml, InputStream xquery, boolean omitXmlDeclaration, URI baseURI, Map<String, String> parameters) {
 		XdmValue result = null;
 
 		Source xmlSrc = new StreamSource(xml);
 
 		Processor proc = new Processor(true);
-		XQueryCompiler comp = proc.newXQueryCompiler();
+		XQueryCompiler xqueryCompiler = proc.newXQueryCompiler();
 
 		if (baseURI != null) {
-			comp.setBaseURI(baseURI);
+			xqueryCompiler.setBaseURI(baseURI);
 		}
 
-		XQueryExecutable exp;
+		XQueryExecutable xqueryExecutable;
 		try {
-			exp = comp.compile(xquery);
-			XQueryEvaluator qe = exp.load();
-			qe.setSource(xmlSrc);
-			result = qe.evaluate();
+			xqueryExecutable = xqueryCompiler.compile(xquery);
+			XQueryEvaluator xqueryEvaluator = xqueryExecutable.load();
+			xqueryEvaluator.setSource(xmlSrc);
+			
+			for (Entry<String, String> parameter : parameters.entrySet()) {
+				xqueryEvaluator.setExternalVariable(new QName(parameter.getKey()), new XdmAtomicValue(parameter.getValue()));
+			}
+			
+			result = xqueryEvaluator.evaluate();
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

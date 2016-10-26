@@ -3,6 +3,7 @@ package ro.kuberam.oxygen.addonBuilder.templates.java.tree;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 
@@ -25,7 +26,7 @@ public class TreeTest {
 		try {
 			content = XQueryOperation
 					.query(new InputStreamReader(TreeTest.class.getResourceAsStream("01.xml")),
-							TreeTest.class.getResourceAsStream("tree-template.xq"), true, null).itemAt(0)
+							TreeTest.class.getResourceAsStream("tree-template.xq"), true, null, new HashMap<String, String>()).itemAt(0)
 					.toString();
 		} catch (IndexOutOfBoundsException | SaxonApiUncheckedException e) {
 			e.printStackTrace();
