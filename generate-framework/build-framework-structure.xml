@@ -16,8 +16,6 @@
 
 	<target name="build-framework">
 
-		<copy file="${oxygenAddonBuilder.pluginInstallDir}${file.separator}lib${file.separator}addon-builder-plugin.jar" todir="${oxygenAddonBuilder.frameworkDir}java" />
-		
 		<copy todir="${oxygenAddonBuilder.frameworkDir}resources${file.separator}css">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
 				<filename name="framework.less" />
