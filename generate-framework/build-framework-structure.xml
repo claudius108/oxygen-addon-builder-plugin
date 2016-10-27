@@ -16,11 +16,6 @@
 
 	<target name="build-framework">
 
-		<copy todir="${oxygenAddonBuilder.frameworkDir}resources${file.separator}css">
-			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}css">
-				<filename name="actions.less" />
-			</fileset>
-		</copy>
 		<copy todir="${oxygenAddonBuilder.frameworkDir}" filtering="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}addon" includes="addon.xml">
 				<present targetdir="${oxygenAddonBuilder.frameworkDir}" present="srconly" />

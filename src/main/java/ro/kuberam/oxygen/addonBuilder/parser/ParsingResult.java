@@ -52,14 +52,6 @@ public class ParsingResult {
 		IOUtilities.serializeObjectToFile(javaDirectory, templates, "templates");
 		IOUtilities.serializeObjectToFile(javaDirectory, dialogs, "dialogs");
 		IOUtilities.serializeObjectToFile(javaDirectory, prolog, "prolog");
-		// TODO: when Oxygen will use commons-io >= 2.1, the function
-		// writeStringToFile(File file, String data, boolean append) will be
-		// used instead of the following one
-		// Files.copy(sourcePath, targetPath.resolve(sourceItem),
-		// StandardCopyOption.REPLACE_EXISTING);
-		// FileUtils.writeStringToFile(new File(cssResourcesDirectory +
-		// File.separator + "framework.less"),
-		// attachedTemplates);
 		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 

@@ -3,8 +3,8 @@ xquery version "3.0";
 declare namespace file = "http://expath.org/ns/file";
 
 declare variable $pluginInstallDir external;
-declare variable $pluginTemplatesDir := file:path-to-native($pluginInstallDir || "/templates)
-declare variable $pluginTemplatesDir-css := file:path-to-native($$pluginTemplatesDir || "/css)
+declare variable $pluginTemplatesDir := file:path-to-native($pluginInstallDir || "/templates);
+declare variable $pluginTemplatesDir-css := file:path-to-native($$pluginTemplatesDir || "/css);
 
 declare variable $frameworkDir := static-base-uri();
 declare variable $frameworkDir-resources-css := file:path-to-native($frameworkDir || "/resources/css");
