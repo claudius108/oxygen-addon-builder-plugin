@@ -21,4 +21,11 @@ declare variable $frameworkId := file:name($frameworkDir);
 		
 		return file:write-text(file:path-to-native($frameworkDir || "/addon.xml"), $text)
 	else ()
+	,
+	if (not(file:exists(file:path-to-native($frameworkDir || "/addon.xq"))))
+	then file:copy(
+		file:path-to-native($pluginTemplatesDir || "/xquery/addon.xq"),
+		$frameworkDir
+	)
+	else ()	
 )

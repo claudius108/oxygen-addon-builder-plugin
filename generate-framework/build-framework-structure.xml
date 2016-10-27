@@ -16,11 +16,6 @@
 
 	<target name="build-framework">
 
-		<copy todir="${oxygenAddonBuilder.frameworkDir}">
-			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}xquery" includes="addon.xq">
-				<present targetdir="${oxygenAddonBuilder.frameworkDir}" present="srconly" />
-			</fileset>
-		</copy>
 		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}" filtering="true" verbose="true">
 			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}xquery" excludes="addon.xq" />
 			<filterchain>
