@@ -27,7 +27,7 @@ public class ParsingResult {
 	}
 
 	public Map<String, String> templates = new HashMap<String, String>();
-	public String attachedTemplates = "@charset \"utf-8\";  @import \"actions/actions.less\"; @import \"datalists/datalists.less\"; * {-oxy-display-tags: none;} ";
+	public String attachedTemplates = "@charset \"utf-8\"; @import \"actions/actions.less\"; @import \"datalists/datalists.less\"; * {-oxy-display-tags: none;} ";
 	public Map<String, Element> derivedActionElements = new HashMap<String, Element>();
 	public Map<String, String[]> observers = new HashMap<String, String[]>();
 	public Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
