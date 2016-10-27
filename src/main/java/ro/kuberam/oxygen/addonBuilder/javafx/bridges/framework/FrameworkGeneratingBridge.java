@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -159,45 +161,48 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	}
 
 	public void _generateFramework(File addonDirectory) {
-		logger.debug("addonDirectory = " + addonDirectory.getAbsolutePath());
-		
-		File pluginInstallDir = AddonBuilderPluginExtension.pluginInstallDir;
-
-		File frameworkDescriptor = new File(addonDirectory + File.separator + frameworkId + ".framework");
-		logger.debug("frameworkDescriptor = " + frameworkDescriptor);
-
-		File generateFrameworkModifier = new File(pluginInstallDir + File.separator
-				+ "generate-framework" + File.separator + "generate-framework.xql");
-		logger.debug("generateFrameworkModifier = " + generateFrameworkModifier);
-
-		Map<String, String> generateFrameworkParameters = new HashMap<String, String>();
-		generateFrameworkParameters.put("pluginInstallDir", pluginInstallDir.getAbsolutePath());
-		logger.debug("generateFrameworkParameters = " + generateFrameworkParameters);
-		
 		try {
+			logger.debug("addonDirectory = " + addonDirectory.getAbsolutePath());
+
+			String pluginInstallDirPath = AddonBuilderPluginExtension.pluginInstallDir.getAbsolutePath();
+			String addonDirectoryPath = addonDirectory.getAbsolutePath();
 			
-			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(generateFrameworkModifier),
-					true, addonDirectory.toURI(), generateFrameworkParameters);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
+			xqueryExternalVariables.put("pluginInstallDir", pluginInstallDirPath);
+			logger.debug("xqueryExternalVariables = " + xqueryExternalVariables);
 
-		runAntBuildFile(addonDirectory.getParentFile(), frameworkId);
+			File frameworkDescriptor = Paths.get(addonDirectoryPath, frameworkId + ".framework").toFile();
+			logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
-		File frameworkDescriptorModifier = new File(AddonBuilderPluginExtension.pluginInstallDir + File.separator
-				+ "generate-framework" + File.separator + "framework-descriptor-modifier.xql");
-		logger.debug("frameworkDescriptorModifier = " + frameworkDescriptorModifier);
+			File generateFrameworkXQueryScript = Paths
+					.get(pluginInstallDirPath, "generate-framework", "generate-framework.xql").toFile();
+			logger.debug("generateFrameworkXQueryScript = " + generateFrameworkXQueryScript);
 
-		try {
+			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(generateFrameworkXQueryScript),
+					true, addonDirectory.toURI(), xqueryExternalVariables);
+
+			File frameworkSpecificXQueryScript = Paths
+					.get(addonDirectoryPath, "resources", "xquery", "framework-specific.xql").toFile();
+			logger.debug("frameworkSpecificXQueryScript = " + frameworkSpecificXQueryScript);
+
+			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(frameworkSpecificXQueryScript),
+					true, addonDirectory.toURI(), xqueryExternalVariables);
+			
+			runAntBuildFile(addonDirectory.getParentFile(), frameworkId);
+
+			File frameworkDescriptorModifier = Paths
+					.get(pluginInstallDirPath, "generate-framework", "framework-descriptor-modifier.xql").toFile();
+			logger.debug("frameworkDescriptorModifier = " + frameworkDescriptorModifier);
+
 			XQueryOperation.update(frameworkDescriptor, frameworkDescriptorModifier);
+
+			if (pluginWorkspaceAccess != null) {
+				pluginWorkspaceAccess.setGlobalObjectProperty("document.types.order", new DocumentTypeEntryPO[0]);
+
+				pluginWorkspaceAccess.setGlobalObjectProperty("document.types.order", null);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		if (pluginWorkspaceAccess != null) {
-			pluginWorkspaceAccess.setGlobalObjectProperty("document.types.order", new DocumentTypeEntryPO[0]);
-
-			pluginWorkspaceAccess.setGlobalObjectProperty("document.types.order", null);
 		}
 	}
 
