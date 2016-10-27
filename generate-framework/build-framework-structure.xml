@@ -15,13 +15,6 @@
 	<echoproperties prefix="oxygenAddonBuilder." />
 
 	<target name="build-framework">
-
-		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}" filtering="true" verbose="true">
-			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}xquery" excludes="addon.xq" />
-			<filterchain>
-				<expandproperties />
-			</filterchain>
-		</copy>		
 		
 		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.xml" todir="${oxygenAddonBuilder.frameworkTargetDir}" failonerror="false"/>
 				
@@ -44,11 +37,6 @@
 			<arg value="${oxygenAddonBuilder.frameworkTargetDir}" />
 			<sysproperty key="DEBUG" value="true" />
 		</java>
-		<delete>
-			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
-				<include name="tree-template.xq" />
-			</fileset>
-		</delete>
 		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="${ant.java.version}" target="${ant.java.version}" classpath="${oxygenAddonBuilder.path-to-addon-builder-plugin.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" fork="true" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
 		<jar destfile="${oxygenAddonBuilder.frameworkDir}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />

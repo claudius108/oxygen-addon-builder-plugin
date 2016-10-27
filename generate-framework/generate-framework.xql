@@ -7,6 +7,7 @@ declare variable $pluginTemplatesDir := file:path-to-native($pluginInstallDir ||
 
 declare variable $frameworkDir := static-base-uri();
 declare variable $frameworkId := file:name($frameworkDir);
+declare variable $frameworkTargetDir := file:path-to-native($frameworkDir || "/target");
 
 (
 	file:copy(
@@ -27,5 +28,8 @@ declare variable $frameworkId := file:name($frameworkDir);
 		file:path-to-native($pluginTemplatesDir || "/xquery/addon.xq"),
 		$frameworkDir
 	)
-	else ()	
+	else ()
+	,
+	file:copy(file:path-to-native($pluginTemplatesDir || "/xquery/tree-template.xq"), $frameworkTargetDir)
 )
+	
