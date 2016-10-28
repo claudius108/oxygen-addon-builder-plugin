@@ -38,8 +38,14 @@ declare variable $frameworkTargetDir := file:path-to-native($frameworkDirPath ||
 	,
 	file:delete(file:path-to-native($frameworkTargetDir || "/" || $frameworkId || ".jar"))
 	,
-	let $file-names := string-join(file:list($frameworkTargetDir), "&#10;")
+	let $file-names := file:list($frameworkTargetDir)
+	let $processed-file-names :=
+		for $file-name in $file-names[ends-with(., '.ser') or . = 'special-characters.xml']
+		
+		return $file-name
+		
+	let $processed-file-names := string-join($processed-file-names, "&#10;")
 	
-	return file:write-text(file:path-to-native($frameworkTargetDir || "/a.xml"), $file-names)
+	return file:write-text(file:path-to-native($frameworkTargetDir || "/a.xml"), $processed-file-names)
 )
 	
