@@ -31,13 +31,15 @@ declare variable $frameworkTargetDir := file:path-to-native($frameworkDirPath ||
 	)
 	else ()
 	,
-	file:copy(file:path-to-native($pluginTemplatesDir || "/xquery/tree-template.xq"), $frameworkTargetDir)
-	,
 	let $text := file:read-text(file:path-to-native($frameworkDirPath || "/addon.xml"))
 	let $text := replace($text, "</xt:version>", "." || format-dateTime(current-dateTime(), "[M01][D01][H01][m01]") || "</xt:version>")
 	
 	return file:write-text(file:path-to-native($frameworkTargetDir || "/addon.xml"), $text)
 	,
 	file:delete(file:path-to-native($frameworkTargetDir || "/" || $frameworkId || ".jar"))
+	,
+	let $file-names := string-join(file:list($frameworkTargetDir), "&#10;")
+	
+	return file:write-text(file:path-to-native($frameworkTargetDir || "/a.xml"), $file-names)
 )
 	
