@@ -5,7 +5,6 @@ declare variable $cssDescriptors-field := //field[@name  = 'cssDescriptors']/css
 declare variable $classpath-field := //field[@name  = 'classpath']/String-array;
 declare variable $classpath-field-string := //field[@name  = 'classpath']/String-array/string();
 declare variable $classpath-items := ("${framework}/java/addon-builder-plugin.jar", "${framework}/java/framework.jar", "${oxygenInstallDir}/jre/lib/jfxrt.jar");
-declare variable $extensionsBundleClassName-item := //field[@name  = 'extensionsBundleClassName'];
 declare variable $authorExtensionStateListener-item := //field[@name  = 'authorExtensionStateListener'];
 
 declare updating function local:process-css-descriptors() {
@@ -29,14 +28,6 @@ declare updating function local:process-classpath-field($classpath-item as xs:st
     insert node element String {$classpath-item} into $classpath-field
 };
 
-declare updating function local:process-extensionsBundleClassName-field() {
-    (
-        delete node $extensionsBundleClassName-item/element()
-        ,
-        insert node element String {concat($framework-id, ".ExtensionsBundle")} into $extensionsBundleClassName-item
-    )
-};
-
 declare updating function local:process-authorExtensionStateListener-field() {
     (
         delete node $authorExtensionStateListener-item/element()
@@ -55,8 +46,6 @@ declare updating function local:process-authorExtensionStateListener-field() {
         if (contains($classpath-field-string, $classpath-item))
         then ()
         else local:process-classpath-field($classpath-item)
-    ,
-    local:process-extensionsBundleClassName-field()
     ,
     local:process-authorExtensionStateListener-field()  
 )
