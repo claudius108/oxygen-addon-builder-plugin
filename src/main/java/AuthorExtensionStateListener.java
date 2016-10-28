@@ -45,7 +45,7 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 					.deserializeObjectFromFile("/actionsByClass.ser");
 
 			if (AuthorExtensionStateListener.class.getResource("/scripts.xml") != null) {
-				InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/scripts.xml");
+				InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/special-characters.xml");
 				scripts.loadFromXML(scriptsIs);
 				scriptsIs.close();
 			}

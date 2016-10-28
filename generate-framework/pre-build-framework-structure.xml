@@ -16,8 +16,6 @@
 
 	<target name="build-framework">
 		
-		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.xml" todir="${oxygenAddonBuilder.frameworkTargetDir}" failonerror="false"/>
-
 		<echo>Execute 'ro.kuberam.oxygen.addonBuilder.parser.Parser' class...</echo>
 		<java fork="true" classname="ro.kuberam.oxygen.addonBuilder.parser.Parser" failonerror="true">
 			<classpath>
