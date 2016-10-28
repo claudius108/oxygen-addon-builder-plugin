@@ -160,35 +160,40 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		}
 	}
 
-	public void _generateFramework(File addonDirectory) {
+	public void _generateFramework(File frameworkDir) {
 		try {
-			logger.debug("addonDirectory = " + addonDirectory.getAbsolutePath());
-
 			String pluginInstallDirPath = AddonBuilderPluginExtension.pluginInstallDir.getAbsolutePath();
-			String addonDirectoryPath = addonDirectory.getAbsolutePath();
-			
+			logger.debug("pluginInstallDirPath = " + pluginInstallDirPath);
+			String frameworkDirPath = frameworkDir.getAbsolutePath();
+			logger.debug("frameworkDirPath = " + frameworkDirPath);
+
 			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
-			xqueryExternalVariables.put("pluginInstallDir", pluginInstallDirPath);
+			xqueryExternalVariables.put("pluginInstallDirPath", pluginInstallDirPath);
+			xqueryExternalVariables.put("frameworkDirPath", frameworkDirPath);
 			logger.debug("xqueryExternalVariables = " + xqueryExternalVariables);
 
-			File frameworkDescriptor = Paths.get(addonDirectoryPath, frameworkId + ".framework").toFile();
+			File frameworkDescriptor = Paths.get(frameworkDirPath, frameworkId + ".framework").toFile();
 			logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
 			File generateFrameworkXQueryScript = Paths
 					.get(pluginInstallDirPath, "generate-framework", "generate-framework.xql").toFile();
 			logger.debug("generateFrameworkXQueryScript = " + generateFrameworkXQueryScript);
 
-			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(generateFrameworkXQueryScript),
-					true, addonDirectory.toURI(), xqueryExternalVariables);
+			XQueryOperation.query(new FileReader(frameworkDescriptor),
+					new FileInputStream(generateFrameworkXQueryScript), true, frameworkDir.toURI(),
+					xqueryExternalVariables);
 
 			File frameworkSpecificXQueryScript = Paths
-					.get(addonDirectoryPath, "resources", "xquery", "framework-specific.xql").toFile();
+					.get(frameworkDirPath, "resources", "xquery", "framework-specific.xql").toFile();
 			logger.debug("frameworkSpecificXQueryScript = " + frameworkSpecificXQueryScript);
 
-			XQueryOperation.query(new FileReader(frameworkDescriptor), new FileInputStream(frameworkSpecificXQueryScript),
-					true, addonDirectory.toURI(), xqueryExternalVariables);
-			
-			runAntBuildFile(addonDirectory.getParentFile(), frameworkId);
+			if (frameworkSpecificXQueryScript.exists()) {
+				XQueryOperation.query(new FileReader(frameworkDescriptor),
+						new FileInputStream(frameworkSpecificXQueryScript), true, frameworkDir.toURI(),
+						xqueryExternalVariables);
+			}
+
+			runAntBuildFile(frameworkDir.getParentFile(), frameworkId);
 
 			File frameworkDescriptorModifier = Paths
 					.get(pluginInstallDirPath, "generate-framework", "framework-descriptor-modifier.xql").toFile();

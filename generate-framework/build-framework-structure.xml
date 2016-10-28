@@ -17,13 +17,7 @@
 	<target name="build-framework">
 		
 		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.xml" todir="${oxygenAddonBuilder.frameworkTargetDir}" failonerror="false"/>
-				
-		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" filtering="true">
-			<fileset dir="${oxygenAddonBuilder.pluginTemplatesDir}java" />
-			<filterchain>
-				<expandproperties />
-			</filterchain>
-		</copy>
+
 		<echo>Execute 'ro.kuberam.oxygen.addonBuilder.parser.Parser' class...</echo>
 		<java fork="true" classname="ro.kuberam.oxygen.addonBuilder.parser.Parser" failonerror="true">
 			<classpath>
