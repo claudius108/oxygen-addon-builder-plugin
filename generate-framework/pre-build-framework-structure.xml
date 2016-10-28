@@ -1,0 +1,37 @@
+<project name="Oxygen Framework Builder">
+
+	<property name="oxygenAddonBuilder.frameworkDir" value="${oxygenAddonBuilder.frameworksDir}${file.separator}${oxygenAddonBuilder.frameworkId}${file.separator}" />
+	<property name="oxygenAddonBuilder.pluginTemplatesDir" value="${oxygenAddonBuilder.pluginInstallDir}${file.separator}templates${file.separator}" />
+	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}target${file.separator}" />
+	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
+	<property name="oxygenAddonBuilder.path-to-oxygenAuthor.jar" value="${oxygenAddonBuilder.frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" />
+	<property name="oxygenAddonBuilder.path-to-addon-builder-plugin.jar" value="${oxygenAddonBuilder.frameworkDir}java${file.separator}addon-builder-plugin.jar" />
+	<property name="oxygenAddonBuilder.path-to-log4j.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/log4j.jar" />
+	<property name="oxygenAddonBuilder.path-to-commons-io.jar" value="${oxygenAddonBuilder.frameworksDir}/../lib/commons-io-1.3.1.jar" />
+	<tstamp>
+		<format property="oxygenAddonBuilder.timestamp" pattern="MMddhhmm" locale="en,GB" />
+	</tstamp>	
+
+	<echoproperties prefix="oxygenAddonBuilder." />
+
+	<target name="build-framework">
+		
+		<copy file="${oxygenAddonBuilder.frameworkDir}resources${file.separator}controlled-vocabularies${file.separator}scripts.xml" todir="${oxygenAddonBuilder.frameworkTargetDir}" failonerror="false"/>
+
+		<echo>Execute 'ro.kuberam.oxygen.addonBuilder.parser.Parser' class...</echo>
+		<java fork="true" classname="ro.kuberam.oxygen.addonBuilder.parser.Parser" failonerror="true">
+			<classpath>
+				<pathelement path="${oxygenAddonBuilder.path-to-addon-builder-plugin.jar}" />
+				<pathelement path="${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" />
+				<pathelement path="${oxygenAddonBuilder.path-to-log4j.jar}" />
+				<pathelement path="${oxygenAddonBuilder.path-to-commons-io.jar}" />
+			</classpath>
+			<arg value="${oxygenAddonBuilder.frameworkDir}" />
+			<arg value="${oxygenAddonBuilder.frameworkId}" />
+			<arg value="${oxygenAddonBuilder.frameworkTargetDir}" />
+			<sysproperty key="DEBUG" value="true" />
+		</java>
+
+	</target>
+
+</project>

@@ -182,6 +182,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			XQueryOperation.query(new FileReader(frameworkDescriptor),
 					new FileInputStream(generateFrameworkXQueryScript), true, frameworkDir.toURI(),
 					xqueryExternalVariables);
+			
+			runAntBuildFile(frameworkDir.getParentFile(), frameworkId, "pre-build-framework-structure.xml");
 
 			File frameworkSpecificXQueryScript = Paths
 					.get(frameworkDirPath, "resources", "xquery", "framework-specific.xql").toFile();
@@ -193,7 +195,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 						xqueryExternalVariables);
 			}
 
-			runAntBuildFile(frameworkDir.getParentFile(), frameworkId);
+			runAntBuildFile(frameworkDir.getParentFile(), frameworkId, "build-framework-structure.xml");
 
 			File frameworkDescriptorModifier = Paths
 					.get(pluginInstallDirPath, "generate-framework", "framework-descriptor-modifier.xql").toFile();
@@ -265,7 +267,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.frameworksDir.getAbsolutePath(), filter);
 	}
 
-	private void runAntBuildFile(File frameworksDir, String frameworkId) {
+	private void runAntBuildFile(File frameworksDir, String frameworkId, String buildFileName) {
 		logger.debug("frameworksDir = " + frameworksDir.getAbsolutePath());
 
 		if (pluginWorkspaceAccess != null) {
@@ -285,7 +287,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 							+ File.separator + "ant",
 					"-f",
 					AddonBuilderPluginExtension.pluginInstallDir + File.separator + "generate-framework"
-							+ File.separator + "build-framework-structure.xml",
+							+ File.separator + buildFileName,
 					"build-framework", "-DoxygenAddonBuilder.frameworksDir=" + frameworksDir,
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
 					"-DoxygenAddonBuilder.pluginInstallDir=" + AddonBuilderPluginExtension.pluginInstallDir);
@@ -294,7 +296,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			String executablePath = "\"" + oxygenInstallDir + File.separator + "tools" + File.separator + "ant"
 					+ File.separator + "bin" + File.separator + "ant" + "\"";
 			String filePath = "\"" + AddonBuilderPluginExtension.pluginInstallDir + File.separator
-					+ "generate-framework" + File.separator + "build-framework-structure.xml" + "\"";
+					+ "generate-framework" + File.separator + buildFileName + "\"";
 
 			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir.getAbsolutePath() + "\"",
