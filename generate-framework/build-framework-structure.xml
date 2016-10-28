@@ -21,14 +21,9 @@
 			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
 				<include name="*/" />
 				<exclude name="${oxygenAddonBuilder.frameworkId}.jar" />
+				<exclude name="addon.xml" />
 			</fileset>
 		</delete>
-		<copy todir="${oxygenAddonBuilder.frameworkTargetDir}" filtering="true">
-			<fileset dir="${oxygenAddonBuilder.frameworkDir}" includes="addon.xml" />
-			<filterchain>
-				<expandproperties />
-			</filterchain>
-		</copy>
 
 	</target>
 
