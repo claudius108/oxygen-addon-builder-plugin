@@ -37,5 +37,7 @@ declare variable $frameworkTargetDir := file:path-to-native($frameworkDirPath ||
 	let $text := replace($text, "</xt:version>", "." || format-dateTime(current-dateTime(), "[M01][D01][H01][m01]") || "</xt:version>")
 	
 	return file:write-text(file:path-to-native($frameworkTargetDir || "/addon.xml"), $text)
+	,
+	file:delete(file:path-to-native($frameworkTargetDir || "/" || $frameworkId || ".jar"))
 )
 	
