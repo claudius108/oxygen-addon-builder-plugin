@@ -13,7 +13,6 @@
 
 	<target name="build-framework">
 		
-		<javac srcdir="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}" source="${ant.java.version}" target="${ant.java.version}" classpath="${oxygenAddonBuilder.path-to-addon-builder-plugin.jar};${oxygenAddonBuilder.path-to-oxygenAuthor.jar}" includeantruntime="false" fork="true" debug="true" />
 		<delete file="${oxygenAddonBuilder.frameworkArchivePath}" />
 		<jar destfile="${oxygenAddonBuilder.frameworkDir}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" excludes="**/*.java" />
 		<jar destfile="${oxygenAddonBuilder.frameworkArchivePath}" basedir="${oxygenAddonBuilder.frameworksDir}" includes="${oxygenAddonBuilder.frameworkId}/**/*.*" excludes="${oxygenAddonBuilder.frameworkId}/target/" />
