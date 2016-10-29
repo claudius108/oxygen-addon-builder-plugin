@@ -48,24 +48,24 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 		for $file-name in $file-names
 		return file:path-to-native($frameworkTargetDirPath || "/" || $file-name)
 	
-	return (
-			file:write-binary(file:path-to-native($frameworkJavaDirPath || "/framework.jar"),
-				arch:create(
-					(
-						"META-INF/MANIFEST.MF"
-						,
-						for $file-name in $file-names
-						return $file-name
-					),
-					(
-						bin:encode-string($jar-manifest-content)
-						,
-						for $file-path in $file-paths
-						return file:read-binary($file-path)
-					)
+	return
+		file:write-binary(
+			file:path-to-native($frameworkJavaDirPath || "/framework.jar"),
+			arch:create(
+				(
+					"META-INF/MANIFEST.MF"
+					,
+					for $file-name in $file-names
+					return $file-name
+				),
+				(
+					bin:encode-string($jar-manifest-content)
+					,
+					for $file-path in $file-paths
+					return file:read-binary($file-path)
 				)
 			)
-	)
+		)
 	,	
 	file:delete($frameworkTargetDirPath, true())
 	,
@@ -76,4 +76,3 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 	
 	return file:write-text(file:path-to-native($frameworkTargetDirPath || "/addon.xml"), $text)
 )
-	
