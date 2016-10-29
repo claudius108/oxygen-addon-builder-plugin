@@ -7,7 +7,7 @@ declare namespace bin = "http://expath.org/ns/binary";
 declare variable $pluginInstallDirPath external;
 declare variable $frameworkDirPath external;
 
-declare variable $pluginTemplatesDir := file:path-to-native($pluginInstallDirPath || "/templates");
+declare variable $pluginTemplatesDirPath := file:path-to-native($pluginInstallDirPath || "/templates");
 
 declare variable $frameworkId := file:name($frameworkDirPath);
 declare variable $frameworkTargetDirPath := file:path-to-native($frameworkDirPath || "/target");
@@ -24,7 +24,7 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 	,
 	if (not(file:exists(file:path-to-native($frameworkDirPath || "/addon.xml"))))
 	then 
-		let $text := file:read-text(file:path-to-native($pluginTemplatesDir || "/addon/addon.xml"))
+		let $text := file:read-text(file:path-to-native($pluginTemplatesDirPath || "/addon/addon.xml"))
 		let $text := replace($text, "frameworkId", $frameworkId)
 		
 		return file:write-text(file:path-to-native($frameworkDirPath || "/addon.xml"), $text)
@@ -32,11 +32,13 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 	,
 	if (not(file:exists(file:path-to-native($frameworkDirPath || "/addon.xq"))))
 	then file:copy(
-		file:path-to-native($pluginTemplatesDir || "/xquery/addon.xq"),
+		file:path-to-native($pluginTemplatesDirPath || "/xquery/addon.xq"),
 		$frameworkDirPath
 	)
 	else ()
 	,
+	file:copy(file:path-to-native($pluginTemplatesDirPath || "/xquery/tree-template.xq"), $frameworkTargetDirPath)
+	,	
 	let $text := file:read-text(file:path-to-native($frameworkDirPath || "/addon.xml"))
 	let $text := replace($text, "</xt:version>", "." || format-dateTime(current-dateTime(), "[M01][D01][H01][m01]") || "</xt:version>")
 	
@@ -60,7 +62,7 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 				return $file-name
 			),
 			(
-				bin:encode-string($jar-manifest-content)
+				bin:encode-string($jar-manifest-content || string-join($file-names, ""))
 				,
 				for $file-name in $file-names
 				return file:read-binary(file:path-to-native($frameworkTargetDirPath || "/" || $file-name))
@@ -68,3 +70,4 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 		)
 	)
 )
+	
