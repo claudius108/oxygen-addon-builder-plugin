@@ -172,11 +172,9 @@ public class Parser {
 		parsingResult.prolog = prolog.toString();
 
 		// load the tree template
-		baseTreeGeneratorTemplate = parsingResult.prolog
-				+ new Scanner(
-						new FileInputStream(new File(
-								addonDirectory + File.separator + "target" + File.separator + "tree-template.xq")),
-						"UTF-8").useDelimiter("\\A").next();
+		Scanner scanner = new Scanner(getClass().getResourceAsStream("tree-template.xq"), "UTF-8");
+		baseTreeGeneratorTemplate = parsingResult.prolog + scanner.useDelimiter("\\A").next();
+		scanner.close();
 		System.out.println("variableElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		System.setProperty("javax.xml.transform.TransformerFactory",
@@ -1000,7 +998,9 @@ public class Parser {
 		if (script.contains("actions/")) {
 			_writeEntryElement("script", script);
 		} else if (script.contains("ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation")) {
-			script = script.replaceAll("ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation\\('", "").replaceAll("'\\)", "");
+			script = script
+					.replaceAll("ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation\\('", "")
+					.replaceAll("'\\)", "");
 			_writeEntryElement("document_url", script);
 			authorOperationName = "ro.kuberam.oxygen.addonBuilder.operations.EditDocumentInNewTabOperation";
 		} else {

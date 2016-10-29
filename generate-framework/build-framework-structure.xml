@@ -13,17 +13,9 @@
 
 	<target name="build-framework">
 		
-		<jar destfile="${oxygenAddonBuilder.frameworkDir}java${file.separator}framework.jar" basedir="${oxygenAddonBuilder.frameworkTargetDir}" />
 		<jar destfile="${oxygenAddonBuilder.frameworkArchivePath}" basedir="${oxygenAddonBuilder.frameworksDir}" includes="${oxygenAddonBuilder.frameworkId}/**/*.*" excludes="${oxygenAddonBuilder.frameworkId}/target/" />
 		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
 		<echo>Delete selectively the content of '${oxygenAddonBuilder.frameworkTargetDir}' directory...</echo>
-		<delete includeemptydirs="true">
-			<fileset dir="${oxygenAddonBuilder.frameworkTargetDir}">
-				<include name="*/" />
-				<exclude name="${oxygenAddonBuilder.frameworkId}.jar" />
-				<exclude name="addon.xml" />
-			</fileset>
-		</delete>
 
 	</target>
 
