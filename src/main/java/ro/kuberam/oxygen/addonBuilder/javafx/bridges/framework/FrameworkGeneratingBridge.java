@@ -175,6 +175,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			File frameworkDescriptor = Paths.get(frameworkDirPath, frameworkId + ".framework").toFile();
 			logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
+			runAntBuildFile(frameworkDir.getParentFile(), frameworkId, "pre-build-framework-structure.xml");
+			
 			File generateFrameworkXQueryScript = Paths
 					.get(pluginInstallDirPath, "generate-framework", "generate-framework.xql").toFile();
 			logger.debug("generateFrameworkXQueryScript = " + generateFrameworkXQueryScript);
@@ -183,8 +185,6 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 					new FileInputStream(generateFrameworkXQueryScript), true, frameworkDir.toURI(),
 					xqueryExternalVariables);
 			
-			runAntBuildFile(frameworkDir.getParentFile(), frameworkId, "pre-build-framework-structure.xml");
-
 			File frameworkSpecificXQueryScript = Paths
 					.get(frameworkDirPath, "resources", "xquery", "framework-specific.xql").toFile();
 			logger.debug("frameworkSpecificXQueryScript = " + frameworkSpecificXQueryScript);
