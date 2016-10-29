@@ -1,6 +1,8 @@
 xquery version "3.0";
 
 declare namespace file = "http://expath.org/ns/file";
+declare namespace arch = "http://expath.org/ns/archive";
+declare namespace bin = "http://expath.org/ns/binary";
 
 declare variable $pluginInstallDirPath external;
 declare variable $frameworkDirPath external;
@@ -8,12 +10,16 @@ declare variable $frameworkDirPath external;
 declare variable $pluginTemplatesDir := file:path-to-native($pluginInstallDirPath || "/templates");
 
 declare variable $frameworkId := file:name($frameworkDirPath);
-declare variable $frameworkTargetDir := file:path-to-native($frameworkDirPath || "/target");
+declare variable $frameworkTargetDirPath := file:path-to-native($frameworkDirPath || "/target");
+declare variable $frameworkJavaDirPath := file:path-to-native($frameworkDirPath || "/java");
+declare variable $frameworkJarPath := file:path-to-native($frameworkTargetDirPath || "/" || $frameworkId || ".jar");
+
+declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || "Created-By: Saxon";
 
 (
 	file:copy(
 		file:path-to-native($pluginInstallDirPath || "/lib/addon-builder-plugin.jar"),
-		file:path-to-native($frameworkDirPath ||"/java")
+		$frameworkJavaDirPath
 	)
 	,
 	if (not(file:exists(file:path-to-native($frameworkDirPath || "/addon.xml"))))
@@ -34,18 +40,31 @@ declare variable $frameworkTargetDir := file:path-to-native($frameworkDirPath ||
 	let $text := file:read-text(file:path-to-native($frameworkDirPath || "/addon.xml"))
 	let $text := replace($text, "</xt:version>", "." || format-dateTime(current-dateTime(), "[M01][D01][H01][m01]") || "</xt:version>")
 	
-	return file:write-text(file:path-to-native($frameworkTargetDir || "/addon.xml"), $text)
+	return file:write-text(file:path-to-native($frameworkTargetDirPath || "/addon.xml"), $text)
 	,
-	file:delete(file:path-to-native($frameworkTargetDir || "/" || $frameworkId || ".jar"))
+	if (file:exists($frameworkJarPath))
+	then file:delete($frameworkJarPath)
+	else ()	
 	,
-	let $file-names := file:list($frameworkTargetDir)
-	let $processed-file-names :=
-		for $file-name in $file-names[ends-with(., '.ser') or . = 'special-characters.xml']
+	let $file-names := 
+		for $file-name in file:list($frameworkTargetDirPath)[ends-with(., '.ser') or . = 'special-characters.xml']
 		
 		return $file-name
-		
-	let $processed-file-names := string-join($processed-file-names, "&#10;")
 	
-	return file:write-text(file:path-to-native($frameworkTargetDir || "/a.xml"), $processed-file-names)
+	return file:write-binary(file:path-to-native($frameworkJavaDirPath || "/framework.jar"),
+		arch:create(
+			(
+				"META-INF/MANIFEST.MF"
+				,
+				for $file-name in $file-names
+				return $file-name
+			),
+			(
+				bin:encode-string($jar-manifest-content)
+				,
+				for $file-name in $file-names
+				return file:read-binary(file:path-to-native($frameworkTargetDirPath || "/" || $file-name))
+			)
+		)
+	)
 )
-	
