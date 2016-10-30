@@ -10,7 +10,7 @@ import org.junit.Test;
 public class FileSystemBridgeTest {
 
 	@Test
-	public void testGetFrameworksNames() {
+	public void testGetFrameworkNames() {
 		String fileTree = FileSystem.getDirectoryTree((new File(getClass().getProtectionDomain()
 				.getCodeSource().getLocation().getFile())).getAbsolutePath(), new String[] {
 				"**/frameworks/**/**", "*.*" });

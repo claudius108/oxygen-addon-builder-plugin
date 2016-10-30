@@ -10,14 +10,12 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,11 +32,6 @@ import ro.kuberam.oxygen.addonBuilder.operations.XQueryOperation;
 import ro.sync.exml.editor.EditorPageConstants;
 import ro.sync.exml.editor.persistance.DocumentTypeEntryPO;
 import ro.sync.exml.workspace.api.PluginWorkspace;
-import ro.sync.exml.workspace.api.editor.WSEditor;
-import ro.sync.exml.workspace.api.editor.documenttype.DocumentTypeInformation;
-import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
-import ro.sync.exml.workspace.api.editor.page.author.actions.AuthorActionsProvider;
-import ro.sync.exml.workspace.api.standalone.actions.ActionsProvider;
 
 public class FrameworkGeneratingBridge extends BaseBridge {
 
@@ -263,9 +256,16 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		});
 	}
 
-	public String getframeworksNames(String filter) {
+	public String getframeworkNames(String filter) {
 		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.frameworksDir.getAbsolutePath(), filter);
 	}
+	
+	public String getExternalframeworksNames(String filter) {
+		String externalFrameworksDirPath = pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${oxygenInstallDir}", null);
+		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
+		
+		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.frameworksDir.getAbsolutePath(), filter);
+	}	
 
 	private void runAntBuildFile(File frameworksDir, String frameworkId, String buildFileName) {
 		logger.debug("frameworksDir = " + frameworksDir.getAbsolutePath());

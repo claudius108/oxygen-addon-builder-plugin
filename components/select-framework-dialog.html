@@ -32,28 +32,38 @@
 }
 </style>
 <script type="text/javascript">
+	function getFrameworkNamesView(frameworkNames) {
+		var frameworksNamesObject = JSON.parse(frameworkNames);
+		
+		var frameworksNamesArray = [];
+		
+		$.each(frameworksNamesObject[0].children, function(i, item) {
+			frameworksNamesArray[i] = item.title;
+		});
+		
+		$.each(frameworksNamesArray.sort(), function(i, item) {
+			var frameworkName = frameworksNamesArray[i];
+			frameworksList += "<div class=\"fileName\" onclick=\"OxygenAddonBuilder." + action + "('" + frameworkName + "');\">" + frameworkName + "</div>";
+		});
+	}
+	
 	function initialize() {
 		$( document ).ready(function() {
-			var frameworksNames = JSON.parse(OxygenAddonBuilder.getframeworksNames("**/frameworks/**/**, *.*"));
 			var action = window.location.search.substring(8);
-			var frameworksNamesArray = [];
-			$.each(frameworksNames[0].children, function(i, item) {
-				frameworksNamesArray[i] = item.title;
-			});
-			var frameworksList = " <div id=\"fileNamesContainer\">";
-			$.each(frameworksNamesArray.sort(), function(i, item) {
-				var frameworkName = frameworksNamesArray[i];
-				frameworksList += "<div class=\"fileName\" onclick=\"OxygenAddonBuilder." + action + "('" + frameworkName + "');\">" + frameworkName + "</div>";
-			});
-			frameworksList += "</div>";
-			$(frameworksList).insertAfter($("body > h2"));
+					
+			var frameworksList = getFrameworkNamesView(OxygenAddonBuilder.getframeworkNames("**/frameworks/**/**, *.*"), action);
+			var externalFrameworksList = getFrameworkNamesView(OxygenAddonBuilder.getExternalframeworksNames("**/frameworks/**/**, *.*"), action);
+			
+			$("").html(frameworksList);
+			$("").html(externalFrameworksList);
 		});		
 	}
 </script>
 </head>
 <body onload="window.setTimeout(initialize, 0);">
-	<h2>Frameworks</h2>
+	<h2>External Frameworks</h2>
 	<div id="fileNamesContainer"></div>
+	<h2>Oxygen Frameworks</h2>
 	<div id="footer">
 		<button style="float: right;" onclick="OxygenAddonBuilder.closeDialogWindow();">Close</button>
 	</div>
