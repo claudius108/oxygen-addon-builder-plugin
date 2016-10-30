@@ -42,7 +42,7 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 	else ()	
 	,
 	let $file-names := 
-		for $file-name in file:list($frameworkTargetDirPath)[ends-with(., '.ser') or . = 'special-characters.xml']
+		for $file-name in file:list($frameworkTargetDirPath)[ends-with(., '.ser')]
 		return $file-name
 	let $file-paths :=
 		for $file-name in $file-names
@@ -76,3 +76,4 @@ declare variable $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || 
 	
 	return file:write-text(file:path-to-native($frameworkTargetDirPath || "/addon.xml"), $text)
 )
+	
