@@ -3,19 +3,12 @@
 	<property name="oxygenAddonBuilder.frameworkDir" value="${oxygenAddonBuilder.frameworksDir}${file.separator}${oxygenAddonBuilder.frameworkId}${file.separator}" />
 	<property name="oxygenAddonBuilder.frameworkTargetDir" value="${oxygenAddonBuilder.frameworkDir}target${file.separator}" />
 	<property name="oxygenAddonBuilder.frameworkArchivePath" value="${oxygenAddonBuilder.frameworkTargetDir}${oxygenAddonBuilder.frameworkId}.jar" />
-	<property name="oxygenAddonBuilder.path-to-oxygenAuthor.jar" value="${oxygenAddonBuilder.frameworksDir}${file.separator}..${file.separator}lib${file.separator}oxygenAuthor.jar" />
-	<property name="oxygenAddonBuilder.path-to-addon-builder-plugin.jar" value="${oxygenAddonBuilder.frameworkDir}java${file.separator}addon-builder-plugin.jar" />
-	<tstamp>
-		<format property="oxygenAddonBuilder.timestamp" pattern="MMddhhmm" locale="en,GB" />
-	</tstamp>	
 
 	<echoproperties prefix="oxygenAddonBuilder." />
 
 	<target name="build-framework">
 		
-		<jar destfile="${oxygenAddonBuilder.frameworkArchivePath}" basedir="${oxygenAddonBuilder.frameworksDir}" includes="${oxygenAddonBuilder.frameworkId}/**/*.*" excludes="${oxygenAddonBuilder.frameworkId}/target/" />
 		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
-		<echo>Delete selectively the content of '${oxygenAddonBuilder.frameworkTargetDir}' directory...</echo>
 
 	</target>
 

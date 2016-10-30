@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
 	<xt:extension id="${oxygenAddonBuilder.frameworkId}">
 		<xt:location href="" />
-		<xt:version>0.1.${oxygenAddonBuilder.timestamp}</xt:version>
+		<xt:version>0.1</xt:version>
 		<xt:oxy_version>18.1+</xt:oxy_version>
 		<xt:type>framework</xt:type>
 		<xt:author></xt:author>
