@@ -260,11 +260,11 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.frameworksDir.getAbsolutePath(), filter);
 	}
 	
-	public String getExternalframeworksNames(String filter) {
-		String externalFrameworksDirPath = pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${oxygenInstallDir}", null);
+	public String getExternalframeworkNames(String filter) {
+		String externalFrameworksDirPath = pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${frameworksDir}", null);
 		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
 		
-		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.frameworksDir.getAbsolutePath(), filter);
+		return (new FileSystemBridge()).list("/home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks", filter);
 	}	
 
 	private void runAntBuildFile(File frameworksDir, String frameworkId, String buildFileName) {
