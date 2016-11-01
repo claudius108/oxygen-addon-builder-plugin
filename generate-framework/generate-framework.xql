@@ -70,6 +70,8 @@ declare function local:make-jar($source-dir, $jar-path, $filter) {
 	)
 	else ()
 	,
+	file:create-dir($frameworkTargetDirPath)
+	,
 	local:make-jar($frameworkTargetDirPath, $frameworkJarPath, "ends-with(., '.ser')")
 	,	
 	file:delete($frameworkTargetDirPath, true())
