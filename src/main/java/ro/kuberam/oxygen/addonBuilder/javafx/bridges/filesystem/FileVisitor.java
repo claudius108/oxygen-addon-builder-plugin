@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-
 public class FileVisitor extends SimpleFileVisitor<Path> {
 
 	/**
@@ -45,15 +44,15 @@ public class FileVisitor extends SimpleFileVisitor<Path> {
 
 		for (int i = 0, il = excludes.size(); i < il; i++) {
 			PathMatcher matcher = excludes.get(i);
-			logger.debug("matcher '" + excludePatterns.get(i) + "' matches dir = "
-					+ matcher.matches(dirPath));
+			logger.debug("matcher '" + excludePatterns.get(i) + "' matches dir = " + matcher.matches(dirPath));
 			if (matcher.matches(dirPath)) {
 				return FileVisitResult.SKIP_SUBTREE;
 			}
 		}
 
 		result.append(delim).append("{\"title\": \"" + dirPath.getFileName() + "\",")
-				.append(" \"key\": \"" + dirPath.getFileName() + "\",").append(" \"folder\": true,")
+				.append(" \"key\": \"" + dirPath.getFileName() + "\",")
+				.append(" \"path\": \"" + dirPath.toString() + "\",").append(" \"folder\": true,")
 				.append(" \"children\": [");
 		delim = "";
 
@@ -72,15 +71,13 @@ public class FileVisitor extends SimpleFileVisitor<Path> {
 
 		for (int i = 0, il = excludes.size(); i < il; i++) {
 			PathMatcher matcher = excludes.get(i);
-			logger.debug("matcher '" + excludePatterns.get(i) + "' matches file = "
-					+ matcher.matches(filePath));
+			logger.debug("matcher '" + excludePatterns.get(i) + "' matches file = " + matcher.matches(filePath));
 			if (matcher.matches(filePath)) {
 				return FileVisitResult.CONTINUE;
 			}
 		}
 
-		result.append(delim).append("{\"title\": \"" + fileName + "\",")
-				.append(" \"key\": \"" + fileName + "\"}");
+		result.append(delim).append("{\"title\": \"" + fileName + "\",").append(" \"key\": \"" + fileName + "\"}");
 		delim = ",";
 
 		return FileVisitResult.CONTINUE;

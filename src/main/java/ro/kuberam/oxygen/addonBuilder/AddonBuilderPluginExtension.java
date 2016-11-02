@@ -57,8 +57,9 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 
 					String addonBuilderToolbarContentPath = null;
 					try {
-						addonBuilderToolbarContentPath = new URL("file:" + pluginInstallDir + File.separator
-								+ "components" + File.separator + "addon-builder-toolbar.html").toExternalForm();
+						addonBuilderToolbarContentPath = new URL(
+								"file:" + pluginInstallDir + "/" + "components" + "/" + "addon-builder-toolbar.html")
+										.toExternalForm();
 						logger.debug("addonBuilderToolbarContentPath: " + addonBuilderToolbarContentPath);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
