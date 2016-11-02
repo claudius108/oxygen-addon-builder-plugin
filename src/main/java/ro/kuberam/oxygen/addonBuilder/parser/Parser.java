@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -1127,11 +1129,11 @@ public class Parser {
 		if (args.length == 0) {
 			String frameworkId = "dlridev";
 			// String oxygenInstallDir = "/home/claudius/oxygen/current";
-			String oxygenInstallDir = "C:/Program Files/Oxygen XML Author 17";
+			Path oxygenInstallDir = Paths.get("C:/Program Files/Oxygen XML Author 17");
 
 			// File addonDirectory = new File(oxygenInstallDir + "/frameworks/"
 			// + frameworkId);
-			File addonDirectory = new File(oxygenInstallDir + "/frameworks/" + frameworkId);
+			Path addonDirectory = oxygenInstallDir.resolve("/frameworks/" + frameworkId);
 
 			// AddonBuilderPluginExtension.pluginInstallDir = new File(
 			// "/home/claudius/.com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
@@ -1141,7 +1143,7 @@ public class Parser {
 
 			FrameworkGeneratingBridge bridge = new FrameworkGeneratingBridge();
 			bridge.frameworkId = frameworkId;
-			bridge.oxygenInstallDir = oxygenInstallDir;
+			bridge.oxygenInstallDir = oxygenInstallDir.toAbsolutePath().toString();
 			bridge._generateFramework(addonDirectory);
 		} else {
 			logger.debug("execute with arguments" + args);

@@ -27,7 +27,7 @@ public class FileSystemBridge extends BaseBridge {
 		super(dialogWindow);
 	}
 
-	public String list(String directoryPath, String filter) {
+	public String list(Path directoryPath, String filter) {
 		logger.debug("directoryPath in list() = " + directoryPath);
 		logger.debug("filter = " + filter);
 

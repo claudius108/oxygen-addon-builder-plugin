@@ -1,29 +1,30 @@
 package ro.kuberam.oxygen.addonBuilder.javafx.bridges.filesystem;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.Test;
 
 public class FileSystemBridgeTest {
 
 	@Test
-	public void testGetFrameworkNames() {
-		String fileTree = FileSystem.getDirectoryTree((new File(getClass().getProtectionDomain()
-				.getCodeSource().getLocation().getFile())).getAbsolutePath(), new String[] {
-				"**/frameworks/**/**", "*.*" });
+	public void testGetFrameworkNames() throws URISyntaxException {
+		String fileTree = FileSystem.getDirectoryTree(
+				Paths.get(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()),
+				new String[] { "**/frameworks/**/**", "*.*" });
 
 		System.out.println(fileTree);
 
 	}
 
 	@Test
-	public void testGetFileList() {
-		String fileTree = FileSystem.getDirectoryTree((new File(getClass().getProtectionDomain()
-				.getCodeSource().getLocation().getFile())).getAbsolutePath(), new String[] { "*.xml",
-				"**/utils" });
+	public void testGetFileList() throws URISyntaxException {
+		String fileTree = FileSystem.getDirectoryTree(
+				Paths.get(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()),
+				new String[] { "*.xml", "**/utils" });
 
 		System.out.println(fileTree);
 

@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 
 	private static StandalonePluginWorkspace pluginWorkspaceAccess;
 	public static File pluginInstallDir;
-	public static File frameworksDir;
+	public static Path oxygenFrameworksDir;
 	public static JFrame parentFrame;
 
 	@Override
@@ -40,9 +42,9 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 
 		pluginInstallDir = AddonBuilderPlugin.getInstance().getDescriptor().getBaseDir();
 		logger.debug("pluginInstallDir: " + pluginInstallDir);
-		frameworksDir = new File(URLUtil.uncorrect(pluginWorkspaceAccess.getUtilAccess()
-				.expandEditorVariables("${frameworksDir}", null)));
-		logger.debug("frameworksDir: " + frameworksDir);
+		oxygenFrameworksDir = Paths.get(URLUtil
+				.uncorrect(pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${frameworksDir}", null)));
+		logger.debug("oxygenFrameworksDir: " + oxygenFrameworksDir);
 
 		// add plugin's toolbar
 		pluginWorkspaceAccess.addToolbarComponentsCustomizer(new ToolbarComponentsCustomizer() {
@@ -55,15 +57,15 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 
 					String addonBuilderToolbarContentPath = null;
 					try {
-						addonBuilderToolbarContentPath = new URL("file:" + pluginInstallDir + File.separator + "components"
-								+ File.separator + "addon-builder-toolbar.html").toExternalForm();
+						addonBuilderToolbarContentPath = new URL("file:" + pluginInstallDir + File.separator
+								+ "components" + File.separator + "addon-builder-toolbar.html").toExternalForm();
 						logger.debug("addonBuilderToolbarContentPath: " + addonBuilderToolbarContentPath);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
 
-					JFXPanel panel = new JavaFXPanel("", addonBuilderToolbarContentPath, new FrameworkGeneratingBridge(),
-							"OxygenAddonBuilder");
+					JFXPanel panel = new JavaFXPanel("", addonBuilderToolbarContentPath,
+							new FrameworkGeneratingBridge(), "OxygenAddonBuilder");
 
 					panel.setPreferredSize(new Dimension(330, 45));
 					comps.add(panel);

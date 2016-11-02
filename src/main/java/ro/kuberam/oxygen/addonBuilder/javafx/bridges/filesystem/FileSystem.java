@@ -2,16 +2,15 @@ package ro.kuberam.oxygen.addonBuilder.javafx.bridges.filesystem;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-
+import java.nio.file.Path;
 
 public class FileSystem {
 
-	public static String getDirectoryTree(String directoryPath, String[] patterns) {
+	public static String getDirectoryTree(Path directoryPath, String[] patterns) {
 		FileVisitor fileVisitor = new FileVisitor(patterns);
-		
+
 		try {
-			Files.walkFileTree(Paths.get(directoryPath), fileVisitor);
+			Files.walkFileTree(directoryPath, fileVisitor);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

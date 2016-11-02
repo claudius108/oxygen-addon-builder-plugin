@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +57,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		frameworkId = frameworkIdArg;
 
-		File addonDirectory = new File(AddonBuilderPluginExtension.frameworksDir + File.separator + frameworkId);
+		Path addonDirectory = AddonBuilderPluginExtension.oxygenFrameworksDir.resolve(frameworkId);
 		logger.debug("addonDirectory = " + addonDirectory);
 
 		Matcher extractTemplateIdPatternMatcher = frameworkIdPattern.matcher(frameworkId);
@@ -69,13 +71,13 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		}
 
-		File xqueryFrameworkDescriptor = new File(addonDirectory + File.separator + "addon.xq");
+		Path xqueryFrameworkDescriptor = addonDirectory.resolve("addon.xq");
 		logger.debug("xqueryFrameworkDescriptor = " + xqueryFrameworkDescriptor);
 
 		_generateFramework(addonDirectory);
 
 		try {
-			pluginWorkspaceAccess.open(xqueryFrameworkDescriptor.toURI().toURL(), EditorPageConstants.PAGE_TEXT,
+			pluginWorkspaceAccess.open(xqueryFrameworkDescriptor.toUri().toURL(), EditorPageConstants.PAGE_TEXT,
 					"text/xquery");
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
@@ -87,7 +89,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		frameworkId = frameworkIdArg;
 
-		File addonDirectory = new File(AddonBuilderPluginExtension.frameworksDir + File.separator + frameworkId);
+		Path addonDirectory = AddonBuilderPluginExtension.oxygenFrameworksDir.resolve(frameworkId);
 		logger.debug("addonDirectory = " + addonDirectory);
 
 		_generateFramework(addonDirectory);
@@ -117,24 +119,21 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			return;
 		}
 
-		URL xqueryFrameworkDescriptorUrl = null;
+		Path xqueryFrameworkDescriptorPath = null;
 
 		try {
-			xqueryFrameworkDescriptorUrl = new URL(
-					URLDecoder.decode(eligibleEditorLocations.get(0).toURI().toASCIIString(), "UTF-8"));
-			logger.debug("xqueryFrameworkDescriptorUrl = " + xqueryFrameworkDescriptorUrl);
+			xqueryFrameworkDescriptorPath = Paths
+					.get(URLDecoder.decode(eligibleEditorLocations.get(0).toURI().toASCIIString(), "UTF-8"));
+			logger.debug("xqueryFrameworkDescriptorUrl = " + xqueryFrameworkDescriptorPath);
 
-			String protocol = xqueryFrameworkDescriptorUrl.getProtocol();
-			logger.debug("protocol = " + protocol);
+			String scheme = xqueryFrameworkDescriptorPath.toUri().getScheme();
+			logger.debug("scheme = " + scheme);
 
-			if (protocol.equals("file")) {
-				File xqueryFrameworkDescriptor = new File(xqueryFrameworkDescriptorUrl.getFile());
-				logger.debug("xqueryFrameworkDescriptor = " + xqueryFrameworkDescriptor);
-
-				File addonDirectory = new File(xqueryFrameworkDescriptor.getParent());
+			if (scheme.equals("file")) {
+				Path addonDirectory = xqueryFrameworkDescriptorPath.getParent();
 				logger.debug("addonDirectory = " + addonDirectory);
 
-				frameworkId = addonDirectory.getName();
+				frameworkId = addonDirectory.getFileName().toString();
 				logger.debug("frameworkId = " + frameworkId);
 
 				// generate the framework jar
@@ -143,8 +142,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 				JOptionPane.showMessageDialog(new JFrame(), "The framework was generated!", "Success",
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				JOptionPane.showMessageDialog(new JFrame(), "The protocol '" + protocol + "' is not supported!",
-						"Error", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(new JFrame(), "The protocol '" + scheme + "' is not supported!", "Error",
+						JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
 
@@ -153,12 +152,14 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		}
 	}
 
-	public void _generateFramework(File frameworkDir) {
+	public void _generateFramework(Path frameworkDir) {
 		try {
 			String pluginInstallDirPath = AddonBuilderPluginExtension.pluginInstallDir.getAbsolutePath();
 			logger.debug("pluginInstallDirPath = " + pluginInstallDirPath);
-			String frameworkDirPath = frameworkDir.getAbsolutePath();
+			String frameworkDirPath = frameworkDir.toFile().getAbsolutePath();
 			logger.debug("frameworkDirPath = " + frameworkDirPath);
+			URI frameworkDirUri = frameworkDir.toUri();
+			logger.debug("frameworkDirUri = " + frameworkDirUri);
 
 			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
 			xqueryExternalVariables.put("pluginInstallDirPath", pluginInstallDirPath);
@@ -168,27 +169,26 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			File frameworkDescriptor = Paths.get(frameworkDirPath, frameworkId + ".framework").toFile();
 			logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
-			runAntBuildFile(frameworkDir.getParentFile(), frameworkId, "pre-build-framework-structure.xml");
-			
+			runAntBuildFile(frameworkDir.getParent(), frameworkId, "pre-build-framework-structure.xml");
+
 			File generateFrameworkXQueryScript = Paths
 					.get(pluginInstallDirPath, "generate-framework", "generate-framework.xql").toFile();
 			logger.debug("generateFrameworkXQueryScript = " + generateFrameworkXQueryScript);
 
 			XQueryOperation.query(new FileReader(frameworkDescriptor),
-					new FileInputStream(generateFrameworkXQueryScript), true, frameworkDir.toURI(),
-					xqueryExternalVariables);
-			
+					new FileInputStream(generateFrameworkXQueryScript), true, frameworkDirUri, xqueryExternalVariables);
+
 			File frameworkSpecificXQueryScript = Paths
 					.get(frameworkDirPath, "resources", "xquery", "framework-specific.xql").toFile();
 			logger.debug("frameworkSpecificXQueryScript = " + frameworkSpecificXQueryScript);
 
 			if (frameworkSpecificXQueryScript.exists()) {
 				XQueryOperation.query(new FileReader(frameworkDescriptor),
-						new FileInputStream(frameworkSpecificXQueryScript), true, frameworkDir.toURI(),
+						new FileInputStream(frameworkSpecificXQueryScript), true, frameworkDirUri,
 						xqueryExternalVariables);
 			}
 
-			runAntBuildFile(frameworkDir.getParentFile(), frameworkId, "build-framework-structure.xml");
+			runAntBuildFile(frameworkDir.getParent(), frameworkId, "build-framework-structure.xml");
 
 			File frameworkDescriptorModifier = Paths
 					.get(pluginInstallDirPath, "generate-framework", "framework-descriptor-modifier.xql").toFile();
@@ -216,7 +216,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 			String url = new URL("file:" + AddonBuilderPluginExtension.pluginInstallDir + File.separator + "components"
 					+ File.separator + "manage-framework-dialog.html" + "?frameworkPath="
-					+ AddonBuilderPluginExtension.frameworksDir + File.separator + frameworkIdArg).toExternalForm();
+					+ AddonBuilderPluginExtension.oxygenFrameworksDir + File.separator + frameworkIdArg)
+							.toExternalForm();
 			logger.debug("url = " + url);
 
 			final DialogModel dialogModel = new DialogModel("manage-framework-dialog", "modeless", "Manage framework",
@@ -257,18 +258,20 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	}
 
 	public String getframeworkNames(String filter) {
-		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.frameworksDir.getAbsolutePath(), filter);
+		return (new FileSystemBridge()).list(AddonBuilderPluginExtension.oxygenFrameworksDir, filter);
 	}
-	
-	public String getExternalframeworkNames(String filter) {
-		String externalFrameworksDirPath = pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${frameworksDir}", null);
-		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
-		
-		return (new FileSystemBridge()).list("/home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks", filter);
-	}	
 
-	private void runAntBuildFile(File frameworksDir, String frameworkId, String buildFileName) {
-		logger.debug("frameworksDir = " + frameworksDir.getAbsolutePath());
+	public String getExternalframeworkNames(String filter) {
+		String externalFrameworksDirPath = pluginWorkspaceAccess.getUtilAccess()
+				.expandEditorVariables("${frameworksDir}", null);
+		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
+
+		return (new FileSystemBridge())
+				.list(Paths.get("/home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks"), filter);
+	}
+
+	private void runAntBuildFile(Path frameworksDir, String frameworkId, String buildFileName) {
+		logger.debug("frameworksDir = " + frameworksDir);
 
 		if (pluginWorkspaceAccess != null) {
 			oxygenInstallDir = pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${oxygenInstallDir}", null);
@@ -299,7 +302,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 					+ "generate-framework" + File.separator + buildFileName + "\"";
 
 			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath, "build-framework",
-					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir.getAbsolutePath() + "\"",
+					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir + "\"",
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId, "-DoxygenAddonBuilder.pluginInstallDir=" + "\""
 							+ AddonBuilderPluginExtension.pluginInstallDir + "\"");
 			break;
