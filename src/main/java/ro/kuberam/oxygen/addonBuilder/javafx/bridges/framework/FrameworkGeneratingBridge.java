@@ -214,10 +214,9 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		try {
 
-			String url = new URL("file:" + AddonBuilderPluginExtension.pluginInstallDir + File.separator + "components"
-					+ File.separator + "manage-framework-dialog.html" + "?frameworkPath="
-					+ AddonBuilderPluginExtension.oxygenFrameworksDir + File.separator + frameworkIdArg)
-							.toExternalForm();
+			String url = new URL("file:" + AddonBuilderPluginExtension.pluginInstallDir + "/" + "components" + "/"
+					+ "manage-framework-dialog.html" + "?frameworkPath="
+					+ AddonBuilderPluginExtension.oxygenFrameworksDir + "/" + frameworkIdArg).toExternalForm();
 			logger.debug("url = " + url);
 
 			final DialogModel dialogModel = new DialogModel("manage-framework-dialog", "modeless", "Manage framework",
@@ -240,8 +239,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		String url = null;
 		try {
-			url = new URL("file:" + AddonBuilderPluginExtension.pluginInstallDir + File.separator + "components"
-					+ File.separator + "select-framework-dialog.html" + "?action=" + action).toExternalForm();
+			url = new URL("file:" + AddonBuilderPluginExtension.pluginInstallDir + "/" + "components" + "/"
+					+ "select-framework-dialog.html" + "?action=" + action).toExternalForm();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -282,24 +281,23 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		logger.debug("executableName = " + executableName);
 
 		List<String> command = null;
+		String executablePath = "";
+		String filePath = "";
 
 		switch (executableName) {
 		case "bash":
-			command = Arrays.asList(executableName,
-					oxygenInstallDir + File.separator + "tools" + File.separator + "ant" + File.separator + "bin"
-							+ File.separator + "ant",
-					"-f",
-					AddonBuilderPluginExtension.pluginInstallDir + File.separator + "generate-framework"
-							+ File.separator + buildFileName,
-					"build-framework", "-DoxygenAddonBuilder.frameworksDir=" + frameworksDir,
+			executablePath = Paths.get(oxygenInstallDir, "tools", "ant", "bin", "ant").toString();
+			filePath = Paths.get(AddonBuilderPluginExtension.pluginInstallDir.getAbsolutePath(), "generate-framework",
+					buildFileName).toString();
+			command = Arrays.asList(executableName, executablePath, "-f", filePath, "build-framework",
+					"-DoxygenAddonBuilder.frameworksDir=" + frameworksDir,
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
 					"-DoxygenAddonBuilder.pluginInstallDir=" + AddonBuilderPluginExtension.pluginInstallDir);
 			break;
 		case "cmd":
-			String executablePath = "\"" + oxygenInstallDir + File.separator + "tools" + File.separator + "ant"
-					+ File.separator + "bin" + File.separator + "ant" + "\"";
-			String filePath = "\"" + AddonBuilderPluginExtension.pluginInstallDir + File.separator
-					+ "generate-framework" + File.separator + buildFileName + "\"";
+			executablePath = Paths.get("\"" + oxygenInstallDir, "tools", "ant", "bin", "ant" + "\"").toString();
+			filePath = Paths.get("\"" + AddonBuilderPluginExtension.pluginInstallDir, "generate-framework",
+					buildFileName + "\"").toString();
 
 			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir + "\"",
@@ -307,7 +305,6 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 							+ AddonBuilderPluginExtension.pluginInstallDir + "\"");
 			break;
 		}
-
 		logger.debug("command = " + String.join(" ", command));
 
 		ProcessBuilder builder = new ProcessBuilder(command);

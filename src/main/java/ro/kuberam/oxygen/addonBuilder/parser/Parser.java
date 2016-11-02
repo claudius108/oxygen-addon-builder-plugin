@@ -1127,7 +1127,7 @@ public class Parser {
 
 	public static void main(String args[]) throws Exception {
 		if (args.length == 0) {
-			String frameworkId = "dlridev";
+			String frameworkId = "dlri";
 			// String oxygenInstallDir = "/home/claudius/oxygen/current";
 			Path oxygenInstallDir = Paths.get("C:/Program Files/Oxygen XML Author 17");
 
