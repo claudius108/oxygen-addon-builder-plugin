@@ -29,7 +29,7 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 	private static final Logger logger = Logger.getLogger(AddonBuilderPluginExtension.class.getName());
 
 	private static StandalonePluginWorkspace pluginWorkspaceAccess;
-	public static File pluginInstallDir;
+	public static Path pluginInstallDir;
 	public static Path oxygenFrameworksDir;
 	public static JFrame parentFrame;
 
@@ -40,8 +40,9 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 
 		parentFrame = (JFrame) pluginWorkspaceAccess.getParentFrame();
 
-		pluginInstallDir = AddonBuilderPlugin.getInstance().getDescriptor().getBaseDir();
+		pluginInstallDir = AddonBuilderPlugin.getInstance().getDescriptor().getBaseDir().toPath();
 		logger.debug("pluginInstallDir: " + pluginInstallDir);
+
 		oxygenFrameworksDir = Paths.get(URLUtil
 				.uncorrect(pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${frameworksDir}", null)));
 		logger.debug("oxygenFrameworksDir: " + oxygenFrameworksDir);

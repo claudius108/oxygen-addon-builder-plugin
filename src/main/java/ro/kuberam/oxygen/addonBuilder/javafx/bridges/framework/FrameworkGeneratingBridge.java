@@ -155,12 +155,15 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 	public void _generateFramework(Path frameworkDir) {
 		try {
-			String pluginInstallDirPath = AddonBuilderPluginExtension.pluginInstallDir.getAbsolutePath();
+			String pluginInstallDirPath = AddonBuilderPluginExtension.pluginInstallDir.toString();
 			logger.debug("pluginInstallDirPath = " + pluginInstallDirPath);
+
 			String frameworkDirPath = frameworkDir.toFile().getAbsolutePath();
 			logger.debug("frameworkDirPath = " + frameworkDirPath);
+
 			URI frameworkDirUri = frameworkDir.toUri();
 			logger.debug("frameworkDirUri = " + frameworkDirUri);
+
 			String frameworkId = frameworkDir.getFileName().toString();
 
 			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
@@ -268,12 +271,10 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	}
 
 	public String getExternalframeworkNames(String filter) {
-		String externalFrameworksDirPath = pluginWorkspaceAccess.getUtilAccess()
-				.expandEditorVariables("${frameworksDir}", null);
+		Path externalFrameworksDirPath = AddonBuilderPluginExtension.pluginInstallDir.resolve("../../frameworks");
 		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
 
-		return (new FileSystemBridge())
-				.list(Paths.get("/home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks"), filter);
+		return (new FileSystemBridge()).list(externalFrameworksDirPath, filter);
 	}
 
 	private void runAntBuildFile(Path frameworksDir, String frameworkId, String buildFileName) {
@@ -294,8 +295,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		switch (executableName) {
 		case "bash":
 			executablePath = Paths.get(oxygenInstallDir, "tools", "ant", "bin", "ant").toString();
-			filePath = Paths.get(AddonBuilderPluginExtension.pluginInstallDir.getAbsolutePath(), "generate-framework",
-					buildFileName).toString();
+			filePath = AddonBuilderPluginExtension.pluginInstallDir
+					.resolve(Paths.get("generate-framework", buildFileName)).toString();
 			command = Arrays.asList(executableName, executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + frameworksDir,
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
