@@ -33,19 +33,30 @@
 </style>
 	<script type="text/javascript">
 		function getFrameworkNamesView(frameworkNames, action) {
-			var frameworkNamesObject = JSON.parse(frameworkNames);
+			var frameworkNamesArray = JSON.parse(frameworkNames)[0].children;
 			
-			var frameworkNamesArray = [];
-			
-			$.each(frameworkNamesObject[0].children, function(i, item) {
-				frameworkNamesArray[i] = item.title;
-			});
+			frameworkNamesArray.sort(function(a, b) {
+				var nameA = a.title.toUpperCase();
+				var nameB = b.title.toUpperCase();
+				
+				if (nameA < nameB) {
+					return -1;
+				}
+				
+				if (nameA > nameB) {
+					return 1;
+				}
+				
+				return 0;
+			});			
 			
 			var frameworkNamesList = "";
 			
-			$.each(frameworkNamesArray.sort(), function(i, item) {
-				var frameworkName = frameworkNamesArray[i];
-				frameworkNamesList += "<div class=\"fileName\" onclick=\"OxygenAddonBuilder." + action + "('" + frameworkName + "');\">" + frameworkName + "</div>";
+			$.each(frameworkNamesArray, function(i, item) {
+				var frameworkName = frameworkNamesArray[i].title;
+				var frameworkPath = frameworkNamesArray[i].path;
+				
+				frameworkNamesList += "<div class=\"fileName\" onclick=\"OxygenAddonBuilder." + action + "('" + frameworkPath + "');\">" + frameworkName + "</div>";
 			});
 			
 			return frameworkNamesList;
