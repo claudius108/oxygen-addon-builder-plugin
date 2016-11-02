@@ -8,7 +8,7 @@
 
 	<target name="build-framework">
 		
-		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="${oxygenAddonBuilder.pluginInstallDir}${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
+		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="..${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
 
 	</target>
 

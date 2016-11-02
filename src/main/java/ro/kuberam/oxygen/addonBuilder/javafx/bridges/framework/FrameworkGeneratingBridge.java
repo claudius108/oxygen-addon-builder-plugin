@@ -55,7 +55,10 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	public void editFramework(String frameworkIdArg) {
 		closeDialogWindow();
 
+		logger.debug("action = 'editFramework'");
+
 		frameworkId = frameworkIdArg;
+		logger.debug("frameworkId = " + frameworkId);
 
 		Path addonDirectory = AddonBuilderPluginExtension.oxygenFrameworksDir.resolve(frameworkId);
 		logger.debug("addonDirectory = " + addonDirectory);
@@ -84,21 +87,23 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		}
 	}
 
-	public void generateSelectedFramework(String frameworkIdArg) {
+	public void generateSelectedFramework(String addonDirectory) {
 		closeDialogWindow();
 
-		frameworkId = frameworkIdArg;
+		logger.debug("action = 'generateSelectedFramework'");
 
-		Path addonDirectory = AddonBuilderPluginExtension.oxygenFrameworksDir.resolve(frameworkId);
-		logger.debug("addonDirectory = " + addonDirectory);
+		Path addonDirectoryPath = Paths.get(addonDirectory);
+		logger.debug("addonDirectoryPath = " + addonDirectoryPath);
 
-		_generateFramework(addonDirectory);
+		_generateFramework(addonDirectoryPath);
 
 		JOptionPane.showMessageDialog(new JFrame(), "The framework was generated!", "Success",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public void generateFramework() {
+		logger.debug("action = 'generateFramework'");
+
 		URL[] editorLocations = pluginWorkspaceAccess.getAllEditorLocations(PluginWorkspace.MAIN_EDITING_AREA);
 		ArrayList<URL> eligibleEditorLocations = new ArrayList<URL>();
 
@@ -160,6 +165,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			logger.debug("frameworkDirPath = " + frameworkDirPath);
 			URI frameworkDirUri = frameworkDir.toUri();
 			logger.debug("frameworkDirUri = " + frameworkDirUri);
+			String frameworkId = frameworkDir.getFileName().toString();
 
 			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
 			xqueryExternalVariables.put("pluginInstallDirPath", pluginInstallDirPath);
@@ -209,8 +215,10 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	public void manageFramework(String frameworkIdArg) {
 		closeDialogWindow();
 
+		logger.debug("action = 'manageFramework'");
+
 		frameworkId = frameworkIdArg;
-		logger.debug("frameworkId in manageFramework() = " + frameworkId);
+		logger.debug("frameworkId = " + frameworkId);
 
 		try {
 
@@ -292,7 +300,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			command = Arrays.asList(executableName, executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + frameworksDir,
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
-					"-DoxygenAddonBuilder.pluginInstallDir=" + AddonBuilderPluginExtension.pluginInstallDir);
+					"-DoxygenAddonBuilder.oxygenInstallDir=" + oxygenInstallDir);
 			break;
 		case "cmd":
 			executablePath = Paths.get("\"" + oxygenInstallDir, "tools", "ant", "bin", "ant" + "\"").toString();
@@ -301,8 +309,8 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir + "\"",
-					"-DoxygenAddonBuilder.frameworkId=" + frameworkId, "-DoxygenAddonBuilder.pluginInstallDir=" + "\""
-							+ AddonBuilderPluginExtension.pluginInstallDir + "\"");
+					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
+					"-DoxygenAddonBuilder.oxygenInstallDir=" + "\"" + oxygenInstallDir + "\"");
 			break;
 		}
 		logger.debug("command = " + String.join(" ", command));
