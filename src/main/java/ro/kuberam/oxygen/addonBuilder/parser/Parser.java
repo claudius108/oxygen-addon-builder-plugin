@@ -1142,7 +1142,6 @@ public class Parser {
 					"C:/Users/claudius.teodorescu/AppData/Roaming/com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
 
 			FrameworkGeneratingBridge bridge = new FrameworkGeneratingBridge();
-			bridge.frameworkId = frameworkId;
 			bridge.oxygenInstallDir = oxygenInstallDir.toAbsolutePath().toString();
 			bridge._generateFramework(addonDirectory);
 		} else {

@@ -41,7 +41,6 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	 * 
 	 */
 	private static final long serialVersionUID = 1583182879142664468L;
-	public String frameworkId;
 	public String oxygenInstallDir;
 	private Pattern frameworkIdPattern = Pattern.compile("^[a-z]+(\\.[a-z][a-z0-9]*)*$");
 
@@ -52,16 +51,16 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		super(dialogWindow);
 	}
 
-	public void editFramework(String frameworkIdArg) {
+	public void editFramework(String addonDirectory) {
 		closeDialogWindow();
 
 		logger.debug("action = 'editFramework'");
 
-		frameworkId = frameworkIdArg;
-		logger.debug("frameworkId = " + frameworkId);
+		Path addonDirectoryPath = Paths.get(addonDirectory);
+		logger.debug("addonDirectoryPath = " + addonDirectoryPath);
 
-		Path addonDirectory = AddonBuilderPluginExtension.oxygenFrameworksDir.resolve(frameworkId);
-		logger.debug("addonDirectory = " + addonDirectory);
+		String frameworkId = addonDirectoryPath.getFileName().toString();
+		logger.debug("frameworkId = " + frameworkId);
 
 		Matcher extractTemplateIdPatternMatcher = frameworkIdPattern.matcher(frameworkId);
 		if (!extractTemplateIdPatternMatcher.matches()) {
@@ -74,10 +73,10 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		}
 
-		Path xqueryFrameworkDescriptor = addonDirectory.resolve("addon.xq");
+		Path xqueryFrameworkDescriptor = addonDirectoryPath.resolve("addon.xq");
 		logger.debug("xqueryFrameworkDescriptor = " + xqueryFrameworkDescriptor);
 
-		_generateFramework(addonDirectory);
+		_generateFramework(addonDirectoryPath);
 
 		try {
 			pluginWorkspaceAccess.open(xqueryFrameworkDescriptor.toUri().toURL(), EditorPageConstants.PAGE_TEXT,
@@ -135,14 +134,11 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			logger.debug("scheme = " + scheme);
 
 			if (scheme.equals("file")) {
-				Path addonDirectory = xqueryFrameworkDescriptorPath.getParent();
-				logger.debug("addonDirectory = " + addonDirectory);
-
-				frameworkId = addonDirectory.getFileName().toString();
-				logger.debug("frameworkId = " + frameworkId);
+				Path addonDirectoryPath = xqueryFrameworkDescriptorPath.getParent();
+				logger.debug("addonDirectoryPath = " + addonDirectoryPath);
 
 				// generate the framework jar
-				_generateFramework(addonDirectory);
+				_generateFramework(addonDirectoryPath);
 
 				JOptionPane.showMessageDialog(new JFrame(), "The framework was generated!", "Success",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -212,19 +208,22 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		}
 	}
 
-	public void manageFramework(String frameworkIdArg) {
+	public void manageFramework(String addonDirectory) {
 		closeDialogWindow();
 
 		logger.debug("action = 'manageFramework'");
 
-		frameworkId = frameworkIdArg;
+		Path addonDirectoryPath = Paths.get(addonDirectory);
+		logger.debug("addonDirectoryPath = " + addonDirectoryPath);
+
+		String frameworkId = addonDirectoryPath.getFileName().toString();
 		logger.debug("frameworkId = " + frameworkId);
 
 		try {
 
 			String url = new URL("file:" + AddonBuilderPluginExtension.pluginInstallDir + "/" + "components" + "/"
 					+ "manage-framework-dialog.html" + "?frameworkPath="
-					+ AddonBuilderPluginExtension.oxygenFrameworksDir + "/" + frameworkIdArg).toExternalForm();
+					+ AddonBuilderPluginExtension.oxygenFrameworksDir + "/" + frameworkId).toExternalForm();
 			logger.debug("url = " + url);
 
 			final DialogModel dialogModel = new DialogModel("manage-framework-dialog", "modeless", "Manage framework",
