@@ -153,47 +153,46 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 		}
 	}
 
-	public void _generateFramework(Path frameworkDir) {
+	public void _generateFramework(Path frameworkDirPath) {
 		try {
 			String pluginInstallDirPath = AddonBuilderPluginExtension.pluginInstallDir.toString();
 			logger.debug("pluginInstallDirPath = " + pluginInstallDirPath);
 
-			String frameworkDirPath = frameworkDir.toFile().getAbsolutePath();
 			logger.debug("frameworkDirPath = " + frameworkDirPath);
 
-			URI frameworkDirUri = frameworkDir.toUri();
+			URI frameworkDirUri = frameworkDirPath.toUri();
 			logger.debug("frameworkDirUri = " + frameworkDirUri);
 
-			String frameworkId = frameworkDir.getFileName().toString();
+			String frameworkId = frameworkDirPath.getFileName().toString();
 
 			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
 			xqueryExternalVariables.put("pluginInstallDirPath", pluginInstallDirPath);
-			xqueryExternalVariables.put("frameworkDirPath", frameworkDirPath);
+			xqueryExternalVariables.put("frameworkDirPath", frameworkDirPath.toString());
 			logger.debug("xqueryExternalVariables = " + xqueryExternalVariables);
 
-			File frameworkDescriptor = Paths.get(frameworkDirPath, frameworkId + ".framework").toFile();
+			File frameworkDescriptor = frameworkDirPath.resolve(frameworkId + ".framework").toFile();
 			logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
-			runAntBuildFile(frameworkDir.getParent(), frameworkId, "pre-build-framework-structure.xml");
+			runAntBuildFile(frameworkDirPath.getParent(), frameworkId, "pre-build-framework-structure.xml");
 
 			File generateFrameworkXQueryScript = Paths
 					.get(pluginInstallDirPath, "generate-framework", "generate-framework.xql").toFile();
 			logger.debug("generateFrameworkXQueryScript = " + generateFrameworkXQueryScript);
 
-			XQueryOperation.query(new FileReader(frameworkDescriptor),
+			XQueryOperation.query(new FileReader(frameworkDescriptor.getAbsolutePath()),
 					new FileInputStream(generateFrameworkXQueryScript), true, frameworkDirUri, xqueryExternalVariables);
 
-			File frameworkSpecificXQueryScript = Paths
-					.get(frameworkDirPath, "resources", "xquery", "framework-specific.xql").toFile();
+			File frameworkSpecificXQueryScript = frameworkDirPath
+					.resolve(Paths.get("resources", "xquery", "framework-specific.xql")).toFile();
 			logger.debug("frameworkSpecificXQueryScript = " + frameworkSpecificXQueryScript);
 
 			if (frameworkSpecificXQueryScript.exists()) {
-				XQueryOperation.query(new FileReader(frameworkDescriptor),
+				XQueryOperation.query(new FileReader(frameworkDescriptor.getAbsolutePath()),
 						new FileInputStream(frameworkSpecificXQueryScript), true, frameworkDirUri,
 						xqueryExternalVariables);
 			}
 
-			runAntBuildFile(frameworkDir.getParent(), frameworkId, "build-framework-structure.xml");
+			runAntBuildFile(frameworkDirPath.getParent(), frameworkId, "build-framework-structure.xml");
 
 			File frameworkDescriptorModifier = Paths
 					.get(pluginInstallDirPath, "generate-framework", "framework-descriptor-modifier.xql").toFile();
@@ -271,7 +270,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	}
 
 	public String getExternalframeworkNames(String filter) {
-		Path externalFrameworksDirPath = AddonBuilderPluginExtension.pluginInstallDir.resolve("../../frameworks");
+		Path externalFrameworksDirPath = AddonBuilderPluginExtension.pluginInstallDir.resolve("../../../frameworks");
 		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
 
 		return (new FileSystemBridge()).list(externalFrameworksDirPath, filter);
@@ -338,3 +337,5 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 	}
 }
+/// home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks
+/// home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks
