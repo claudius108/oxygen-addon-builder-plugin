@@ -127,7 +127,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 		try {
 			xqueryFrameworkDescriptorPath = Paths
-					.get(URLDecoder.decode(eligibleEditorLocations.get(0).toURI().toASCIIString(), "UTF-8"));
+					.get(URLDecoder.decode(eligibleEditorLocations.get(0).getPath(), "UTF-8"));
 			logger.debug("xqueryFrameworkDescriptorUrl = " + xqueryFrameworkDescriptorPath);
 
 			String scheme = xqueryFrameworkDescriptorPath.toUri().getScheme();
@@ -160,10 +160,11 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 			logger.debug("frameworkDirPath = " + frameworkDirPath);
 
-			URI frameworkDirUri = frameworkDirPath.toUri();
+			URI frameworkDirUri = URI.create("file://" + frameworkDirPath.toString());
 			logger.debug("frameworkDirUri = " + frameworkDirUri);
 
 			String frameworkId = frameworkDirPath.getFileName().toString();
+			logger.debug("frameworkId = " + frameworkId);
 
 			Map<String, String> xqueryExternalVariables = new HashMap<String, String>();
 			xqueryExternalVariables.put("pluginInstallDirPath", pluginInstallDirPath);
@@ -171,7 +172,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			logger.debug("xqueryExternalVariables = " + xqueryExternalVariables);
 
 			File frameworkDescriptor = frameworkDirPath.resolve(frameworkId + ".framework").toFile();
-			logger.debug("frameworkDescriptor = " + frameworkDescriptor);
+			logger.debug("frameworkDescriptor = " + frameworkDescriptor.getAbsolutePath());
 
 			runAntBuildFile(frameworkDirPath.getParent(), frameworkId, "pre-build-framework-structure.xml");
 
