@@ -65,12 +65,17 @@
 		function initialize() {
 			$(document).ready(function() {
 				var action = window.location.search.substring(8);
-						
-				var frameworkNamesList = getFrameworkNamesView(OxygenAddonBuilder.getframeworkNames("**/frameworks/**/**, *.*"), action);
-				var externalFrameworkNamesList = getFrameworkNamesView(OxygenAddonBuilder.getExternalframeworkNames("**/frameworks/**/**, *.*"), action);
 				
+				var externalFrameworkNames = OxygenAddonBuilder.getExternalframeworkNames("**/frameworks/**/**, *.*");
+				if (externalFrameworkNames == "[]") {
+					externalFrameworkNames = "[{\"children\": []}]";		
+				}
+				
+				var externalFrameworkNamesList = getFrameworkNamesView(externalFrameworkNames, action);
+				var frameworkNamesList = getFrameworkNamesView(OxygenAddonBuilder.getframeworkNames("**/frameworks/**/**, *.*"), action);
+
+				$("#externalFrameworkNamesContainer").html(externalFrameworkNamesList);								
 				$("#frameworkNamesContainer").html(frameworkNamesList);
-				$("#externalFrameworkNamesContainer").html(externalFrameworkNamesList);
 			});		
 		}
 	</script>

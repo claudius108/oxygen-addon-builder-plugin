@@ -96,6 +96,7 @@ public class Parser {
 				&& xqueryFrameworkDescriptorAsString.charAt(0) == '\uFEFF')
 						? xqueryFrameworkDescriptorAsString.substring(1) : xqueryFrameworkDescriptorAsString;
 		File frameworkDescriptor = new File(addonDirectory + File.separator + frameworkId + ".framework");
+		logger.debug("frameworkDescriptor = " + frameworkDescriptor);
 
 		parsingResult = new ParsingResult();
 
@@ -1126,28 +1127,32 @@ public class Parser {
 	}
 
 	public static void main(String args[]) throws Exception {
-//		if (args.length == 0) {
-//			String frameworkId = "dlri";
-//			// String oxygenInstallDir = "/home/claudius/oxygen/current";
-//			Path oxygenInstallDir = Paths.get("C:/Program Files/Oxygen XML Author 17");
-//
-//			// File addonDirectory = new File(oxygenInstallDir + "/frameworks/"
-//			// + frameworkId);
-//			Path addonDirectory = oxygenInstallDir.resolve("/frameworks/" + frameworkId);
-//
-//			// AddonBuilderPluginExtension.pluginInstallDir = new File(
-//			// "/home/claudius/.com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
-//
-//			AddonBuilderPluginExtension.pluginInstallDir = new File(
-//					"C:/Users/claudius.teodorescu/AppData/Roaming/com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
-//
-//			FrameworkGeneratingBridge bridge = new FrameworkGeneratingBridge();
-//			bridge.oxygenInstallDir = oxygenInstallDir.toAbsolutePath().toString();
-//			bridge._generateFramework(addonDirectory);
-//		} else {
-//			logger.debug("execute with arguments" + args);
-//			new Parser(new File(args[0]), args[1], new File(args[2]));
-//		}
+		// if (args.length == 0) {
+		// String frameworkId = "dlri";
+		// // String oxygenInstallDir = "/home/claudius/oxygen/current";
+		// Path oxygenInstallDir = Paths.get("C:/Program Files/Oxygen XML Author
+		// 17");
+		//
+		// // File addonDirectory = new File(oxygenInstallDir + "/frameworks/"
+		// // + frameworkId);
+		// Path addonDirectory = oxygenInstallDir.resolve("/frameworks/" +
+		// frameworkId);
+		//
+		// // AddonBuilderPluginExtension.pluginInstallDir = new File(
+		// //
+		// "/home/claudius/.com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
+		//
+		// AddonBuilderPluginExtension.pluginInstallDir = new File(
+		// "C:/Users/claudius.teodorescu/AppData/Roaming/com.oxygenxml.author/extensions/v17.1/plugins/http___claudius108.users.sourceforge.net_repos_addon_builder_plugin_addon.xml/addon-builder-plugin");
+		//
+		// FrameworkGeneratingBridge bridge = new FrameworkGeneratingBridge();
+		// bridge.oxygenInstallDir =
+		// oxygenInstallDir.toAbsolutePath().toString();
+		// bridge._generateFramework(addonDirectory);
+		// } else {
+		// logger.debug("execute with arguments" + args);
+		// new Parser(new File(args[0]), args[1], new File(args[2]));
+		// }
 	}
 
 }
