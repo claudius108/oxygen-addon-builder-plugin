@@ -7,11 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ro.kuberam.oxygen.addonBuilder.mutations.ObserverConnection;
-
+import org.apache.log4j.Logger;
 
 @SuppressWarnings("unchecked")
 public class MutationObservers {
+
+	/**
+	 * Logger for logging.
+	 */
+	private static final Logger logger = Logger.getLogger(MutationObservers.class.getName());
 
 	public static Map<String, String[]> observers;
 	private static Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
@@ -23,16 +27,15 @@ public class MutationObservers {
 		ObjectInputStream nodeSelectorsOis = null;
 
 		try {
-			observersOis = new ObjectInputStream(
-					MutationObservers.class.getResourceAsStream("observers.ser"));
+			observersOis = new ObjectInputStream(MutationObservers.class.getResourceAsStream("observers.ser"));
 			connectObserverActionsOis = new ObjectInputStream(
 					MutationObservers.class.getResourceAsStream("connectObserverActions.ser"));
-			nodeSelectorsOis = new ObjectInputStream(
-					MutationObservers.class.getResourceAsStream("nodeSelectors.ser"));
+			nodeSelectorsOis = new ObjectInputStream(MutationObservers.class.getResourceAsStream("nodeSelectors.ser"));
 
 			observers = (Map<String, String[]>) observersOis.readObject();
-			connectObserverActions = (Map<String, ObserverConnection>) connectObserverActionsOis
-					.readObject();
+			connectObserverActions = (Map<String, ObserverConnection>) connectObserverActionsOis.readObject();
+			logger.debug("connectObserverActions = " + connectObserverActions);
+
 			nodeSelectors = (Map<String, String>) nodeSelectorsOis.readObject();
 
 			observersOis.close();
@@ -44,26 +47,5 @@ public class MutationObservers {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String args[]) {
-		String observedElement = "//idno";
-
-		ObserverConnection observerConnection = connectObserverActions.get(observedElement);
-		String observerHandler = observerConnection.getObserverHandler();
-		Map<String, Object> options = observerConnection.getOptions();
-//		System.out.println("observerHandler: " + observerHandler);
-//		System.out.println("options: " + observerConnection.getOptions());
-		List<String> attributeFilter = (List<String>) options.get("attributeFilter");
-		System.out.println("size: " + attributeFilter.size());
-		System.out.println("item 0: " + attributeFilter.get(0));
-		
-
-		String[] actionHandlers = (String[]) observers.get(observerHandler);
-		for (String actionHandler : actionHandlers) {
-//			System.out.println("actionHandler: " + actionHandler);
-		}
-
-//		System.out.println("nodeSelectors: " + nodeSelectors);
 	}
 }
