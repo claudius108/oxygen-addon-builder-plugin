@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import org.apache.log4j.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,9 +35,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension;
 import ro.kuberam.oxygen.addonBuilder.javafx.DialogModel;
-import ro.kuberam.oxygen.addonBuilder.javafx.bridges.framework.FrameworkGeneratingBridge;
 import ro.kuberam.oxygen.addonBuilder.mutations.ObserverConnection;
 import ro.kuberam.oxygen.addonBuilder.oxyFormControlDescriptors.OxyEditorDescriptor;
 import ro.kuberam.oxygen.addonBuilder.parser.XQuery30.ParseException;
@@ -1127,7 +1123,7 @@ public class Parser {
 	}
 
 	public static void main(String args[]) throws Exception {
-		 if (args.length == 0) {
+		if (args.length == 0) {
 			// String frameworkId = "dlri";
 			// // String oxygenInstallDir = "/home/claudius/oxygen/current";
 			// Path oxygenInstallDir = Paths.get("");
@@ -1149,10 +1145,12 @@ public class Parser {
 			// bridge.oxygenInstallDir =
 			// oxygenInstallDir.toAbsolutePath().toString();
 			// bridge._generateFramework(addonDirectory);
-		 } else {
-		 logger.debug("execute with arguments" + args);
-		 new Parser(new File(args[0]), args[1], new File(args[2]));
-		 }
+		} else {
+			System.out.println("execute with arguments" + args);
+			//System.out.println("connectObserverActions = " + connectObserverActions);
+			
+			new Parser(new File(args[0]), args[1], new File(args[2]));
+		}
 	}
 
 }

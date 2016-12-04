@@ -13,13 +13,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import ro.kuberam.oxygen.addonBuilder.javafx.DialogModel;
+import ro.kuberam.oxygen.addonBuilder.mutations.MutationObservers;
 import ro.kuberam.oxygen.addonBuilder.mutations.ObserverConnection;
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
 
 public class ParsingResult {
+	
+	private Logger logger = Logger.getLogger(MutationObservers.class.getName());
 
 	public ParsingResult() {
 		actionsByClass.put("load", new ArrayList<String>());
@@ -46,6 +50,8 @@ public class ParsingResult {
 
 		IOUtilities.serializeObjectToFile(javaDirectory, observers, "observers");
 		IOUtilities.serializeObjectToFile(javaDirectory, connectObserverActions, "connectObserverActions");
+		System.out.println("connectObserverActions = " + connectObserverActions);
+		
 		IOUtilities.serializeObjectToFile(javaDirectory, nodeSelectors, "nodeSelectors");
 		IOUtilities.serializeObjectToFile(javaDirectory, actionsByName, "actionsByName");
 		IOUtilities.serializeObjectToFile(javaDirectory, actionsByClass, "actionsByClass");

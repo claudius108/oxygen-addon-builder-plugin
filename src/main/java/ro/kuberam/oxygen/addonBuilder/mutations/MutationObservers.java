@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -12,10 +11,7 @@ import org.apache.log4j.Logger;
 @SuppressWarnings("unchecked")
 public class MutationObservers {
 
-	/**
-	 * Logger for logging.
-	 */
-	private static final Logger logger = Logger.getLogger(MutationObservers.class.getName());
+	private static Logger logger = Logger.getLogger(MutationObservers.class.getName());
 
 	public static Map<String, String[]> observers;
 	private static Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
