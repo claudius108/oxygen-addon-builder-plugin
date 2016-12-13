@@ -50,8 +50,6 @@ public class ParsingResult {
 
 		IOUtilities.serializeObjectToFile(javaDirectory, observers, "observers");
 		IOUtilities.serializeObjectToFile(javaDirectory, connectObserverActions, "connectObserverActions");
-		System.out.println("connectObserverActions = " + connectObserverActions);
-		
 		IOUtilities.serializeObjectToFile(javaDirectory, nodeSelectors, "nodeSelectors");
 		IOUtilities.serializeObjectToFile(javaDirectory, actionsByName, "actionsByName");
 		IOUtilities.serializeObjectToFile(javaDirectory, actionsByClass, "actionsByClass");

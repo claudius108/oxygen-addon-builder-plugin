@@ -1147,7 +1147,6 @@ public class Parser {
 			// bridge._generateFramework(addonDirectory);
 		} else {
 			System.out.println("execute with arguments" + args);
-			//System.out.println("connectObserverActions = " + connectObserverActions);
 			
 			new Parser(new File(args[0]), args[1], new File(args[2]));
 		}
