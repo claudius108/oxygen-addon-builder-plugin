@@ -338,5 +338,3 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 
 	}
 }
-/// home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks
-/// home/claudius/.com.oxygenxml.author/extensions/v18.1/frameworks
