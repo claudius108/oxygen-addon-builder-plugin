@@ -271,7 +271,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 	}
 
 	public String getExternalframeworkNames(String filter) {
-		Path externalFrameworksDirPath = AddonBuilderPluginExtension.pluginInstallDir.resolve("../../../frameworks");
+		Path externalFrameworksDirPath = AddonBuilderPluginExtension.pluginInstallDir.resolve("../../frameworks");
 		logger.debug("externalFrameworksDirPath = " + externalFrameworksDirPath);
 
 		return (new FileSystemBridge()).list(externalFrameworksDirPath, filter);
