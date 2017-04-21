@@ -12,8 +12,8 @@ declare variable $pluginTemplatesDirPath := file:path-to-native($pluginInstallDi
 declare variable $frameworkId := file:name($frameworkDirPath);
 declare variable $frameworkTargetDirPath := file:path-to-native($frameworkDirPath || "/target");
 declare variable $frameworkJavaDirPath := file:path-to-native($frameworkDirPath || "/java");
-declare variable $frameworkJarPath := file:path-to-native($frameworkTargetDirPath || "/framework.jar");
-declare variable $frameworkUberJarPath := file:path-to-native($frameworkTargetDirPath || "/" || $frameworkId || ".jar");
+declare variable $frameworkJarPath := $frameworkTargetDirPath || "/framework.jar";
+declare variable $frameworkUberJarPath := $frameworkTargetDirPath || "/" || $frameworkId || ".jar";
 
 declare function local:make-jar($source-dir, $jar-path, $filter) {
 	let $jar-manifest-content := "Manifest-Version: 1.0" || "&#10;" || "Created-By: Saxon"
@@ -85,5 +85,5 @@ declare function local:make-jar($source-dir, $jar-path, $filter) {
 	let $text := file:read-text(file:path-to-native($frameworkDirPath || "/addon.xml"))
 	let $text := replace($text, "</xt:version>", "." || format-dateTime(current-dateTime(), "[M01][D01][H01][m01]") || "</xt:version>")
 	
-	return file:write-text(file:path-to-native($frameworkTargetDirPath || "/addon.xml"), $text)	
+	return file:write-text($frameworkTargetDirPath || "/addon.xml", $text)	
 )
