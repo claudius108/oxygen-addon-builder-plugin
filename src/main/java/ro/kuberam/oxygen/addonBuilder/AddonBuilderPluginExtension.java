@@ -69,7 +69,7 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 					JFXPanel panel = new JavaFXPanel("", addonBuilderToolbarContentPath,
 							new FrameworkGeneratingBridge(), "OxygenAddonBuilder");
 
-					panel.setPreferredSize(new Dimension(330, 45));
+					panel.setPreferredSize(new Dimension(350, 45));
 					comps.add(panel);
 
 					toolbarInfo.setComponents(comps.toArray(new JComponent[0]));
