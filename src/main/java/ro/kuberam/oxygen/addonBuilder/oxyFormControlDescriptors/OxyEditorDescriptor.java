@@ -32,6 +32,9 @@ public class OxyEditorDescriptor {
 	private String color;
 	private String uncheckedValues;
 	private String hasMultipleValues;
+	private String href;
+	private String width;
+	private String height;
 	private Map<String, String> customProperties = new LinkedHashMap<String, String>();
 
 	public OxyEditorDescriptor() {
@@ -259,6 +262,30 @@ public class OxyEditorDescriptor {
 		this.hasMultipleValues = hasMultipleValues;
 	}
 
+	public String getHref() {
+		return (href != null ? "href, '" + href + "', " : "");
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+	
+	public String getWidth() {
+		return (width != null ? "width, " + href + "px, " : "");
+	}
+
+	public void setWidth(String width) {
+		this.width = width;
+	}
+	
+	public String getHeight() {
+		return (height != null ? "height, " + height + "px, " : "");
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
 	public void processAndSetLabelsAndValues(NodeList nodeChildNodes) {
 		StringBuilder values = new StringBuilder();
 		StringBuilder labels = new StringBuilder();
@@ -285,6 +312,6 @@ public class OxyEditorDescriptor {
 				+ getActionID() + getAction() + getActionContext() + getTransparent() + getVisible() + getDisabled()
 				+ getShowIcon() + getValues() + getLabels() + getColumns() + getRows() + getContentType()
 				+ getSelectionMode() + getEditable() + getColor() + getUncheckedValues() + getHasMultipleValues()
-				+ getCustomProperties()).replaceAll(", $", "") + ")";
+				+ getHref() + getWidth() + getHeight() + getCustomProperties()).replaceAll(", $", "") + ")";
 	}
 }

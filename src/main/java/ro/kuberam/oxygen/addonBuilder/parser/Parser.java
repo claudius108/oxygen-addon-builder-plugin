@@ -430,6 +430,9 @@ public class Parser {
 			if (nodeName.equals("tree")) {
 				result = treeElementTemplate(node);
 			}
+			if (nodeName.equals("iframe")) {
+				result = iframeElementTemplate(node);
+			}
 			break;
 		case 3:
 			String textContent = node.getTextContent().trim();
@@ -586,6 +589,26 @@ public class Parser {
 				.replace("${tree-height}", height + "px");
 
 		parsingResult.templates.put(treeGeneratorTemplateId, treeGeneratorTemplate);
+
+		return oxyEditorDescriptor.toString();
+	}
+
+	private String iframeElementTemplate(Node node) {
+		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
+		oxyEditorDescriptor.setType("browser");
+		NamedNodeMap nodeAttrs = node.getAttributes();
+
+		for (int i = 0, il = nodeAttrs.getLength(); i < il; i++) {
+			Node attr = nodeAttrs.item(i);
+			String attrName = attr.getNodeName();
+			String attrValue = attr.getNodeValue();
+
+			if (attrName.equals("src")) {
+				oxyEditorDescriptor.setHref(attrValue);
+			}
+
+		}
+		// System.out.println(oxyEditorDescriptor.toString());
 
 		return oxyEditorDescriptor.toString();
 	}
@@ -1147,7 +1170,7 @@ public class Parser {
 			// bridge._generateFramework(addonDirectory);
 		} else {
 			System.out.println("execute with arguments" + args);
-			
+
 			new Parser(new File(args[0]), args[1], new File(args[2]));
 		}
 	}
