@@ -606,9 +606,16 @@ public class Parser {
 			if (attrName.equals("src")) {
 				oxyEditorDescriptor.setHref(attrValue);
 			}
+			
+			if (attrName.equals("width")) {
+				oxyEditorDescriptor.setWidth(attrValue);
+			}
+			
+			if (attrName.equals("height")) {
+				oxyEditorDescriptor.setHeight(attrValue);
+			}
 
 		}
-		// System.out.println(oxyEditorDescriptor.toString());
 
 		return oxyEditorDescriptor.toString();
 	}

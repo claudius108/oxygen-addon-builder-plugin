@@ -271,7 +271,7 @@ public class OxyEditorDescriptor {
 	}
 	
 	public String getWidth() {
-		return (width != null ? "width, " + href + "px, " : "");
+		return (width != null ? "width, " + width + "px, " : "");
 	}
 
 	public void setWidth(String width) {
