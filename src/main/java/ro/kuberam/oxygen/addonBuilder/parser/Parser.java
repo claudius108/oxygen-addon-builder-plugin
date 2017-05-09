@@ -604,13 +604,15 @@ public class Parser {
 			String attrValue = attr.getNodeValue();
 
 			if (attrName.equals("src")) {
+				attrValue = attrValue.replaceAll(oxyXpathExpressionStartMarker, "{")
+						.replaceAll(oxyXpathExpressionEndMarker, "}");
 				oxyEditorDescriptor.setHref(attrValue);
 			}
-			
+
 			if (attrName.equals("width")) {
 				oxyEditorDescriptor.setWidth(attrValue);
 			}
-			
+
 			if (attrName.equals("height")) {
 				oxyEditorDescriptor.setHeight(attrValue);
 			}
