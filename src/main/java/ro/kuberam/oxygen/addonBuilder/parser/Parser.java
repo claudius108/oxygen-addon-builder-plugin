@@ -332,9 +332,10 @@ public class Parser {
 		String templateContentAsString = templateContent.getTextContent();
 
 		NodeList templateContentAsXml = XML.parse(templateContentAsString).getChildNodes();
+		int templateContentLength = templateContentAsXml.getLength();
 		String processedTemplateContent = "";
 
-		for (int i = 0, il = templateContentAsXml.getLength(); i < il; i++) {
+		for (int i = 0, il = templateContentLength; i < il; i++) {
 			processedTemplateContent += _processHTMLTemplateContent(templateContentAsXml.item(i), parsingResult,
 					templateId);
 		}
@@ -402,7 +403,7 @@ public class Parser {
 		String result = "";
 
 		switch (node.getNodeType()) {
-		case 1:
+		case Node.ELEMENT_NODE:
 			String nodeName = node.getNodeName();
 
 			if (nodeName.equals("button")) {
@@ -434,7 +435,7 @@ public class Parser {
 				result = iframeElementTemplate(node);
 			}
 			break;
-		case 3:
+		case Node.TEXT_NODE:
 			String textContent = node.getTextContent().trim();
 
 			if (!textContent.equals("")) {
@@ -454,6 +455,7 @@ public class Parser {
 
 	private String _processOxyGetTemplate(String textContent) {
 		String result = "";
+		
 		if (textContent.contains("oxy:get-template(")) {
 			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 			textContent = textContent.replace("ua:get-template(oxy:get-template(", "").replaceAll("\\)\\)$", "");
@@ -666,7 +668,6 @@ public class Parser {
 	}
 
 	private String selectHTMLElementTemplate(Node node, ParsingResult parsingResult) {
-
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 		NamedNodeMap nodeAttrs = node.getAttributes();
 

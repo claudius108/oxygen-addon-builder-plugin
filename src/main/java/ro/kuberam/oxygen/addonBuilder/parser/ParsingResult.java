@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 import ro.kuberam.oxygen.addonBuilder.javafx.DialogModel;
 import ro.kuberam.oxygen.addonBuilder.mutations.MutationObservers;
 import ro.kuberam.oxygen.addonBuilder.mutations.ObserverConnection;
+import ro.kuberam.oxygen.addonBuilder.oxyFormControlDescriptors.OxyEditorDescriptor;
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
 
 public class ParsingResult {
@@ -40,6 +41,7 @@ public class ParsingResult {
 	public Map<String, ArrayList<String>> actionsByClass = new HashMap<String, ArrayList<String>>();
 	public Map<String, String> variables = new HashMap<String, String>();
 	public Map<String, DialogModel> dialogs = new HashMap<String, DialogModel>();
+	public Map<String, OxyEditorDescriptor> checkboxes = new HashMap<String, OxyEditorDescriptor>();
 	public String prolog = "";
 	public Map<String, String> datalists = new HashMap<String, String>();
 	public ArrayList<String> actions = new ArrayList<String>();
