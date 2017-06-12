@@ -179,8 +179,10 @@ public class Parser {
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
 
-		// FileUtils.writeStringToFile(new File("/home/claudius/a.xml"),
-		// XML.xmlToString(xqueryParserOutputDocumentElement, "no", "yes"));
+		// Files.write(Paths.get("/home/claudius/a.xml"),
+		// XML.xmlToString(xqueryParserOutputDocumentElement, "no",
+		// "yes").getBytes("UTF-8"),
+		// StandardOpenOption.CREATE);
 
 		// process function calls
 		long functionCallElementsStart = (long) (TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
@@ -331,12 +333,16 @@ public class Parser {
 
 		String templateContentAsString = templateContent.getTextContent();
 
-		NodeList templateContentAsXml = XML.parse(templateContentAsString).getChildNodes();
-		int templateContentLength = templateContentAsXml.getLength();
+		Element templateContentAsXml = XML.parse(templateContentAsString);
+
+		NodeList templateContentChildNodes = XML.parse(templateContentAsString).getChildNodes();
+		int templateContentLength = templateContentChildNodes.getLength();
 		String processedTemplateContent = "";
 
+		processedTemplateContent += _processCheckBoxes(templateContentAsXml);
+
 		for (int i = 0, il = templateContentLength; i < il; i++) {
-			processedTemplateContent += _processHTMLTemplateContent(templateContentAsXml.item(i), parsingResult,
+			processedTemplateContent += _processHTMLTemplateContent(templateContentChildNodes.item(i), parsingResult,
 					templateId);
 		}
 
@@ -455,7 +461,7 @@ public class Parser {
 
 	private String _processOxyGetTemplate(String textContent) {
 		String result = "";
-		
+
 		if (textContent.contains("oxy:get-template(")) {
 			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 			textContent = textContent.replace("ua:get-template(oxy:get-template(", "").replaceAll("\\)\\)$", "");
@@ -748,7 +754,46 @@ public class Parser {
 		return oxyEditorDescriptor.toString();
 	}
 
-	private String inputHTMLElementTemplate(Node node, ParsingResult parsingResult) {
+	private String _processCheckBoxes(Element templateContentAsXml) {
+		NodeList inputElements = templateContentAsXml.getElementsByTagName("input");
+		NodeList labelElements = templateContentAsXml.getElementsByTagName("label");
+
+		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> labels = new ArrayList<String>();
+
+		for (int i = 0, il = inputElements.getLength(); i < il; i++) {
+			Node inputElement = inputElements.item(i);
+			NamedNodeMap inputElementAttributes = inputElement.getAttributes();
+
+			if (inputElementAttributes.getNamedItem("type").getTextContent() == "checkbox") {
+				values.add(inputElementAttributes.getNamedItem("value").getTextContent());
+			}
+		}
+
+		for (int i = 0, il = labelElements.getLength(); i < il; i++) {
+			Node labelElement = labelElements.item(i);
+
+			labels.add(labelElement.getTextContent());
+		}
+
+		System.out.println("checkbox values = " + values);
+		System.out.println("checkbox labels = " + labels);
+
+		return null;
+	}
+
+	private String inputHTMLElementTemplate(Node node, ParsingResult parsingResult2) {
+
+		if (node.getAttributes().getNamedItem("type").getTextContent() == "checkbox") {
+			return "";
+		}
+		// <input data-ua-ref="@type" type="checkbox" id="proverb-checkbox"
+		// name="unitate-semantică-subsumată-checkbox" value="proverb" />
+		// <label for="proverb-checkbox">proverb</label>
+		// <input data-ua-ref="@type" type="checkbox" id="saying-checkbox"
+		// name="unitate-semantică-subsumată-checkbox" value="saying" />
+		// <label for="saying-checkbox">zicătoare</label>
+
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 		String type = "text";
 		NamedNodeMap nodeAttrs = node.getAttributes();
@@ -761,7 +806,7 @@ public class Parser {
 			String attrValue = attr.getNodeValue();
 
 			if (attrName.equals("data-ua-ref")) {
-				_processReferenceAttribute(oxyEditorDescriptor, attrValue, parsingResult);
+				_processReferenceAttribute(oxyEditorDescriptor, attrValue, parsingResult2);
 			}
 
 			if (attrName.equals("size")) {
@@ -788,6 +833,21 @@ public class Parser {
 			oxyEditorDescriptor.setLabels(node.getTextContent().trim());
 			oxyEditorDescriptor.setValues(values);
 			oxyEditorDescriptor.setUncheckedValues(values);
+			// case "checkbox":
+			// String checkboxName =
+			// node.getAttributes().getNamedItem("name").getTextContent();
+			// OxyEditorDescriptor checkboxDescriptor =
+			// parsingResult.checkboxes.get(checkboxName);
+			//
+			// String labels = node.getTextContent().trim();
+			//
+			// if (checkboxDescriptor != null) {
+			// labels = checkboxDescriptor.getValues() + ", " + labels;
+			// values = checkboxDescriptor.getValues() + ", " + values;
+			// }
+
+			// oxyEditorDescriptor.setLabels(labels);
+			// oxyEditorDescriptor.setValues(values);
 		}
 
 		oxyEditorDescriptor.setType(type);
