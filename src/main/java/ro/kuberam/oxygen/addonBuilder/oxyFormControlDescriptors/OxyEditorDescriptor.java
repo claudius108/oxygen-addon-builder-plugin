@@ -269,7 +269,7 @@ public class OxyEditorDescriptor {
 	public void setHref(String href) {
 		this.href = href;
 	}
-	
+
 	public String getWidth() {
 		return (width != null ? "width, " + width + "px, " : "");
 	}
@@ -277,7 +277,7 @@ public class OxyEditorDescriptor {
 	public void setWidth(String width) {
 		this.width = width;
 	}
-	
+
 	public String getHeight() {
 		return (height != null ? "height, " + height + "px, " : "");
 	}
@@ -313,5 +313,13 @@ public class OxyEditorDescriptor {
 				+ getShowIcon() + getValues() + getLabels() + getColumns() + getRows() + getContentType()
 				+ getSelectionMode() + getEditable() + getColor() + getUncheckedValues() + getHasMultipleValues()
 				+ getHref() + getWidth() + getHeight() + getCustomProperties()).replaceAll(", $", "") + ")";
+	}
+
+	public String shortDescription() {
+		return ("oxy_" + type + "(" + getRendererClassName() + getSwingEditorClassName() + getEdit() + getActionID()
+				+ getAction() + getActionContext() + getTransparent() + getVisible() + getDisabled() + getShowIcon()
+				+ getValues() + getLabels() + getColumns() + getRows() + getContentType() + getSelectionMode()
+				+ getEditable() + getColor() + getUncheckedValues() + getHasMultipleValues() + getHref() + getWidth()
+				+ getHeight() + getCustomProperties()).replaceAll(", $", "") + ")";
 	}
 }

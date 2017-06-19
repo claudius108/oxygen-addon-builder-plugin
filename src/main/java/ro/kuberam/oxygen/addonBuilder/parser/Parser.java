@@ -339,12 +339,12 @@ public class Parser {
 		int templateContentLength = templateContentChildNodes.getLength();
 		String processedTemplateContent = "";
 
-		processedTemplateContent += _processCheckBoxes(templateContentAsXml);
-
 		for (int i = 0, il = templateContentLength; i < il; i++) {
 			processedTemplateContent += _processHTMLTemplateContent(templateContentChildNodes.item(i), parsingResult,
 					templateId);
 		}
+
+		processedTemplateContent += _processCheckBoxes(templateContentAsXml);
 
 		processedTemplateContent = processedTemplateContent.trim();
 
@@ -755,6 +755,9 @@ public class Parser {
 	}
 
 	private String _processCheckBoxes(Element templateContentAsXml) {
+		String result = "";
+		String editValue = "";
+
 		NodeList inputElements = templateContentAsXml.getElementsByTagName("input");
 		NodeList labelElements = templateContentAsXml.getElementsByTagName("label");
 
@@ -764,9 +767,11 @@ public class Parser {
 		for (int i = 0, il = inputElements.getLength(); i < il; i++) {
 			Node inputElement = inputElements.item(i);
 			NamedNodeMap inputElementAttributes = inputElement.getAttributes();
+			Node typeAtribute = inputElementAttributes.getNamedItem("type");
 
-			if (inputElementAttributes.getNamedItem("type").getTextContent() == "checkbox") {
-				values.add(inputElementAttributes.getNamedItem("value").getTextContent());
+			if (typeAtribute != null && typeAtribute.getNodeValue().equals("checkbox")) {
+				values.add(inputElementAttributes.getNamedItem("value").getNodeValue());
+				editValue = inputElementAttributes.getNamedItem("data-ua-ref").getNodeValue();
 			}
 		}
 
@@ -776,28 +781,31 @@ public class Parser {
 			labels.add(labelElement.getTextContent());
 		}
 
-		System.out.println("checkbox values = " + values);
-		System.out.println("checkbox labels = " + labels);
+		if (labels.size() != 0) {
+			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
+			oxyEditorDescriptor.setType("checkbox");
+			oxyEditorDescriptor.setValues(String.join(",", values));
+			oxyEditorDescriptor.setLabels(String.join(",", labels));
+			oxyEditorDescriptor.setEdit(editValue);
 
-		return null;
+			result = oxyEditorDescriptor.shortDescription();
+			System.out.println("oxyEditorDescriptor = " + result);
+		}
+
+		return result;
 	}
 
 	private String inputHTMLElementTemplate(Node node, ParsingResult parsingResult2) {
+		NamedNodeMap nodeAttrs = node.getAttributes();
 
-		if (node.getAttributes().getNamedItem("type").getTextContent() == "checkbox") {
+		Node typeAtribute = nodeAttrs.getNamedItem("type");
+
+		if (typeAtribute != null && typeAtribute.getNodeValue().equals("checkbox")) {
 			return "";
 		}
-		// <input data-ua-ref="@type" type="checkbox" id="proverb-checkbox"
-		// name="unitate-semantică-subsumată-checkbox" value="proverb" />
-		// <label for="proverb-checkbox">proverb</label>
-		// <input data-ua-ref="@type" type="checkbox" id="saying-checkbox"
-		// name="unitate-semantică-subsumată-checkbox" value="saying" />
-		// <label for="saying-checkbox">zicătoare</label>
 
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
 		String type = "text";
-		NamedNodeMap nodeAttrs = node.getAttributes();
-
 		String values = "";
 
 		for (int i = 0, il = nodeAttrs.getLength(); i < il; i++) {
@@ -833,21 +841,6 @@ public class Parser {
 			oxyEditorDescriptor.setLabels(node.getTextContent().trim());
 			oxyEditorDescriptor.setValues(values);
 			oxyEditorDescriptor.setUncheckedValues(values);
-			// case "checkbox":
-			// String checkboxName =
-			// node.getAttributes().getNamedItem("name").getTextContent();
-			// OxyEditorDescriptor checkboxDescriptor =
-			// parsingResult.checkboxes.get(checkboxName);
-			//
-			// String labels = node.getTextContent().trim();
-			//
-			// if (checkboxDescriptor != null) {
-			// labels = checkboxDescriptor.getValues() + ", " + labels;
-			// values = checkboxDescriptor.getValues() + ", " + values;
-			// }
-
-			// oxyEditorDescriptor.setLabels(labels);
-			// oxyEditorDescriptor.setValues(values);
 		}
 
 		oxyEditorDescriptor.setType(type);
