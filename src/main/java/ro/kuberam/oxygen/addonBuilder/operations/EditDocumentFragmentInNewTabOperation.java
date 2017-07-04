@@ -32,6 +32,7 @@ import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.listeners.WSEditorListener;
+import ro.sync.exml.workspace.api.options.WSOptionsStorage;
 import ro.sync.util.URLUtil;
 
 public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
@@ -61,11 +62,11 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 	 *      ArgumentsMap)
 	 */
 	public void doOperation(AuthorAccess authorAccess, ArgumentsMap args) throws AuthorOperationException {
-		logger.debug("================ start OpenFileInNewTabOperation ========================");
+		logger.debug("================ start EditDocumentFragmentInNewTabOperation ========================");
 
 		AuthorEditorAccess authorEditorAccess = authorAccess.getEditorAccess();
 		AuthorDocumentController authorDocumentController = authorAccess.getDocumentController();
-		final OptionsStorage optionsStorage = authorAccess.getOptionsStorage();
+		final WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
 
 		final URL openerLocation = authorEditorAccess.getEditorLocation();
 		logger.debug("openerLocation = " + openerLocation);
@@ -100,6 +101,7 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 
 			final PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
 			optionsStorage.setOption(openedFileName + " xpath", openedXpathExpr);
+			System.out.println("openedFileName = " + openedFileName);
 			logger.debug(
 					"openedXpathExpr in optionsStorage = " + optionsStorage.getOption(openedFileName + " xpath", ""));
 
@@ -123,7 +125,7 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 			authorDocumentController.endCompoundEdit();
 		}
 
-		logger.debug("================ end OpenFileInNewTabOperation ============================");
+		logger.debug("================ end EditDocumentFragmentInNewTabOperation ============================");
 
 	}
 
@@ -156,6 +158,7 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					String openedFileName = URLUtil.uncorrect(URLUtil.extractFileName(openedLocation));
+					System.out.println("openedFileName = " + openedFileName);
 
 					String currentContent = "";
 					try {
@@ -167,15 +170,17 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 						e.printStackTrace();
 					}
 					currentContent = currentContent.substring(xmlPI.length());
+					System.out.println("currentContent = " + currentContent);
 
 					WSEditor mainEditor = PluginWorkspaceProvider.getPluginWorkspace().getEditorAccess(openerLocation,
 							PluginWorkspace.MAIN_EDITING_AREA);
 					WSAuthorEditorPage mainWSAuthorEditorPage = (WSAuthorEditorPage) mainEditor.getCurrentPage();
 					AuthorDocumentController openerAuthorDocumentController = mainWSAuthorEditorPage
 							.getDocumentController();
-					OptionsStorage optionsStorage = mainWSAuthorEditorPage.getOptionsStorage();
+					WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
 
 					String openedXpathExpr = optionsStorage.getOption(openedFileName + " xpath", "");
+					System.out.println("openedXpathExpr = " + openedXpathExpr);
 
 					AuthorNode targetNode = null;
 					try {
@@ -188,12 +193,12 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 					try {
 						openerAuthorDocumentController.insertXMLFragment(currentContent, targetNode,
 								AuthorConstants.POSITION_AFTER);
+						mainEditor.save();
 					} catch (AuthorOperationException e) {
 						e.printStackTrace();
 					}
 
 					int currentOffset = targetNode.getStartOffset();
-					System.out.println("currentOffset " + currentOffset);
 
 					openerAuthorDocumentController.deleteNode(targetNode);
 
