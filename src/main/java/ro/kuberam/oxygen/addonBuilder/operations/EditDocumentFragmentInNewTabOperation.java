@@ -22,7 +22,6 @@ import ro.sync.ecss.extensions.api.AuthorConstants;
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
 import ro.sync.ecss.extensions.api.AuthorOperation;
 import ro.sync.ecss.extensions.api.AuthorOperationException;
-import ro.sync.ecss.extensions.api.OptionsStorage;
 import ro.sync.ecss.extensions.api.access.AuthorEditorAccess;
 import ro.sync.ecss.extensions.api.node.AuthorDocumentFragment;
 import ro.sync.ecss.extensions.api.node.AuthorNode;
@@ -101,7 +100,6 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 
 			final PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
 			optionsStorage.setOption(openedFileName + " xpath", openedXpathExpr);
-			System.out.println("openedFileName = " + openedFileName);
 			logger.debug(
 					"openedXpathExpr in optionsStorage = " + optionsStorage.getOption(openedFileName + " xpath", ""));
 
@@ -158,7 +156,6 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					String openedFileName = URLUtil.uncorrect(URLUtil.extractFileName(openedLocation));
-					System.out.println("openedFileName = " + openedFileName);
 
 					String currentContent = "";
 					try {
@@ -170,7 +167,6 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 						e.printStackTrace();
 					}
 					currentContent = currentContent.substring(xmlPI.length());
-					System.out.println("currentContent = " + currentContent);
 
 					WSEditor mainEditor = PluginWorkspaceProvider.getPluginWorkspace().getEditorAccess(openerLocation,
 							PluginWorkspace.MAIN_EDITING_AREA);
@@ -180,7 +176,6 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 					WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
 
 					String openedXpathExpr = optionsStorage.getOption(openedFileName + " xpath", "");
-					System.out.println("openedXpathExpr = " + openedXpathExpr);
 
 					AuthorNode targetNode = null;
 					try {
