@@ -7,9 +7,7 @@
 	<echoproperties prefix="oxygenAddonBuilder." />
 
 	<target name="build-framework">
-		
 		<signjar jar="${oxygenAddonBuilder.frameworkArchivePath}" keystore="..${file.separator}cryptographic-materials${file.separator}oxygen-addon-builder.jks" alias="oxygen-addon-builder" storepass="oxygen" keypass="oxygen" />
-
 	</target>
 
 </project>
