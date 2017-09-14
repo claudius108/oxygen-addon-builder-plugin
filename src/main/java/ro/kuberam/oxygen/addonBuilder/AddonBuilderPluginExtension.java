@@ -1,7 +1,6 @@
 package ro.kuberam.oxygen.addonBuilder;
 
 import java.awt.Dimension;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -9,13 +8,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.embed.swing.JFXPanel;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
 
+import javafx.embed.swing.JFXPanel;
 import ro.kuberam.oxygen.addonBuilder.javafx.JavaFXPanel;
 import ro.kuberam.oxygen.addonBuilder.javafx.bridges.framework.FrameworkGeneratingBridge;
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
