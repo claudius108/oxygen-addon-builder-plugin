@@ -5,23 +5,42 @@
 
 	<groupId>ro.kuberam.oxygen</groupId>
 	<artifactId>addon-builder-plugin</artifactId>
-	<version>2.4</version>
+	<version>2.5</version>
 	<packaging>jar</packaging>
 
 	<prerequisites>
-		<maven>3.3.3</maven>
+		<maven>3.5</maven>
 	</prerequisites>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java-version>1.8</java-version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
-		<oxygen-version>19.0.0.0</oxygen-version>
+		<oxygen-author-home>/home/claudius/oxygen/author</oxygen-author-home>
+		<oxygen-version>19.1.0.3</oxygen-version>
 		<plugin-final-name>oxygen-${project.artifactId}</plugin-final-name>
 		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${plugin-final-name}/${plugin-final-name}.jar</addon-location>
 		<github.global.server>github</github.global.server>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>oxygen-sdk</id>
+			<name>oXygen public artifacts</name>
+			<url>http://www.oxygenxml.com/maven</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -91,14 +110,6 @@
 		</extensions>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.6.1</version>
-					<configuration>
-						<source>${java-version}</source>
-						<target>${java-version}</target>
-					</configuration>
-				</plugin>
 				<plugin>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>3.0.2</version>
