@@ -5,7 +5,7 @@
 
 	<groupId>ro.kuberam.oxygen</groupId>
 	<artifactId>addon-builder-plugin</artifactId>
-	<version>2.5</version>
+	<version>2.6</version>
 	<packaging>jar</packaging>
 
 	<prerequisites>
@@ -20,9 +20,9 @@
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
 		<oxygen-author-home>/home/claudius/oxygen/author</oxygen-author-home>
 		<oxygen-version>19.1.0.3</oxygen-version>
-		<plugin-final-name>oxygen-${project.artifactId}</plugin-final-name>
-		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${plugin-final-name}/${plugin-final-name}.jar</addon-location>
+		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${project.build.finalName}/${project.build.finalName}.jar</addon-location>
 		<github.global.server>github</github.global.server>
+		<oxygen.plugin.finalName>oxygen-${project.artifactId}</oxygen.plugin.finalName>
 	</properties>
 
 	<repositories>
@@ -101,7 +101,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>plugin</finalName>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -111,10 +111,17 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>3.0.2</version>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
 					<version>3.0.0</version>
 				</plugin>
@@ -122,6 +129,11 @@
 					<groupId>com.github.github</groupId>
 					<artifactId>site-maven-plugin</artifactId>
 					<version>0.12</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jarsigner-plugin</artifactId>
+					<version>1.4</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -162,7 +174,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-clean-plugin</artifactId>
-						<version>3.0.0</version>
 						<executions>
 							<execution>
 								<id>auto-clean</id>
@@ -227,7 +238,7 @@
 										<resource>
 											<directory>${project.build.directory}</directory>
 											<includes>
-												<include>${project.artifactId}.jar</include>
+												<include>${project.build.finalName}.jar</include>
 											</includes>
 										</resource>
 									</resources>
@@ -260,8 +271,7 @@
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<finalName>${plugin-final-name}</finalName>
+									<finalName>${oxygen.plugin.finalName}</finalName>
 									<appendAssemblyId>false</appendAssemblyId>
 									<attach>false</attach>
 									<descriptors>
@@ -274,7 +284,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-jarsigner-plugin</artifactId>
-						<version>1.4</version>
 						<executions>
 							<execution>
 								<id>sign</id>
@@ -283,7 +292,7 @@
 									<goal>sign</goal>
 								</goals>
 								<configuration>
-									<archive>${project.build.directory}/${plugin-final-name}.jar</archive>
+									<archive>${project.build.directory}/${oxygen.plugin.finalName}.jar</archive>
 									<keystore>${basedir}/cryptographic-materials/oxygen-addon-builder.jks</keystore>
 									<alias>oxygen-addon-builder</alias>
 									<storepass>oxygen</storepass>
@@ -309,12 +318,12 @@
 							<branch>refs/heads/master</branch>
 							<merge>true</merge>
 							<includes>
-								<include>${plugin-final-name}.jar</include>
+								<include>${oxygen.plugin.finalName}.jar</include>
 								<include>addon.xml</include>
 							</includes>
 							<repositoryName>oxygen-addons</repositoryName>
 							<repositoryOwner>claudius108</repositoryOwner>
-							<path>${plugin-final-name}</path>
+							<path>${project.build.finalName}</path>
 						</configuration>
 					</plugin>
 				</plugins>
