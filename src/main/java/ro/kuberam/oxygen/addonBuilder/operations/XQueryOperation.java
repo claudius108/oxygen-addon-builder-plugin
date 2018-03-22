@@ -39,7 +39,8 @@ public class XQueryOperation {
 	 */
 	private static final Logger logger = Logger.getLogger(XQueryOperation.class.getName());
 
-	public static XdmValue query(Reader xml, InputStream xquery, boolean omitXmlDeclaration, URI baseURI, Map<String, String> parameters) {
+	public static XdmValue query(Reader xml, InputStream xquery, boolean omitXmlDeclaration, URI baseURI,
+			Map<String, String> parameters) {
 		XdmValue result = null;
 
 		Source xmlSrc = new StreamSource(xml);
@@ -56,11 +57,12 @@ public class XQueryOperation {
 			xqueryExecutable = xqueryCompiler.compile(xquery);
 			XQueryEvaluator xqueryEvaluator = xqueryExecutable.load();
 			xqueryEvaluator.setSource(xmlSrc);
-			
+
 			for (Entry<String, String> parameter : parameters.entrySet()) {
-				xqueryEvaluator.setExternalVariable(new QName(parameter.getKey()), new XdmAtomicValue(parameter.getValue()));
+				xqueryEvaluator.setExternalVariable(new QName(parameter.getKey()),
+						new XdmAtomicValue(parameter.getValue()));
 			}
-			
+
 			result = xqueryEvaluator.evaluate();
 		} catch (SaxonApiException e) {
 			e.printStackTrace();
@@ -108,7 +110,7 @@ public class XQueryOperation {
 			XdmNode root = iter.next();
 			URI rootUri = root.getDocumentURI();
 			if (rootUri != null && rootUri.getScheme().equals("file")) {
-				Serializer out = new Serializer();
+				Serializer out = processor.newSerializer();
 				out.setOutputProperty(Serializer.Property.METHOD, "xml");
 				out.setOutputProperty(Serializer.Property.INDENT, "yes");
 				out.setOutputProperty(Serializer.Property.OMIT_XML_DECLARATION, "yes");

@@ -4,7 +4,7 @@ declare variable $framework-id := (//field[@name  = 'name']/String/text())[1];
 declare variable $cssDescriptors-field := //field[@name  = 'cssDescriptors']/cssFile-array;
 declare variable $classpath-field := //field[@name  = 'classpath']/String-array;
 declare variable $classpath-field-string := //field[@name  = 'classpath']/String-array/string();
-declare variable $classpath-items := ("${framework}/java/addon-builder-plugin.jar", "${framework}/java/" || $framework-id || ".jar", "${oxygenInstallDir}/jre/lib/jfxrt.jar");
+declare variable $classpath-items := ("${framework}/java/plugin.jar", "${framework}/java/" || $framework-id || ".jar", "${oxygenInstallDir}/jre/lib/jfxrt.jar");
 declare variable $authorExtensionStateListener-item := //field[@name  = 'authorExtensionStateListener'];
 
 declare updating function local:process-css-descriptors() {

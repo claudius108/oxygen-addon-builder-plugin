@@ -147,46 +147,46 @@ public class XML {
 		return xpathExpression.replace("/", "/*:");
 	}
 
-	public static String getXPathExpression(AuthorDocumentController authorDocumentController,
-			AuthorParentNode currentNode) throws BadLocationException {
-		String xpathExpr = "";
-		AuthorDocument doc = authorDocumentController.getAuthorDocumentNode();
-		if (doc != null) {
-
-			while (currentNode != null && AuthorNode.NODE_TYPE_DOCUMENT != currentNode.getType()) {
-				String name = currentNode.getName();
-				String proxy = XmlUtil.getProxy(name);
-				String localname = XmlUtil.getLocalName(name);
-
-				String indexInParent = "";
-
-				AuthorParentNode parent = (AuthorParentNode) currentNode.getParent();
-				if (parent != null && AuthorNode.NODE_TYPE_DOCUMENT != parent.getType()) {
-					List<AuthorNode> children = parent.getContentNodes();
-					int index = 0;
-					for (Iterator<AuthorNode> iter = children.iterator(); iter.hasNext();) {
-						AuthorNode child = (AuthorNode) iter.next();
-						index++;
-						if (child == currentNode) {
-							indexInParent = "[" + index + "]";
-							break;
-						}
-
-					}
-				}
-
-				if (proxy != null && localname != null) {
-					xpathExpr = "/*" + indexInParent + xpathExpr;
-				} else {
-					// This should not happen.
-					xpathExpr = "";
-					break;
-				}
-				currentNode = (AuthorParentNode) currentNode.getParent();
-			}
-		}
-		return xpathExpr;
-	}
+//	public static String getXPathExpression(AuthorDocumentController authorDocumentController,
+//			AuthorParentNode currentNode) throws BadLocationException {
+//		String xpathExpr = "";
+//		AuthorDocument doc = authorDocumentController.getAuthorDocumentNode();
+//		if (doc != null) {
+//
+//			while (currentNode != null && AuthorNode.NODE_TYPE_DOCUMENT != currentNode.getType()) {
+//				String name = currentNode.getName();
+//				String proxy = XmlUtil.getProxy(name);
+//				String localname = XmlUtil.getLocalName(name);
+//
+//				String indexInParent = "";
+//
+//				AuthorParentNode parent = (AuthorParentNode) currentNode.getParent();
+//				if (parent != null && AuthorNode.NODE_TYPE_DOCUMENT != parent.getType()) {
+//					List<AuthorNode> children = parent.getContentNodes();
+//					int index = 0;
+//					for (Iterator<AuthorNode> iter = children.iterator(); iter.hasNext();) {
+//						AuthorNode child = (AuthorNode) iter.next();
+//						index++;
+//						if (child == currentNode) {
+//							indexInParent = "[" + index + "]";
+//							break;
+//						}
+//
+//					}
+//				}
+//
+//				if (proxy != null && localname != null) {
+//					xpathExpr = "/*" + indexInParent + xpathExpr;
+//				} else {
+//					// This should not happen.
+//					xpathExpr = "";
+//					break;
+//				}
+//				currentNode = (AuthorParentNode) currentNode.getParent();
+//			}
+//		}
+//		return xpathExpr;
+//	}
 
 	public static String completeXpathExpression(String xpathExpression) {
 		String completedXpathExpression = "";

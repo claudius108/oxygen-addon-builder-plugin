@@ -51,7 +51,7 @@ declare function local:make-jar($source-dir, $jar-path, $filter) {
 
 (
 	file:copy(
-		file:path-to-native($pluginInstallDirPath || "/lib/addon-builder-plugin.jar"),
+		file:path-to-native($pluginInstallDirPath || "/lib/plugin.jar"),
 		$frameworkJavaDirPath
 	)
 	,
