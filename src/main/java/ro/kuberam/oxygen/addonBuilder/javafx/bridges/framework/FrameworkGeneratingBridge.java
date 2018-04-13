@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -313,7 +314,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 					"-DoxygenAddonBuilder.oxygenInstallDir=" + "\"" + oxygenInstallDir + "\"");
 			break;
 		}
-		logger.debug("command = " + String.join(" ", command));
+		logger.debug("command = " + command.stream().collect(Collectors.joining(" ")));
 
 		ProcessBuilder builder = new ProcessBuilder(command);
 
@@ -323,16 +324,14 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			InputStream is = process.getInputStream();
 			InputStreamReader isr = new InputStreamReader(is);
 			BufferedReader br = new BufferedReader(isr);
-			String line;
 
-			while ((line = br.readLine()) != null) {
-				logger.debug(line);
+			String outputMessage = br.lines().collect(Collectors.joining("\n"));
+			if (outputMessage.contains("[java] Exception in thread \"main\"")) {
+				JOptionPane.showMessageDialog(new JFrame(), outputMessage, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 
 			process.waitFor();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 
