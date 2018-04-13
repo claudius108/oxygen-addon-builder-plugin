@@ -174,7 +174,7 @@ public class Parser {
 		Scanner scanner = new Scanner(getClass().getResourceAsStream("tree-template.xq"), "UTF-8");
 		baseTreeGeneratorTemplate = parsingResult.prolog + scanner.useDelimiter("\\A").next();
 		scanner.close();
-		System.out.println("variableElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
+//		System.out.println("variableElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
@@ -186,7 +186,7 @@ public class Parser {
 
 		// process function calls
 		long functionCallElementsStart = (long) (TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
-		System.out.println("functionCallElementsStart: " + functionCallElementsStart);
+//		System.out.println("functionCallElementsStart: " + functionCallElementsStart);
 		NodeList functionCallElements = xqueryParserOutputDocumentElement.getElementsByTagName("FunctionCall");
 		for (int i = 0, il = functionCallElements.getLength(); i < il; i++) {
 			Element functionCallElement = (Element) functionCallElements.item(i);
@@ -364,8 +364,9 @@ public class Parser {
 				Node varRefElement = varRefElements.item(i);
 				String variableName = varRefElement.getTextContent();
 				String variableValue = parsingResult.variables.get(variableName);
-				enclosedExpressionTextContent = enclosedExpressionTextContent.replace(variableName, variableValue)
-						.replaceAll("^\\{\\s*", "").replaceAll("\\s*\\}$", "");
+				variableValue = (variableValue != null) ? variableValue : variableName;
+				
+				enclosedExpressionTextContent = enclosedExpressionTextContent.replace(variableName, variableValue);
 			}
 		}
 
@@ -789,7 +790,6 @@ public class Parser {
 			oxyEditorDescriptor.setEdit(editValue);
 
 			result = oxyEditorDescriptor.shortDescription();
-			System.out.println("oxyEditorDescriptor = " + result);
 		}
 
 		return result;
