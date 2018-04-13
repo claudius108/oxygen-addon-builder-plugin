@@ -19,7 +19,7 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
 		<oxygen-author-home>/home/claudius/oxygen/author</oxygen-author-home>
-		<oxygen-version>20.0.0.0</oxygen-version>
+		<oxygen-version>20.0.0.1</oxygen-version>
 		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${project.build.finalName}/${project.build.finalName}.jar</addon-location>
 		<github.global.server>github</github.global.server>
 		<oxygen.plugin.finalName>oxygen-${project.artifactId}</oxygen.plugin.finalName>
