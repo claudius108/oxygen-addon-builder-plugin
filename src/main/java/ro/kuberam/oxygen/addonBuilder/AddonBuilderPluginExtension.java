@@ -20,7 +20,6 @@ import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 import ro.sync.exml.workspace.api.standalone.ToolbarComponentsCustomizer;
 import ro.sync.exml.workspace.api.standalone.ToolbarInfo;
-import ro.sync.util.URLUtil;
 
 public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtension {
 
@@ -41,8 +40,8 @@ public class AddonBuilderPluginExtension implements WorkspaceAccessPluginExtensi
 		pluginInstallDir = AddonBuilderPlugin.getInstance().getDescriptor().getBaseDir().toPath();
 		logger.debug("pluginInstallDir: " + pluginInstallDir);
 
-		oxygenFrameworksDir = Paths.get(URLUtil
-				.uncorrect(pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${frameworksDir}", null)));
+		oxygenFrameworksDir = Paths
+				.get(pluginWorkspaceAccess.getUtilAccess().expandEditorVariables("${frameworksDir}", null));
 		logger.debug("oxygenFrameworksDir: " + oxygenFrameworksDir);
 
 		// add plugin's toolbar

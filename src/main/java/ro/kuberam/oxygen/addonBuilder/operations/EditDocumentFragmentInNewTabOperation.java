@@ -32,14 +32,13 @@ import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.listeners.WSEditorListener;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
-import ro.sync.util.URLUtil;
 
 public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 
 	/**
 	 * This operation is designated to allow editing of XML fragment of a main
-	 * document in new editors, opened in new tabs. When the data in the new
-	 * editors is saved, the main document is updated accordingly.
+	 * document in new editors, opened in new tabs. When the data in the new editors
+	 * is saved, the main document is updated accordingly.
 	 */
 
 	/**
@@ -69,7 +68,7 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 
 		final URL openerLocation = authorEditorAccess.getEditorLocation();
 		logger.debug("openerLocation = " + openerLocation);
-		String openerFileName = URLUtil.extractFileName(openerLocation.toString());
+		String openerFileName = authorAccess.getUtilAccess().getFileName(openerLocation.toString());
 		logger.debug("openerFileName = " + openerFileName);
 
 		try {
@@ -155,7 +154,9 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 		public void editorSaved(int operationType) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					String openedFileName = URLUtil.uncorrect(URLUtil.extractFileName(openedLocation));
+					String openedFileName = PluginWorkspaceProvider.getPluginWorkspace().getUtilAccess()
+							.getFileName(openedLocation.toString());
+					logger.debug("openedFileName = " + openedFileName);
 
 					String currentContent = "";
 					try {
