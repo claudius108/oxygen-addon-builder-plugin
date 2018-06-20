@@ -32,6 +32,7 @@ import ro.sync.exml.workspace.api.editor.WSEditor;
 import ro.sync.exml.workspace.api.editor.page.author.WSAuthorEditorPage;
 import ro.sync.exml.workspace.api.listeners.WSEditorListener;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+import ro.sync.exml.workspace.api.util.UtilAccess;
 
 public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 
@@ -65,10 +66,11 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 		AuthorEditorAccess authorEditorAccess = authorAccess.getEditorAccess();
 		AuthorDocumentController authorDocumentController = authorAccess.getDocumentController();
 		final WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
+		UtilAccess utilAccess = authorAccess.getUtilAccess();
 
 		final URL openerLocation = authorEditorAccess.getEditorLocation();
 		logger.debug("openerLocation = " + openerLocation);
-		String openerFileName = authorAccess.getUtilAccess().getFileName(openerLocation.toString());
+		String openerFileName = utilAccess.uncorrectURL(utilAccess.getFileName(openerLocation.toString()));
 		logger.debug("openerFileName = " + openerFileName);
 
 		try {
@@ -154,8 +156,10 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 		public void editorSaved(int operationType) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					String openedFileName = PluginWorkspaceProvider.getPluginWorkspace().getUtilAccess()
-							.getFileName(openedLocation.toString());
+					PluginWorkspace pluginWorkspace = PluginWorkspaceProvider.getPluginWorkspace();
+					UtilAccess utilAccess = pluginWorkspace.getUtilAccess();
+
+					String openedFileName = utilAccess.uncorrectURL(utilAccess.getFileName(openedLocation.toString()));
 					logger.debug("openedFileName = " + openedFileName);
 
 					String currentContent = "";
@@ -169,12 +173,12 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 					}
 					currentContent = currentContent.substring(xmlPI.length());
 
-					WSEditor mainEditor = PluginWorkspaceProvider.getPluginWorkspace().getEditorAccess(openerLocation,
+					WSEditor mainEditor = pluginWorkspace.getEditorAccess(openerLocation,
 							PluginWorkspace.MAIN_EDITING_AREA);
 					WSAuthorEditorPage mainWSAuthorEditorPage = (WSAuthorEditorPage) mainEditor.getCurrentPage();
 					AuthorDocumentController openerAuthorDocumentController = mainWSAuthorEditorPage
 							.getDocumentController();
-					WSOptionsStorage optionsStorage = PluginWorkspaceProvider.getPluginWorkspace().getOptionsStorage();
+					WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
 
 					String openedXpathExpr = optionsStorage.getOption(openedFileName + " xpath", "");
 
