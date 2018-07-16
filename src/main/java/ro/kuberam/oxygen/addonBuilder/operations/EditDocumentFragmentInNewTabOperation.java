@@ -198,7 +198,7 @@ public class EditDocumentFragmentInNewTabOperation implements AuthorOperation {
 						e.printStackTrace();
 					}
 
-					int currentOffset = targetNode.getStartOffset();
+					// int currentOffset = targetNode.getStartOffset();
 
 					openerAuthorDocumentController.deleteNode(targetNode);
 

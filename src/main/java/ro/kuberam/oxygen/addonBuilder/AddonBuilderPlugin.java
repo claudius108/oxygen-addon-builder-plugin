@@ -1,8 +1,5 @@
 package ro.kuberam.oxygen.addonBuilder;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-
 import ro.sync.exml.plugin.Plugin;
 import ro.sync.exml.plugin.PluginDescriptor;
 

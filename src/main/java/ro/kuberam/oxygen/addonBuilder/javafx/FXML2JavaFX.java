@@ -30,7 +30,6 @@ public class FXML2JavaFX extends JDialog {
 
 	public FXML2JavaFX(final JFrame parent, final DialogModel dialogModel) {
 		super(parent, dialogModel.title, (dialogModel.type == "modal") ? true : false);
-		final FXML2JavaFX dialogWindow = this;
 		panel = new JFXPanel();
 		Platform.runLater(new Runnable() {
 			@Override
@@ -57,12 +56,14 @@ public class FXML2JavaFX extends JDialog {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				String content = new Scanner(FXML2JavaFX.class
-						.getResourceAsStream("manage-framework-dialog.html"), "UTF-8").useDelimiter("\\A")
-						.next();
-				DialogModel dialogModel = new DialogModel("rich-textarea-dialog", "modal", "Dialog Title",
-						400, 320, "none", new String[] { "auto", "0", "auto", "auto" }, "",
-						"OxygenAddonBuilder", new BaseBridge(), content);
+				String content;
+				try (Scanner scanner = new Scanner(
+						FXML2JavaFX.class.getResourceAsStream("manage-framework-dialog.html"), "UTF-8")) {
+					content = scanner.useDelimiter("\\A").next();
+				}
+				DialogModel dialogModel = new DialogModel("rich-textarea-dialog", "modal", "Dialog Title", 400, 320,
+						"none", new String[] { "auto", "0", "auto", "auto" }, "", "OxygenAddonBuilder",
+						new BaseBridge(), content);
 				new FXML2JavaFX(new JFrame(), dialogModel);
 			}
 		});

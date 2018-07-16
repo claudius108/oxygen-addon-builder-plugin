@@ -301,7 +301,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			command = Arrays.asList(executableName, executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + frameworksDir,
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
-					"-DoxygenAddonBuilder.oxygenInstallDir=" + oxygenInstallDir);
+					"-DoxygenAddonBuilder.oxygenInstallDir=" + oxygenInstallDir, "-verbose");
 			break;
 		case "cmd":
 			executablePath = Paths.get("\"" + oxygenInstallDir, "tools", "ant", "bin", "ant" + "\"").toString();
@@ -311,7 +311,7 @@ public class FrameworkGeneratingBridge extends BaseBridge {
 			command = Arrays.asList(executableName, "/c", executablePath, "-f", filePath, "build-framework",
 					"-DoxygenAddonBuilder.frameworksDir=" + "\"" + frameworksDir + "\"",
 					"-DoxygenAddonBuilder.frameworkId=" + frameworkId,
-					"-DoxygenAddonBuilder.oxygenInstallDir=" + "\"" + oxygenInstallDir + "\"");
+					"-DoxygenAddonBuilder.oxygenInstallDir=" + "\"" + oxygenInstallDir + "\"", "-verbose");
 			break;
 		}
 		logger.debug("command = " + command.stream().collect(Collectors.joining(" ")));

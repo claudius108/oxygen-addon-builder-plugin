@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import javafx.embed.swing.JFXPanel;
 import ro.kuberam.oxygen.addonBuilder.SerialisedObjects;
+import ro.kuberam.oxygen.addonBuilder.javafx.FXML2JavaFX;
 import ro.kuberam.oxygen.addonBuilder.javafx.JavaFXPanel;
 import ro.kuberam.oxygen.addonBuilder.javafx.bridges.ui.UserInterfaceBridge;
 import ro.kuberam.oxygen.addonBuilder.operations.XQueryOperation;
@@ -59,15 +60,17 @@ public class TreeFormControl extends InplaceEditorRendererAdapter {
 	 * @throws BadLocationException
 	 */
 	public TreeFormControl() {
-		//logger.debug("componentPanel = " + componentPanel);
+		// logger.debug("componentPanel = " + componentPanel);
 		componentPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-		String content = new Scanner(TreeFormControl.class.getResourceAsStream("tree-example.html"),
-				"UTF-8").useDelimiter("\\A").next();
+		String content;
+		try (Scanner scanner = new Scanner(TreeFormControl.class.getResourceAsStream("tree-example.html"), "UTF-8")) {
+			content = scanner.useDelimiter("\\A").next();
+		}
 
 		System.out.println(content);
 
-		//logger.debug("content = " + content);
+		// logger.debug("content = " + content);
 
 		JFXPanel treePanel = new JavaFXPanel(content, "", new UserInterfaceBridge(), "UserInterfaceBridge");
 		try {
@@ -77,20 +80,19 @@ public class TreeFormControl extends InplaceEditorRendererAdapter {
 			e.printStackTrace();
 		}
 
-		//logger.debug("treePanel = " + treePanel);
+		// logger.debug("treePanel = " + treePanel);
 
 		componentPanel.add(treePanel);
 	}
 
 	/**
 	 * @see ro.sync.ecss.extensions.api.editor.InplaceEditorRendererAdapter#getEditorComponent(ro.sync.ecss.extensions.api.editor.AuthorInplaceContext,
-	 *      ro.sync.exml.view.graphics.Rectangle,
-	 *      ro.sync.exml.view.graphics.Point)
+	 *      ro.sync.exml.view.graphics.Rectangle, ro.sync.exml.view.graphics.Point)
 	 */
 	@Override
 	public Object getEditorComponent(AuthorInplaceContext context, Rectangle allocation, Point mouseLocation) {
 		prepareComponent(context);
-		
+
 		return componentPanel;
 	}
 
@@ -141,7 +143,7 @@ public class TreeFormControl extends InplaceEditorRendererAdapter {
 	@Override
 	public Object getRendererComponent(AuthorInplaceContext context) {
 		prepareComponent(context);
-		
+
 		return componentPanel;
 	}
 
@@ -165,43 +167,42 @@ public class TreeFormControl extends InplaceEditorRendererAdapter {
 	 * @throws BadLocationException
 	 */
 	private void prepareComponent(final AuthorInplaceContext context) {
-		
+
 		this.authorAccess = context.getAuthorAccess();
 		this.authorEditorAccess = authorAccess.getEditorAccess();
 
 		String treeGeneratorTemplateId = (String) context.getArguments().get("treeGeneratorTemplateId");
-		//logger.debug("treeGeneratorTemplateId = " + treeGeneratorTemplateId);
+		// logger.debug("treeGeneratorTemplateId = " + treeGeneratorTemplateId);
 
 		if (generatedTreeIds.contains(treeGeneratorTemplateId)) {
-			//logger.debug("template '" + treeGeneratorTemplateId + "' was already generated");
+			// logger.debug("template '" + treeGeneratorTemplateId + "' was already
+			// generated");
 		} else {
 			generatedTreeIds.add(treeGeneratorTemplateId);
 
 			String treeTemplate = SerialisedObjects.templates.get(treeGeneratorTemplateId);
-			//logger.debug("treeTemplate = " + treeTemplate);
+			// logger.debug("treeTemplate = " + treeTemplate);
 
-			String content = XQueryOperation
-					.query(authorEditorAccess.createContentReader(),
-							new ByteArrayInputStream(treeTemplate.getBytes(StandardCharsets.UTF_8)), true,
-							null, new HashMap<String, String>()).itemAt(0).toString();
+			String content = XQueryOperation.query(authorEditorAccess.createContentReader(),
+					new ByteArrayInputStream(treeTemplate.getBytes(StandardCharsets.UTF_8)), true, null,
+					new HashMap<String, String>()).itemAt(0).toString();
 
-			//logger.debug("content = " + content);
+			// logger.debug("content = " + content);
 
 			JFXPanel treePanel = null;
 			try {
-				treePanel = new JavaFXPanel(content, "", new UserInterfaceBridge(),
-						"UserInterfaceBridge");
+				treePanel = new JavaFXPanel(content, "", new UserInterfaceBridge(), "UserInterfaceBridge");
 				Thread.sleep(1000);
 			} catch (Exception e) {
 				logger.debug("e1.printStackTrace() = " + e.getMessage());
 			}
-			
+
 			logger.debug("treePanel = " + treePanel.getParent());
 
-			//logger.debug("treePanel = " + treePanel);
+			// logger.debug("treePanel = " + treePanel);
 
 			componentPanel.add(treePanel);
-			
+
 			logger.debug("treePanel = " + treePanel.getParent());
 		}
 	}
@@ -214,13 +215,14 @@ public class TreeFormControl extends InplaceEditorRendererAdapter {
 	}
 
 	public static void main(String args[]) throws Exception {
-		String content = new Scanner(TreeFormControl.class.getResourceAsStream("tree-example.html"),
-				"UTF-8").useDelimiter("\\A").next();
+		String content;
+		try (Scanner scanner = new Scanner(TreeFormControl.class.getResourceAsStream("tree-example.html"), "UTF-8")) {
+			content = scanner.useDelimiter("\\A").next();
+		}
 
 		System.out.println(content);
 
-		JavaFXPanel componentPanel = new JavaFXPanel(content, "", new UserInterfaceBridge(),
-				"UserInterfaceBridge");
+		JavaFXPanel componentPanel = new JavaFXPanel(content, "", new UserInterfaceBridge(), "UserInterfaceBridge");
 
 		JFrame frame = new JFrame();
 

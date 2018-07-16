@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import javafx.scene.web.WebEngine;
 
-
 import ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension;
 import ro.kuberam.oxygen.addonBuilder.javafx.JavaFXDialog;
 import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
@@ -24,17 +23,15 @@ public class BaseBridge implements Serializable {
 	 */
 	protected static final Logger logger = Logger.getLogger(BaseBridge.class.getName());
 
-	protected StandalonePluginWorkspace pluginWorkspaceAccess = AddonBuilderPluginExtension
-			.getPluginWorkspaceAccess();
+	protected StandalonePluginWorkspace pluginWorkspaceAccess = AddonBuilderPluginExtension.getPluginWorkspaceAccess();
 	public JavaFXDialog dialogWindow;
 	public WebEngine webEngine;
 
 	public BaseBridge() {
-		this.dialogWindow = dialogWindow;
 	}
 
 	public BaseBridge(JavaFXDialog dialogWindow) {
-
+		this.dialogWindow = dialogWindow;
 	}
 
 	public void closeDialogWindow() {

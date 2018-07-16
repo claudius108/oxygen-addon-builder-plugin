@@ -13,18 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import ro.kuberam.oxygen.addonBuilder.javafx.DialogModel;
-import ro.kuberam.oxygen.addonBuilder.mutations.MutationObservers;
 import ro.kuberam.oxygen.addonBuilder.mutations.ObserverConnection;
 import ro.kuberam.oxygen.addonBuilder.oxyFormControlDescriptors.OxyEditorDescriptor;
 import ro.kuberam.oxygen.addonBuilder.utils.IOUtilities;
 
 public class ParsingResult {
-	
-	private Logger logger = Logger.getLogger(MutationObservers.class.getName());
 
 	public ParsingResult() {
 		actionsByClass.put("load", new ArrayList<String>());
@@ -43,7 +39,7 @@ public class ParsingResult {
 	public Map<String, DialogModel> dialogs = new HashMap<String, DialogModel>();
 	public Map<String, OxyEditorDescriptor> checkboxes = new HashMap<String, OxyEditorDescriptor>();
 	public String prolog = "";
-	public Map<String, String> datalists = new HashMap<String, String>();
+	public ArrayList<Datalist> datalists = new ArrayList<Datalist>();
 	public ArrayList<String> actions = new ArrayList<String>();
 	private Charset utf8 = StandardCharsets.UTF_8;
 
@@ -70,9 +66,9 @@ public class ParsingResult {
 			Path actionsDirectory = cssResourcesDirectory.resolve("actions");
 			Utils.deleteDirectoryContent(actionsDirectory);
 			Files.createDirectory(actionsDirectory);
-			
-			Files.write(actionsDirectory.resolve("actions.less"), actions, utf8,
-					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);			
+
+			Files.write(actionsDirectory.resolve("actions.less"), actions, utf8, StandardOpenOption.CREATE,
+					StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -87,17 +83,18 @@ public class ParsingResult {
 			ArrayList<String> datalistImportStatements = new ArrayList<>();
 			datalistImportStatements.add("@charset \"utf-8\";");
 
-			for (Map.Entry<String, String> datalist : datalists.entrySet()) {
-				String datalistId = datalist.getKey();
+			for (Datalist datalist : datalists) {
+				String datalistId = datalist.getId();
 
 				datalistImportStatements.add("@import \"" + datalistId + ".less\";");
 
 				ArrayList<String> lines = new ArrayList<>();
-				lines.add("@charset \"utf-8\"; @" + datalistId + ": \"" + datalist.getValue() + "\";");
-				lines.add("\n");
+				lines.add("@charset \"utf-8\";");
+				lines.add("@" + datalistId + "-labels: \"" + datalist.getLabels() + "\";");
+				lines.add("@" + datalistId + "-values: \"" + datalist.getValues() + "\";");
 
 				Files.write(datalistsDirectory.resolve(datalistId + ".less"), lines, utf8, StandardOpenOption.CREATE,
-						StandardOpenOption.APPEND);
+						StandardOpenOption.TRUNCATE_EXISTING);
 			}
 
 			Files.write(datalistsDirectory.resolve("datalists.less"), datalistImportStatements, utf8,

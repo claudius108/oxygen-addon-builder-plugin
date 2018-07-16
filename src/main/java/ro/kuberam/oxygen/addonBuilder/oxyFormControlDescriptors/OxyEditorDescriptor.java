@@ -23,8 +23,8 @@ public class OxyEditorDescriptor {
 	private String disabled;
 	private String showIcon;
 	private String editable;
+	private String labels = "";	
 	private String values = "";
-	private String labels;
 	private String columns;
 	private String rows;
 	private String contentType;
@@ -192,7 +192,10 @@ public class OxyEditorDescriptor {
 	}
 
 	public String getLabels() {
-		return (labels != null ? "labels, " + _formatOxyXpathExpression(labels) + ", " : "");
+		labels = (labels != "" ? "labels, " + _formatOxyXpathExpression(labels) + ", " : "");
+		labels = (labels.contains("\"@")) ? labels.replace("\"", "") : labels;
+		
+		return labels;
 	}
 
 	public void setLabels(String labels) {

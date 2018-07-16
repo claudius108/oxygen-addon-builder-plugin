@@ -46,10 +46,8 @@ public class JavaFXPanel extends JFXPanel {
 							JSObject window = (JSObject) webEngine.executeScript("window");
 							window.setMember(jsObjectName, bridge);
 
-							webEngine.executeScript("console.log = function(message) {" + jsObjectName
-									+ ".log(message);};");
-
-							JSObject jdoc = (JSObject) webEngine.getDocument();
+							webEngine.executeScript(
+									"console.log = function(message) {" + jsObjectName + ".log(message);};");
 						}
 					}
 				});
@@ -57,8 +55,7 @@ public class JavaFXPanel extends JFXPanel {
 				webEngine.setOnAlert(new EventHandler<WebEvent<String>>() {
 					@Override
 					public void handle(WebEvent<String> event) {
-						JOptionPane.showMessageDialog(null, event.getData(), "",
-								JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, event.getData(), "", JOptionPane.WARNING_MESSAGE);
 
 					}
 				});
@@ -67,9 +64,8 @@ public class JavaFXPanel extends JFXPanel {
 					public Boolean call(String message) {
 						boolean response = true;
 						Object[] options = { "OK", "Cancel" };
-						int option = JOptionPane.showOptionDialog(null, message, "",
-								JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
-								options[0]);
+						int option = JOptionPane.showOptionDialog(null, message, "", JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 						if (option == 1) {
 							response = false;
 						}
@@ -81,8 +77,9 @@ public class JavaFXPanel extends JFXPanel {
 				webEngine.setPromptHandler(new Callback<PromptData, String>() {
 					@Override
 					public String call(PromptData message) {
-						String response = JOptionPane.showInputDialog(null, message.getMessage(), "", JOptionPane.PLAIN_MESSAGE);
-						
+						String response = JOptionPane.showInputDialog(null, message.getMessage(), "",
+								JOptionPane.PLAIN_MESSAGE);
+
 						return response;
 					}
 				});

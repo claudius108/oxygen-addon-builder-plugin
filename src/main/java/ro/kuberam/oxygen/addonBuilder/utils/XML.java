@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.swing.text.BadLocationException;
 import javax.xml.parsers.DocumentBuilder;
@@ -30,10 +28,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import ro.sync.ecss.extensions.api.AuthorDocumentController;
-import ro.sync.ecss.extensions.api.node.AuthorDocument;
-import ro.sync.ecss.extensions.api.node.AuthorNode;
-import ro.sync.ecss.extensions.api.node.AuthorParentNode;
-import ro.sync.xml.XmlUtil;
 
 public class XML {
 	private static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

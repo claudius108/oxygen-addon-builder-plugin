@@ -11,11 +11,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -60,8 +63,9 @@ public class Parser {
 	private static Map<String, String> replaceExprTargetChoiceValues = new HashMap<String, String>();
 	private static Pattern extractTemplateIdPattern = Pattern
 			.compile("(ua:(get|show)-template\\(['\"])([A-Za-z_-]+)(['\"]\\)\\s*,?\\s*)");
-	private static Pattern isAttributePattern = Pattern.compile("@.+$");
-	private static Pattern variablePattern = Pattern.compile("(\\$)([A-Za-z_-]+)");
+	// private static Pattern isAttributePattern = Pattern.compile("@.+$");
+	// private static Pattern variablePattern =
+	// Pattern.compile("(\\$)([A-Za-z_-]+)");
 	private static String oxyXpathExpressionStartMarker = "oxy_xpath_start";
 	private static String oxyXpathExpressionEndMarker = "oxy_xpath_end";
 	private static ArrayList<String> builtinFormControlNames = new ArrayList<String>();
@@ -90,7 +94,8 @@ public class Parser {
 		String xqueryFrameworkDescriptorAsString = new String(buffer, System.getProperty("file.encoding"));
 		xqueryFrameworkDescriptorAsString = (xqueryFrameworkDescriptorAsString.length() > 0
 				&& xqueryFrameworkDescriptorAsString.charAt(0) == '\uFEFF')
-						? xqueryFrameworkDescriptorAsString.substring(1) : xqueryFrameworkDescriptorAsString;
+						? xqueryFrameworkDescriptorAsString.substring(1)
+						: xqueryFrameworkDescriptorAsString;
 		File frameworkDescriptor = new File(addonDirectory + File.separator + frameworkId + ".framework");
 		logger.debug("frameworkDescriptor in Parser class = " + frameworkDescriptor);
 
@@ -174,7 +179,8 @@ public class Parser {
 		Scanner scanner = new Scanner(getClass().getResourceAsStream("tree-template.xq"), "UTF-8");
 		baseTreeGeneratorTemplate = parsingResult.prolog + scanner.useDelimiter("\\A").next();
 		scanner.close();
-//		System.out.println("variableElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
+		// System.out.println("variableElements: " +
+		// TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
@@ -185,8 +191,6 @@ public class Parser {
 		// StandardOpenOption.CREATE);
 
 		// process function calls
-		long functionCallElementsStart = (long) (TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
-//		System.out.println("functionCallElementsStart: " + functionCallElementsStart);
 		NodeList functionCallElements = xqueryParserOutputDocumentElement.getElementsByTagName("FunctionCall");
 		for (int i = 0, il = functionCallElements.getLength(); i < il; i++) {
 			Element functionCallElement = (Element) functionCallElements.item(i);
@@ -217,7 +221,8 @@ public class Parser {
 			if (functionName.equals("ua:add-event-listener")) {
 				NodeList argumentElements = functionCallElement.getElementsByTagName("Argument");
 
-				String eventTarget = _processStringLiteral(argumentElements.item(0).getTextContent());
+				// String eventTarget =
+				// _processStringLiteral(argumentElements.item(0).getTextContent());
 				String eventType = _processStringLiteral(argumentElements.item(1).getTextContent());
 				String listener = argumentElements.item(2).getTextContent();
 
@@ -299,9 +304,6 @@ public class Parser {
 
 		// write the files with observers, actions by class, etc.
 		parsingResult.writeToFile(targetDirectory, addonDirectory);
-
-		System.out.println("duration: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
-
 	}
 
 	private void ua__attach_template(Element functionCallElement, ParsingResult parsingResult) {
@@ -333,8 +335,6 @@ public class Parser {
 
 		String templateContentAsString = templateContent.getTextContent();
 
-		Element templateContentAsXml = XML.parse(templateContentAsString);
-
 		NodeList templateContentChildNodes = XML.parse(templateContentAsString).getChildNodes();
 		int templateContentLength = templateContentChildNodes.getLength();
 		String processedTemplateContent = "";
@@ -343,8 +343,6 @@ public class Parser {
 			processedTemplateContent += _processHTMLTemplateContent(templateContentChildNodes.item(i), parsingResult,
 					templateId);
 		}
-
-		processedTemplateContent += _processCheckBoxes(templateContentAsXml);
 
 		processedTemplateContent = processedTemplateContent.trim();
 
@@ -365,7 +363,7 @@ public class Parser {
 				String variableName = varRefElement.getTextContent();
 				String variableValue = parsingResult.variables.get(variableName);
 				variableValue = (variableValue != null) ? variableValue : variableName;
-				
+
 				enclosedExpressionTextContent = enclosedExpressionTextContent.replace(variableName, variableValue);
 			}
 		}
@@ -433,7 +431,7 @@ public class Parser {
 				result = dialogHTMLElementTemplate(templateId, node, parsingResult);
 			}
 			if (nodeName.equals("datalist")) {
-				result = datalistHTMLElementTemplate(node, parsingResult);
+				result = datalistHTMLElementTemplate(node);
 			}
 			if (nodeName.equals("tree")) {
 				result = treeElementTemplate(node);
@@ -523,25 +521,24 @@ public class Parser {
 		return result;
 	}
 
-	private String datalistHTMLElementTemplate(Node node, ParsingResult parsingResult2) {
+	private String datalistHTMLElementTemplate(Node node) {
 		Element element = (Element) node;
 		NodeList nodeChildNodes = node.getChildNodes();
 		String id = element.getAttribute("id");
-		StringBuilder values = new StringBuilder();
-		String delim = "";
 
-		for (int i = 0, il = nodeChildNodes.getLength(); i < il; i++) {
-			Node childNode = nodeChildNodes.item(i);
-			String childNodeName = childNode.getNodeName();
+		String labels = IntStream.range(0, nodeChildNodes.getLength()).mapToObj(nodeChildNodes::item)
+				.filter(Element.class::isInstance).map(Element.class::cast)
+				.map(el -> el.getAttributes().getNamedItem("label").getNodeValue()).collect(Collectors.joining(","));
+		String values = IntStream.range(0, nodeChildNodes.getLength()).mapToObj(nodeChildNodes::item)
+				.filter(Element.class::isInstance).map(Element.class::cast)
+				.map(el -> el.getAttributes().getNamedItem("value").getNodeValue()).collect(Collectors.joining(","));
 
-			if (childNodeName.equals("option")) {
-				values.append(delim).append(childNode.getAttributes().getNamedItem("label").getNodeValue());
-				delim = ",";
-			}
+		boolean idExists = parsingResult.datalists.stream().map(Datalist::getId).anyMatch(id::equals);
+
+		if (!idExists) {
+			parsingResult.templates.put(id, values);
+			parsingResult.datalists.add(new Datalist(id, labels, values));
 		}
-
-		parsingResult.templates.put(id, values.toString());
-		parsingResult.datalists.put(id, values.toString());
 
 		return "";
 	}
@@ -755,57 +752,11 @@ public class Parser {
 		return oxyEditorDescriptor.toString();
 	}
 
-	private String _processCheckBoxes(Element templateContentAsXml) {
-		String result = "";
-		String editValue = "";
-
-		NodeList inputElements = templateContentAsXml.getElementsByTagName("input");
-		NodeList labelElements = templateContentAsXml.getElementsByTagName("label");
-
-		ArrayList<String> values = new ArrayList<String>();
-		ArrayList<String> labels = new ArrayList<String>();
-
-		for (int i = 0, il = inputElements.getLength(); i < il; i++) {
-			Node inputElement = inputElements.item(i);
-			NamedNodeMap inputElementAttributes = inputElement.getAttributes();
-			Node typeAtribute = inputElementAttributes.getNamedItem("type");
-
-			if (typeAtribute != null && typeAtribute.getNodeValue().equals("checkbox")) {
-				values.add(inputElementAttributes.getNamedItem("value").getNodeValue());
-				editValue = inputElementAttributes.getNamedItem("data-ua-ref").getNodeValue();
-			}
-		}
-
-		for (int i = 0, il = labelElements.getLength(); i < il; i++) {
-			Node labelElement = labelElements.item(i);
-
-			labels.add(labelElement.getTextContent());
-		}
-
-		if (labels.size() != 0) {
-			OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
-			oxyEditorDescriptor.setType("checkbox");
-			oxyEditorDescriptor.setValues(String.join(",", values));
-			oxyEditorDescriptor.setLabels(String.join(",", labels));
-			oxyEditorDescriptor.setEdit(editValue);
-
-			result = oxyEditorDescriptor.shortDescription();
-		}
-
-		return result;
-	}
-
 	private String inputHTMLElementTemplate(Node node, ParsingResult parsingResult2) {
 		NamedNodeMap nodeAttrs = node.getAttributes();
 
-		Node typeAtribute = nodeAttrs.getNamedItem("type");
-
-		if (typeAtribute != null && typeAtribute.getNodeValue().equals("checkbox")) {
-			return "";
-		}
-
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
-		String type = "text";
+		String type = Optional.ofNullable(nodeAttrs.getNamedItem("type")).map(Node::getNodeValue).orElse("text");
 		String values = "";
 
 		for (int i = 0, il = nodeAttrs.getLength(); i < il; i++) {
@@ -822,12 +773,9 @@ public class Parser {
 			}
 
 			if (attrName.equals("list")) {
-				oxyEditorDescriptor.setValues("@" + attrValue);
+				oxyEditorDescriptor.setValues("@" + attrValue + "-values");
 				oxyEditorDescriptor.setHasMultipleValues("false");
-			}
-
-			if (attrName.equals("type")) {
-				type = attrValue;
+				oxyEditorDescriptor.setLabels("@" + attrValue + "-labels");
 			}
 
 			if (attrName.equals("value")) {
@@ -841,8 +789,10 @@ public class Parser {
 			oxyEditorDescriptor.setLabels(node.getTextContent().trim());
 			oxyEditorDescriptor.setValues(values);
 			oxyEditorDescriptor.setUncheckedValues(values);
+		case "checkbox":
+			type = "check";
 		}
-
+		
 		oxyEditorDescriptor.setType(type);
 
 		return oxyEditorDescriptor.toString();
@@ -1181,10 +1131,11 @@ public class Parser {
 		actionsWriter.writeEndElement();
 	}
 
-	private void checkXPathExpressionIsAttribute(String xpathExpression) {
-		Matcher isAttributePatternMatcher = isAttributePattern.matcher(xpathExpression);
-
-	}
+	// private void checkXPathExpressionIsAttribute(String xpathExpression) {
+	// Matcher isAttributePatternMatcher =
+	// isAttributePattern.matcher(xpathExpression);
+	//
+	// }
 
 	private String _processNodeSelector(final String nodeSelector) {
 		String processedNodeSelector = "";
