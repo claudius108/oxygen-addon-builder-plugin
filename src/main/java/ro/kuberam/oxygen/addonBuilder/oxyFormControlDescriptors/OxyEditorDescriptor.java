@@ -4,8 +4,12 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -23,7 +27,7 @@ public class OxyEditorDescriptor {
 	private String disabled;
 	private String showIcon;
 	private String editable;
-	private String labels = "";	
+	private String labels = "";
 	private String values = "";
 	private String columns;
 	private String rows;
@@ -194,7 +198,7 @@ public class OxyEditorDescriptor {
 	public String getLabels() {
 		labels = (labels != "" ? "labels, " + _formatOxyXpathExpression(labels) + ", " : "");
 		labels = (labels.contains("\"@")) ? labels.replace("\"", "") : labels;
-		
+
 		return labels;
 	}
 
@@ -289,25 +293,29 @@ public class OxyEditorDescriptor {
 		this.height = height;
 	}
 
-	public void processAndSetLabelsAndValues(NodeList nodeChildNodes) {
-		StringBuilder values = new StringBuilder();
-		StringBuilder labels = new StringBuilder();
-		String delim = "";
+	public void processAndSetLabelsAndValues(Node node) {
+		NodeList nodeChildNodes = node.getChildNodes();
+		String labels = "";
+		String values = "";
 
-		for (int i = 0, il = nodeChildNodes.getLength(); i < il; i++) {
-			Node childNode = nodeChildNodes.item(i);
-			String childNodeName = childNode.getNodeName();
-
-			if (childNodeName.equals("option")) {
-				values.append(delim).append(childNode.getAttributes().getNamedItem("value").getNodeValue());
-				labels.append(delim).append(childNode.getAttributes().getNamedItem("label").getNodeValue());
-				delim = ",";
-			}
-
+		if (nodeChildNodes.getLength() != 0) {
+			labels = IntStream.range(0, nodeChildNodes.getLength()).mapToObj(nodeChildNodes::item)
+					.filter(Element.class::isInstance).map(Element.class::cast)
+					.map(el -> el.getAttributes().getNamedItem("label").getNodeValue())
+					.collect(Collectors.joining(","));
+			values = IntStream.range(0, nodeChildNodes.getLength()).mapToObj(nodeChildNodes::item)
+					.filter(Element.class::isInstance).map(Element.class::cast)
+					.map(el -> el.getAttributes().getNamedItem("value").getNodeValue())
+					.collect(Collectors.joining(","));
+		} else {
+			String listId = Optional.ofNullable(node.getAttributes().getNamedItem("list")).map(Node::getNodeValue)
+					.orElse("");
+			labels = "@" + listId + "-labels";
+			values = "@" + listId + "-values";
 		}
 
-		this.setValues(values.toString());
-		this.setLabels(labels.toString());
+		this.setValues(values);
+		this.setLabels(labels);
 	}
 
 	public String toString() {

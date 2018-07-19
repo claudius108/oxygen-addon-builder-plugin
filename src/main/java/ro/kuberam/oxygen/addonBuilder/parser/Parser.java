@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -160,8 +159,8 @@ public class Parser {
 			}
 
 			if (typeDeclaration.equals("as element()")) {
-				parsingResult.variables.put("$" + variableName,
-						variableElement.getElementsByTagName("VarValue").item(0).getTextContent());
+				parsingResult.variables.put("$" + variableName, variableElement.getElementsByTagName("VarValue").item(0)
+						.getTextContent().replaceAll("<template>", "").replaceAll("</template>", "").trim());
 			}
 
 			if (typeDeclaration.endsWith("string")) {
@@ -179,8 +178,6 @@ public class Parser {
 		Scanner scanner = new Scanner(getClass().getResourceAsStream("tree-template.xq"), "UTF-8");
 		baseTreeGeneratorTemplate = parsingResult.prolog + scanner.useDelimiter("\\A").next();
 		scanner.close();
-		// System.out.println("variableElements: " +
-		// TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		System.setProperty("javax.xml.transform.TransformerFactory",
 				"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl");
@@ -249,9 +246,6 @@ public class Parser {
 			}
 
 		}
-
-		System.out
-				.println("functionCallElements: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) / 1000.0);
 
 		for (SimpleAction simpleAction : simpleActions) {
 			actionsWriter.writeStartElement("action");
@@ -695,15 +689,12 @@ public class Parser {
 		size = ((multipleAttrNode == null) && size.equals("")) ? "4" : size;
 		String appearance = (appearanceAttrNode == null) ? "" : appearanceAttrNode.getNodeValue();
 
-		NodeList childNodes = node.getChildNodes();
-
-		oxyEditorDescriptor.processAndSetLabelsAndValues(childNodes);
+		oxyEditorDescriptor.processAndSetLabelsAndValues(node);
 
 		oxyEditorDescriptor.setColumns(Integer.toString(style.width));
 
 		if (multipleAttrNode == null) {
 			oxyEditorDescriptor.setType("combo");
-
 			_processReferenceAttribute(oxyEditorDescriptor, ref, parsingResult);
 			oxyEditorDescriptor.setEditable(contenteditable);
 
@@ -773,9 +764,9 @@ public class Parser {
 			}
 
 			if (attrName.equals("list")) {
+				oxyEditorDescriptor.setLabels("@" + attrValue + "-labels");
 				oxyEditorDescriptor.setValues("@" + attrValue + "-values");
 				oxyEditorDescriptor.setHasMultipleValues("false");
-				oxyEditorDescriptor.setLabels("@" + attrValue + "-labels");
 			}
 
 			if (attrName.equals("value")) {
@@ -792,7 +783,7 @@ public class Parser {
 		case "checkbox":
 			type = "check";
 		}
-		
+
 		oxyEditorDescriptor.setType(type);
 
 		return oxyEditorDescriptor.toString();
@@ -1190,3 +1181,10 @@ public class Parser {
 	}
 
 }
+
+// bash /home/claudius/oxygen/author/tools/ant/bin/ant -f
+// /home/claudius/oxygen/author/plugins/addon-builder-plugin/generate-framework/pre-build-framework-structure.xml
+// build-framework
+// -DoxygenAddonBuilder.frameworksDir=/home/claudius/oxygen/author/plugins/addon-builder-plugin/../../frameworks
+// -DoxygenAddonBuilder.frameworkId=dlri
+// -DoxygenAddonBuilder.oxygenInstallDir=/home/claudius/oxygen/author -verbose
