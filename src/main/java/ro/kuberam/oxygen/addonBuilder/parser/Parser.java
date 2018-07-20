@@ -747,44 +747,36 @@ public class Parser {
 		NamedNodeMap nodeAttrs = node.getAttributes();
 
 		OxyEditorDescriptor oxyEditorDescriptor = new OxyEditorDescriptor();
+
 		String type = Optional.ofNullable(nodeAttrs.getNamedItem("type")).map(Node::getNodeValue).orElse("text");
-		String values = "";
-
-		for (int i = 0, il = nodeAttrs.getLength(); i < il; i++) {
-			Node attr = nodeAttrs.item(i);
-			String attrName = attr.getNodeName();
+		String values = Optional.ofNullable(nodeAttrs.getNamedItem("value")).map(Node::getNodeValue).orElse("");
+		Optional.ofNullable(nodeAttrs.getNamedItem("data-ua-ref")).ifPresent(
+				attr -> _processReferenceAttribute(oxyEditorDescriptor, attr.getNodeValue(), parsingResult2));
+		Optional.ofNullable(nodeAttrs.getNamedItem("size"))
+				.ifPresent(attr -> oxyEditorDescriptor.setColumns(attr.getNodeValue()));
+		Optional.ofNullable(nodeAttrs.getNamedItem("list")).ifPresent(attr -> {
 			String attrValue = attr.getNodeValue();
-
-			if (attrName.equals("data-ua-ref")) {
-				_processReferenceAttribute(oxyEditorDescriptor, attrValue, parsingResult2);
-			}
-
-			if (attrName.equals("size")) {
-				oxyEditorDescriptor.setColumns(attrValue);
-			}
-
-			if (attrName.equals("list")) {
+			if (type.equals("checkbox")) {
 				oxyEditorDescriptor.setLabels("@" + attrValue + "-labels");
-				oxyEditorDescriptor.setValues("@" + attrValue + "-values");
-				oxyEditorDescriptor.setHasMultipleValues("false");
 			}
 
-			if (attrName.equals("value")) {
-				values = attrValue;
-			}
-		}
+			oxyEditorDescriptor.setValues("@" + attrValue + "-values");
+			oxyEditorDescriptor.setHasMultipleValues("false");
+		});
 
 		switch (type) {
 		case "radio":
-			type = "check";
+			oxyEditorDescriptor.setType("check");
 			oxyEditorDescriptor.setLabels(node.getTextContent().trim());
 			oxyEditorDescriptor.setValues(values);
 			oxyEditorDescriptor.setUncheckedValues(values);
+			break;
 		case "checkbox":
-			type = "check";
+			oxyEditorDescriptor.setType("check");
+			break;
+		default:
+			oxyEditorDescriptor.setType(type);
 		}
-
-		oxyEditorDescriptor.setType(type);
 
 		return oxyEditorDescriptor.toString();
 	}
