@@ -114,7 +114,7 @@ public class Parser {
 			w.close();
 		}
 
-		long start = System.nanoTime();
+		// long start = System.nanoTime();
 
 		XMLOutputFactory actionsOutputFactory = XMLOutputFactory.newInstance();
 
@@ -136,9 +136,16 @@ public class Parser {
 
 		NodeList namespaceDeclElements = xqueryParserOutputDocumentElement.getElementsByTagName("NamespaceDecl");
 		for (int i = 0, il = namespaceDeclElements.getLength(); i < il; i++) {
-			prolog.append(delim).append(((Element) namespaceDeclElements.item(i)).getTextContent()).append("; ");
+			prolog.append(((Element) namespaceDeclElements.item(i)).getTextContent()).append("; ");
 			delim = "";
 		}
+		IntStream.range(0, namespaceDeclElements.getLength()).mapToObj(namespaceDeclElements::item)
+				.filter(Element.class::isInstance).map(Element.class::cast).forEach(el -> {
+					String prefix = el.getElementsByTagName("NCName").item(1).getTextContent();
+					String uri = el.getElementsByTagName("StringLiteral").item(0).getTextContent();
+					parsingResult.attachedTemplates.add("@namespace " + prefix + " url(" + uri + ");");
+				});
+		parsingResult.initializeAttachedTemplates();
 
 		delim = "declare ";
 		NodeList varDeclElements = xqueryParserOutputDocumentElement.getElementsByTagName("VarDecl");
@@ -308,7 +315,7 @@ public class Parser {
 		String template = parsingResult.templates.get(templateId);
 
 		if (template != null && !template.contains("<dialog")) {
-			parsingResult.attachedTemplates += nodeSelector + "{content: " + template + ";}\r\n";
+			parsingResult.attachedTemplates.add(nodeSelector + "{content: " + template + ";}");
 		}
 	}
 

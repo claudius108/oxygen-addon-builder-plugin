@@ -25,10 +25,11 @@ public class ParsingResult {
 	public ParsingResult() {
 		actionsByClass.put("load", new ArrayList<String>());
 		actions.add("@charset \"utf-8\";");
+		attachedTemplates.add("@charset \"utf-8\";");
 	}
 
 	public Map<String, String> templates = new HashMap<String, String>();
-	public String attachedTemplates = "@charset \"utf-8\"; @import \"actions/actions.less\"; @import \"datalists/datalists.less\"; * {-oxy-display-tags: none;} ";
+	public ArrayList<String> attachedTemplates = new ArrayList<>();
 	public Map<String, Element> derivedActionElements = new HashMap<String, Element>();
 	public Map<String, String[]> observers = new HashMap<String, String[]>();
 	public Map<String, ObserverConnection> connectObserverActions = new HashMap<String, ObserverConnection>();
@@ -54,11 +55,16 @@ public class ParsingResult {
 		IOUtilities.serializeObjectToFile(javaDirectory, templates, "templates");
 		IOUtilities.serializeObjectToFile(javaDirectory, dialogs, "dialogs");
 		IOUtilities.serializeObjectToFile(javaDirectory, prolog, "prolog");
-		Files.write(cssResourcesDirectory.resolve("framework.less"), attachedTemplates.getBytes(utf8),
-				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+		writeLines(cssResourcesDirectory.resolve("framework.less"), attachedTemplates);
 
 		generateDatalists(cssResourcesDirectory);
 		generateActions(cssResourcesDirectory);
+	}
+
+	public void initializeAttachedTemplates() {
+		attachedTemplates.add("@import \"actions/actions.less\";");
+		attachedTemplates.add("@import \"datalists/datalists.less\";");
+		attachedTemplates.add("* {-oxy-display-tags: none;}");
 	}
 
 	private void generateActions(Path cssResourcesDirectory) {
@@ -67,8 +73,7 @@ public class ParsingResult {
 			Utils.deleteDirectoryContent(actionsDirectory);
 			Files.createDirectory(actionsDirectory);
 
-			Files.write(actionsDirectory.resolve("actions.less"), actions, utf8, StandardOpenOption.CREATE,
-					StandardOpenOption.TRUNCATE_EXISTING);
+			writeLines(actionsDirectory.resolve("actions.less"), actions);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -93,12 +98,18 @@ public class ParsingResult {
 				lines.add("@" + datalistId + "-labels: \"" + datalist.getLabels() + "\";");
 				lines.add("@" + datalistId + "-values: \"" + datalist.getValues() + "\";");
 
-				Files.write(datalistsDirectory.resolve(datalistId + ".less"), lines, utf8, StandardOpenOption.CREATE,
-						StandardOpenOption.TRUNCATE_EXISTING);
+				writeLines(datalistsDirectory.resolve(datalistId + ".less"), lines);
 			}
 
-			Files.write(datalistsDirectory.resolve("datalists.less"), datalistImportStatements, utf8,
-					StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+			writeLines(datalistsDirectory.resolve("datalists.less"), datalistImportStatements);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void writeLines(Path path, ArrayList<String> lines) {
+		try {
+			Files.write(path, lines, utf8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

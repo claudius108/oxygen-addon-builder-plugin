@@ -6,7 +6,7 @@
 
 	<groupId>ro.kuberam.oxygen</groupId>
 	<artifactId>addon-builder-plugin</artifactId>
-	<version>3.0</version>
+	<version>3.1</version>
 	<packaging>jar</packaging>
 
 	<prerequisites>
@@ -264,6 +264,24 @@
 									</resources>
 								</configuration>
 							</execution>
+							<execution>
+								<id>install-plugin-jar-to-iliradmin-framework-home</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${oxygen-author-home}/frameworks/iliradmin/java</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.build.finalName}.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>							
 						</executions>
 					</plugin>
 				</plugins>
