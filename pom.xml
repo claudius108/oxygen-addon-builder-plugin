@@ -6,7 +6,7 @@
 
 	<groupId>ro.kuberam.oxygen</groupId>
 	<artifactId>addon-builder-plugin</artifactId>
-	<version>3.1</version>
+	<version>3.2</version>
 	<packaging>jar</packaging>
 
 	<prerequisites>
@@ -21,7 +21,7 @@
 		<maven.build.timestamp.format>MMddHHmm</maven.build.timestamp.format>
 		<oxygen-author-home>/home/claudius/oxygen/author</oxygen-author-home>
 		<oxygen-version>20.1.0.0</oxygen-version>
-		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addons/master/${project.build.finalName}/${project.build.finalName}.jar</addon-location>
+		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addon-builder-plugin/master/release/${oxygen.plugin.finalName}.jar</addon-location>
 		<github.global.server>github</github.global.server>
 		<oxygen.plugin.finalName>oxygen-${project.artifactId}</oxygen.plugin.finalName>
 		<maven.version>3.5.2</maven.version>
@@ -359,9 +359,9 @@
 								<include>${oxygen.plugin.finalName}.jar</include>
 								<include>addon.xml</include>
 							</includes>
-							<repositoryName>oxygen-addons</repositoryName>
+							<repositoryName>oxygen-addon-builder-plugin</repositoryName>
 							<repositoryOwner>claudius108</repositoryOwner>
-							<path>${project.build.finalName}</path>
+							<path>release</path>
 						</configuration>
 					</plugin>
 				</plugins>
