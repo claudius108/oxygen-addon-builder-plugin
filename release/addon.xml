@@ -4,9 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
 	<xt:extension id="addon-builder-plugin">
-		<xt:location href="https://raw.githubusercontent.com/claudius108/oxygen-addon-builder-plugin/master/release/plugin.jar" />
+		<xt:location href="https://raw.githubusercontent.com/claudius108/oxygen-addon-builder-plugin/master/release/oxygen-addon-builder-plugin.jar" />
 		<!-- https://github.com/claudius108/oxygen-addon-builder-plugin/releases/download/... -->
-		<xt:version>3.2.10230818</xt:version>
+		<xt:version>3.2.10230830</xt:version>
 		<xt:oxy_version>20.1+</xt:oxy_version>
 		<xt:type>plugin</xt:type>
 		<xt:author>Claudius Teodorescu</xt:author>
