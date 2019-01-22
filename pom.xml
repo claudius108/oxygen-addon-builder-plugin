@@ -24,7 +24,7 @@
 		<addon-location>https://raw.githubusercontent.com/claudius108/oxygen-addon-builder-plugin/master/release/${oxygen.plugin.finalName}.jar</addon-location>
 		<github.global.server>github</github.global.server>
 		<oxygen.plugin.finalName>oxygen-${project.artifactId}</oxygen.plugin.finalName>
-		<maven.version>3.5.2</maven.version>
+		<maven.version>3.6.0</maven.version>
 	</properties>
 
 	<repositories>
