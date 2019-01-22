@@ -1,7 +1,6 @@
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -45,16 +44,13 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 					.deserializeObjectFromFile("/actionsByClass.ser");
 
 			if (AuthorExtensionStateListener.class.getResource("/special-characters.xml") != null) {
-				InputStream scriptsIs = AuthorExtensionStateListener.class.getResourceAsStream("/special-characters.xml");
+				InputStream scriptsIs = AuthorExtensionStateListener.class
+						.getResourceAsStream("/special-characters.xml");
 				scripts.loadFromXML(scriptsIs);
 				scriptsIs.close();
 			}
 
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -98,17 +94,8 @@ public class AuthorExtensionStateListener implements ro.sync.ecss.extensions.api
 				c = Class.forName(actionClass);
 				AuthorOperation o = (AuthorOperation) c.newInstance();
 				o.doOperation(authorAccess, null);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (AuthorOperationException e) {
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SecurityException
+					| IllegalArgumentException | AuthorOperationException e) {
 				e.printStackTrace();
 			}
 		}
