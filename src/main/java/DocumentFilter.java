@@ -112,18 +112,10 @@ public class DocumentFilter extends AuthorDocumentFilter {
 
 	@Override
 	public void insertText(AuthorDocumentFilterBypass filterBypass, int offset, String textContent) {
-		AuthorNode currentNode = null;
-		try {
-			currentNode = authorDocumentController.getNodeAtOffset(offset);
-		} catch (BadLocationException e) {
-			e.printStackTrace();
-		}
-		AuthorElement currentElement = (AuthorElement) currentNode;
-
-		int caretPosition = currentElement.getStartOffset() + 1;
-
 		filterBypass.insertText(offset, textContent);
+		int newOffset = offset + textContent.length();
+		logger.debug("new offset = " + newOffset);
 
-		authorEditorAccess.setCaretPosition(caretPosition + 1);
+		authorEditorAccess.setCaretPosition(newOffset);
 	}
 }
