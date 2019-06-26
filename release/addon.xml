@@ -6,7 +6,7 @@
 	<xt:extension id="addon-builder-plugin">
 		<xt:location href="https://raw.githubusercontent.com/claudius108/oxygen-addon-builder-plugin/master/release/oxygen-addon-builder-plugin.jar" />
 		<!-- https://github.com/claudius108/oxygen-addon-builder-plugin/releases/download/... -->
-		<xt:version>3.2.10230830</xt:version>
+		<xt:version>3.2.06260839</xt:version>
 		<xt:oxy_version>20.1+</xt:oxy_version>
 		<xt:type>plugin</xt:type>
 		<xt:author>Claudius Teodorescu</xt:author>
