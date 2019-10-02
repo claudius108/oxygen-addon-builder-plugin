@@ -7,7 +7,7 @@
 		<xt:location href="${addon-location}" />
 		<!-- https://github.com/claudius108/oxygen-addon-builder-plugin/releases/download/... -->
 		<xt:version>${project.version}.${timestamp}</xt:version>
-		<xt:oxy_version>20.1+</xt:oxy_version>
+		<xt:oxy_version>21.1+</xt:oxy_version>
 		<xt:type>plugin</xt:type>
 		<xt:author>Claudius Teodorescu</xt:author>
 		<xt:name>Addon Builder plugin</xt:name>

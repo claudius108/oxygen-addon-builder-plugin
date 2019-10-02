@@ -1,12 +1,14 @@
 package ro.kuberam.oxygen.addonBuilder.operations;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import ro.sync.ecss.extensions.api.ArgumentDescriptor;
@@ -20,8 +22,8 @@ public class EditDocumentInNewTabOperation implements AuthorOperation {
 
 	/**
 	 * This operation is designated to allow editing of XML fragment of a main
-	 * document in new editors, opened in new tabs. When the data in the new
-	 * editors is saved, the main document is updated accordingly.
+	 * document in new editors, opened in new tabs. When the data in the new editors
+	 * is saved, the main document is updated accordingly.
 	 */
 
 	/**
@@ -68,7 +70,12 @@ public class EditDocumentInNewTabOperation implements AuthorOperation {
 			Path path = Paths.get(System.getProperty("java.io.tmpdir"), documentName);
 			File file = path.toFile();
 			file.deleteOnExit();
-			FileUtils.copyURLToFile(documentUrl, file);
+
+			ReadableByteChannel rbc = Channels.newChannel(documentUrl.openStream());
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			fos.close();
+			rbc.close();
 
 			authorAccess.getWorkspaceAccess().open(file.toURI().toURL(), EditorPageConstants.PAGE_AUTHOR, "text/xml");
 

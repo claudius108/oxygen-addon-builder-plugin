@@ -7,6 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -18,29 +22,27 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Element;
 
 import ro.kuberam.oxygen.addonBuilder.AddonBuilderPluginExtension;
 
 public class IOUtilities {
 
-	public static void storeJavaTemplateToBeDeleted(String addonPackageAbsolutePath,
-			String javaTemplateName, String addonJavaPackageName) {
+	public static void storeJavaTemplateToBeDeleted(String addonPackageAbsolutePath, String javaTemplateName,
+			String addonJavaPackageName) {
 		String javaTemplate = null;
 		try {
-			javaTemplate = IOUtils.toString(AddonBuilderPluginExtension.class
-					.getResourceAsStream("templates/java/" + javaTemplateName));
-		} catch (IOException e2) {
-			e2.printStackTrace();
+			javaTemplate = new String(Files.readAllBytes(Paths
+					.get(AddonBuilderPluginExtension.class.getResource("templates/java/" + javaTemplateName).toURI())),
+					StandardCharsets.UTF_8);
+		} catch (IOException | URISyntaxException e) {
+			e.printStackTrace();
 		}
 
 		javaTemplate = javaTemplate.replaceAll("addon-javapackage-name", addonJavaPackageName);
 
 		try {
-			FileUtils.writeStringToFile(new File(addonPackageAbsolutePath + File.separator
-					+ javaTemplateName), javaTemplate);
+			Files.write(Paths.get(addonPackageAbsolutePath, javaTemplateName), javaTemplate.getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,15 +54,15 @@ public class IOUtilities {
 		for (File javaTemplateFile : javaTemplateFiles) {
 			String javaTemplate = null;
 			try {
-				javaTemplate = IOUtils.toString(new FileInputStream(javaTemplateFile));
+				javaTemplate = new String(Files.readAllBytes(javaTemplateFile.toPath()), StandardCharsets.UTF_8);
+
 			} catch (IOException e2) {
 				e2.printStackTrace();
 			}
 			javaTemplate = javaTemplate.replaceAll("addon-javapackage-name", addonJavaPackageName);
 
 			try {
-				FileUtils.writeStringToFile(
-						new File(targetDir + File.separator + javaTemplateFile.getName()), javaTemplate);
+				Files.write(targetDir.toPath().resolve(javaTemplateFile.getName()), javaTemplate.getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -78,8 +80,8 @@ public class IOUtilities {
 		return filePath;
 	}
 
-	public static Object deserializeObjectFromFile(String filePath) throws FileNotFoundException,
-			IOException, ClassNotFoundException {
+	public static Object deserializeObjectFromFile(String filePath)
+			throws FileNotFoundException, IOException, ClassNotFoundException {
 		Object result = null;
 		ObjectInputStream ois = new ObjectInputStream(IOUtilities.class.getResourceAsStream(filePath));
 		result = ois.readObject();
@@ -88,8 +90,8 @@ public class IOUtilities {
 		return result;
 	}
 
-	public static Object deserializeObjectFromFile(File file) throws FileNotFoundException, IOException,
-			ClassNotFoundException {
+	public static Object deserializeObjectFromFile(File file)
+			throws FileNotFoundException, IOException, ClassNotFoundException {
 		Object result = null;
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 		result = ois.readObject();
