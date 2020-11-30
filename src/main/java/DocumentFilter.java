@@ -35,7 +35,8 @@ public class DocumentFilter extends AuthorDocumentFilter {
 	/**
 	 * Constructor.
 	 * 
-	 * @param access The author access.
+	 * @param access
+	 *            The author access.
 	 */
 	public DocumentFilter(AuthorAccess access) {
 		this.authorAccess = access;
@@ -48,11 +49,42 @@ public class DocumentFilter extends AuthorDocumentFilter {
 	@Override
 	public boolean delete(AuthorDocumentFilterBypass filterBypass, int startOffset, int endOffset,
 			boolean withBackspace) {
-		if (withBackspace) {
-			return true;
-		} else {
-			return filterBypass.delete(startOffset, endOffset, withBackspace);
+
+		AuthorNode currentNode = null;
+		try {
+			currentNode = authorDocumentController.getNodeAtOffset(startOffset);
+		} catch (BadLocationException e) {
+
+			e.printStackTrace();
 		}
+
+		Styles styles = authorEditorAccess.getStyles(currentNode);
+
+		StaticContent[] mixedContent = styles.getMixedContent();
+		logger.debug("mixedContent = " + mixedContent);
+		logger.debug("mixed content length = " + mixedContent.length);
+
+//		if (mixedContent.length == 0) {
+//			return true;
+//		}
+
+		try {
+			OffsetInformation ci = authorDocumentController.getContentInformationAtOffset(startOffset);
+
+			if (ci.getNodeForMarkerOffset() != null) {
+				if (withBackspace && ci.getNodeForMarkerOffset().getStartOffset() == startOffset) {
+					if (ci.getNodeForMarkerOffset().getStartOffset() + 1 == ci.getNodeForMarkerOffset()
+							.getEndOffset()) {
+						return true;
+					}
+				}
+			}
+
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+
+		return filterBypass.delete(startOffset, endOffset, withBackspace);
 	}
 
 	@Override
